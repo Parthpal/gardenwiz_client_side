@@ -1,6 +1,7 @@
 import * as React from "react";
+import { IconSvgProps } from "../../types";
 
-import { IconSvgProps } from "@/types";
+
 
 export const Logo: React.FC<IconSvgProps> = ({
   size = 36,
@@ -209,6 +210,98 @@ export const NextUILogo: React.FC<IconSvgProps> = (props) => {
       <path
         className="fill-white dark:fill-black"
         d="M17.5667 9.21729H18.8111V18.2403C18.8255 19.1128 18.6 19.9726 18.159 20.7256C17.7241 21.4555 17.0968 22.0518 16.3458 22.4491C15.5717 22.8683 14.6722 23.0779 13.6473 23.0779C12.627 23.0779 11.7286 22.8672 10.9521 22.4457C10.2007 22.0478 9.5727 21.4518 9.13602 20.7223C8.6948 19.9705 8.4692 19.1118 8.48396 18.2403V9.21729H9.72854V18.1538C9.71656 18.8298 9.88417 19.4968 10.2143 20.0868C10.5362 20.6506 11.0099 21.1129 11.5814 21.421C12.1689 21.7448 12.8576 21.9067 13.6475 21.9067C14.4374 21.9067 15.1272 21.7448 15.7169 21.421C16.2895 21.1142 16.7635 20.6516 17.0844 20.0868C17.4124 19.4961 17.5788 18.8293 17.5667 18.1538V9.21729ZM23.6753 9.21729V22.845H22.4309V9.21729H23.6753Z"
+      />
+    </svg>
+  );
+};
+
+export const TreeIcon: React.FC<IconSvgProps> = (props) => {
+  const { width, height = 30 } = props;
+
+  return (
+    <svg
+      fill="none"
+      height={height}
+      viewBox="0 0 491.3 491.3"
+      width={width}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        className="fill-current text-green-600 dark:text-white"
+        d="M481.6,113.825c-16-27.8-47.4-36.4-69.2-34.7c1.5-22.5-5.8-43.5-20.2-58.1c-29.8-30.9-82.3-26-120.8,9.4
+          c-25.3,23.6-33.6,79.6-35.8,128c-26.1-40.9-61.4-85.4-95.2-93.1c-51.2-11.3-99,10.6-109.4,52.3c-5.2,19.8-1,41.7,11.6,60.4
+          c-19.8,9.4-42.6,32.6-42.6,64.7c0.1,37.5,30.4,71.8,72.1,82.2c36,8.2,61.6,30.3,77,65.2c12.2,28.4,42.3,47.4,74.8,47.4
+          c32.6,0,62.6-19,74.8-47.4c15.4-34.9,41-57,77-65.2c41.7-10.4,72-44.7,72.1-82.2C524.2,148.725,501.4,123.225,481.6,113.825z"
+      />
+    </svg>
+  );
+};
+
+export const ArrowUpIcon: React.FC<IconSvgProps> = (props) => {
+  const { width, height = 25 } = props;
+
+  return (
+    <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    width={width}
+    height={height}
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"
+    />
+    </svg>
+  );
+};
+
+export const CommentsIcon: React.FC<IconSvgProps> = (props) => {
+  const { width, height = 25 } = props;
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      width={width}
+      height={height}
+      {...props}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
+      />
+    </svg>
+  );
+};
+
+export const ArrowDownIcon: React.FC<IconSvgProps> = (props) => {
+  const { width, height = 25 } = props;
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      width={width}
+      height={height}
+      {...props}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19.5 13.5L12 21m0 0L4.5 13.5M12 21V3"
       />
     </svg>
   );
