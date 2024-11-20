@@ -3,12 +3,18 @@
 import React, { useState, useRef, useMemo } from 'react';
 import JoditEditor from 'jodit-react';
 
+interface TextEditorProps{
+    content:string,
+    setContent:React.Dispatch<React.SetStateAction<string>>
+}
+interface TextEditorProps{
+    content:string,
+    setContent:React.Dispatch<React.SetStateAction<string>>
+}
 
-const TextEditor = ({placeholder}) => {
+const TextEditor = ({content,setContent}:TextEditorProps) => {
     const editor = useRef(null);
-	const [content, setContent] = useState('');
-    console.log(content);
-    
+
     return (
         <JoditEditor
         ref={editor}
