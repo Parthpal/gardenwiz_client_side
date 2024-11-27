@@ -1,7 +1,13 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import React, { useState, useRef, useMemo } from 'react';
-import JoditEditor from 'jodit-react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the editor with SSR disabled
+const JoditEditor = dynamic(() => import('jodit-react'), {
+  ssr: false,
+});
+
 
 interface TextEditorProps{
     content:string,

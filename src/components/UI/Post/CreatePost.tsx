@@ -1,7 +1,7 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 "use client"
-import { Card } from '@nextui-org/card';
+import { Card, CardBody } from '@nextui-org/card';
 import React, { useRef, useState } from 'react';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import GWForm from '../Form/GWForm';
@@ -24,18 +24,21 @@ const CreatePost = () => {
     
   }
     return (<>
-        <Card className="max-w-[720px] ">
-          <FormProvider {...methods}>
-              <form onSubmit={submitHandler(onSubmit)}>
-              <GWInput className="max-w-xs" size='sm' label="Title" name="title"/>
-              <GWInput className="max-w-xs" label="category" name="category"/>
-              <TextEditor content={content} setContent={setContent} />
-              <Button size="lg" type="submit">
-                  Post
-              </Button>
-              </form>
-          </FormProvider>
-        </Card>
+
+        <Card>
+          <CardBody>
+            <FormProvider {...methods}>
+                  <form onSubmit={submitHandler(onSubmit)}>
+                  <GWInput className="max-w-xs" size='sm' label="Title" name="title"/>
+                  <GWInput className="max-w-xs" label="category" name="category"/>
+                  <TextEditor content={content} setContent={setContent} />
+                  <Button size="lg" type="submit">
+                      Post
+                  </Button>
+                  </form>
+              </FormProvider>
+              </CardBody>
+          </Card>
         </>
     );
 };

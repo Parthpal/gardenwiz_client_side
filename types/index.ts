@@ -12,4 +12,12 @@ export interface IInput {
   name: string;
   className?: string;
   disabled?: boolean;
+  color?:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "danger"
+    | undefined;
 }

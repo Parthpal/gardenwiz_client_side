@@ -16,6 +16,7 @@ export default function GWInput({
   label,
   name,
   className,
+  color
 }: IProps) {
 
   const { register,formState: { errors },} = useFormContext();
@@ -23,6 +24,8 @@ export default function GWInput({
   return (
     <Input
       {...register(name)}
+      className={className}
+      color={color}
       errorMessage={errors[name] ? (errors[name].message as string) : ""}
       isInvalid={!!errors[name]}
       label={label}
@@ -30,7 +33,7 @@ export default function GWInput({
       size={size}
       type={type}
       variant={variant}
-      className={className}
+      
     />
   );
 }
