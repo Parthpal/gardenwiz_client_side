@@ -3,15 +3,25 @@
 "use client"
 import GWForm from "@/src//components/UI/Form/GWForm";
 import GWInput from "@/src//components/UI/Form/GWInput";
+import { useUserRegistration } from "@/src//hooks/auth.hook";
+import { registerUser } from "@/src//service/AuthService";
 import { Button } from "@nextui-org/button";
+import { log } from "console";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 
 const RegisterPage = () => {
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        console.log(data);
+   const {mutate:handleRegistration,isPending}=useUserRegistration();
+    const onSubmit: SubmitHandler<FieldValues> =async (data) => {
+      const userData = {
+        ...data,
+        profilePhoto:
+          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+      };
+      console.log(userData);
+      handleRegistration(userData)
       };
     return (
         <div className="flex flex-col lg:flex-row ">
@@ -24,7 +34,7 @@ const RegisterPage = () => {
           />
         </div>
         <div className="flex-1 mt-16 mb-16">
-          <div className="pb-10 md:w-[380px] w-[350px] bg-base-200 rounded-lg border-[#1d772e] border-2 lg:mx-0 mx-auto">
+          <div className="pb-10 md:w-[60%] w-[80%] bg-base-200 rounded-lg border-[#1d772e] border-2 lg:mx-0 mx-auto">
             <h3 className="text-3xl text-center mt-4 font-bold text-[#1d772e]">
               Register
             </h3>
@@ -34,7 +44,7 @@ const RegisterPage = () => {
                 <GWInput className="my-5 px-5 " color="success" label="email" name="email" type="email" />
                 <GWInput className="my-5 px-5" color="success" label="password" name="password" type="password"  />
                 <Button
-                className="my-4 lg:mx-6 mx-5 md:w-[330px] w-[310px] rounded-md bg-[#1d772e] font-semibold text-white"
+                className="my-4 w-[90%] mx-5 rounded-md bg-[#1d772e] font-semibold text-white"
                 size="lg"
                 type="submit"
               >
