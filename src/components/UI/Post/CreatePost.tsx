@@ -2,7 +2,7 @@
 /* eslint-disable padding-line-between-statements */
 "use client";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   FieldValues,
   FormProvider,
@@ -73,6 +73,15 @@ const CreatePost = () => {
       setImagePreviews((prev) => prev.filter((_, i) => i !== index));
       setImageFiles((prev) => prev.filter((_, i) => i !== index));
     };
+  
+    useEffect(()=>{
+      const fetchCategory=async()=>{
+        const res=await fetch('http://localhost:5000/api/v1/category');
+        const categories=await res.json();
+        console.log(categories.data);
+      }
+      fetchCategory();
+    },[])
 
   return (
     <>
