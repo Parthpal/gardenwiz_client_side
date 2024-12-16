@@ -4,6 +4,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
+  Controller,
   FieldValues,
   FormProvider,
   SubmitHandler,
@@ -12,7 +13,6 @@ import {
 import GWForm from "../Form/GWForm";
 import GWInput from "../Form/GWInput";
 import { Button } from "@nextui-org/button";
-import JoditEditor from "jodit-react";
 import TextEditor from "../RichTextEditor/TextEditor";
 import {
   Modal,
@@ -25,13 +25,17 @@ import {
 import { Input } from "@nextui-org/input";
 import { Image } from "@nextui-org/image";
 import { Divider } from "@nextui-org/divider";
+import GWSelect from "../Form/GWSelect";
+import { fetchCategory } from "@/src//service/categories";
+import { UsefetchCategories, usefetchCategories } from "@/src//hooks/categories.hook";
+import { postData } from "@/src//service/post";
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 
 const CreatePost = () => {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreviews, setImagePreviews] = useState<string[] | []>([]);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
   const [size, setSize] = React.useState<Sizes>("3xl");
   const sizes:Sizes[]=["3xl"];
 
@@ -46,14 +50,16 @@ const CreatePost = () => {
   const submitHandler = methods.handleSubmit;
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const formData = new FormData();
-    const postData = {
+    const postGardenData = {
       ...data,
       content,
     };
-    formData.append("data", JSON.stringify(postData));
+    formData.append("data", JSON.stringify(postGardenData));
     for (let image of imageFiles) {
       formData.append("itemImages", image);
     }
+    console.log(formData);
+    postData(formData)
   };
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];
@@ -73,16 +79,22 @@ const CreatePost = () => {
       setImagePreviews((prev) => prev.filter((_, i) => i !== index));
       setImageFiles((prev) => prev.filter((_, i) => i !== index));
     };
+    const {
+      data: categoriesData,
+      isLoading: categoryLoading,
+      isSuccess: categorySuccess,
+    } = UsefetchCategories();
   
-    useEffect(()=>{
-      const fetchCategory=async()=>{
-        const res=await fetch('http://localhost:5000/api/v1/category');
-        const categories=await res.json();
-        console.log(categories.data);
-      }
-      fetchCategory();
-    },[])
-
+    let categoryOption: { key: string; label: string }[] = [];
+  
+    if (categoriesData?.data && !categoryLoading) {
+      categoryOption = categoriesData.data
+        .sort()
+        .map((category: { _id: string; name: string }) => ({
+          key: category._id,
+          label: category.name,
+        }));
+    }
   return (
     <>
           <Card className="max-w-7xl my-4">
@@ -110,11 +122,11 @@ const CreatePost = () => {
             </CardBody>
             <Divider />
           </Card>
-          <Modal
-            isOpen={isOpen}
-            size={size}
-            placement="top-center"
-            onOpenChange={onOpenChange}
+          <Modal isOpen={isOpen}
+        onOpenChange={onOpenChange} 
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        size={size}
           >
             <ModalContent>
               {(onClose) => (
@@ -124,12 +136,8 @@ const CreatePost = () => {
                     <Card>
                       <CardBody>
                         <FormProvider {...methods}>
-                          <form onSubmit={submitHandler(onSubmit)}>
-                            <GWInput
-                              className=" w-full my-2"
-                              label="category"
-                              name="category"
-                            />
+                          <form className="space-y-5" onSubmit={submitHandler(onSubmit)}>
+                            <GWSelect label="category" name="category" options={categoryOption}/>
                             <TextEditor content={content} setContent={setContent} />
                             <div className="min-w-fit flex-1">
                                 <label
