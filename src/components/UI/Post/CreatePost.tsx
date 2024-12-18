@@ -137,7 +137,8 @@ const CreatePost = () => {
                       <CardBody>
                         <FormProvider {...methods}>
                           <form className="space-y-5" onSubmit={submitHandler(onSubmit)}>
-                            <GWSelect label="category" name="category" options={categoryOption}/>
+                            <GWInput label="title" name="title"/>
+                            <GWSelect label="category" name="categoryID" options={categoryOption}/>
                             <TextEditor content={content} setContent={setContent} />
                             <div className="min-w-fit flex-1">
                                 <label
