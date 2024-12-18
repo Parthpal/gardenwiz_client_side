@@ -7,35 +7,44 @@ import { Button } from '@nextui-org/button';
 import { Card, CardBody } from '@nextui-org/card';
 import { Image } from '@nextui-org/image';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ArrowDownIcon, ArrowUpIcon, CommentsIcon } from '../../icons';
-const PostCard = () => {
+import Link from 'next/link';
+
+const PostCard = ({posts}) => {
+    const{_id,title,images,content,upvotes,downvotes}=posts;
     const [liked, setLiked] = React.useState(false);
+
     return (
         <>
             <Card
                 isBlurred
-                className="border-none bg-background/60 dark:bg-default-100/50 w-[720px]"
+                className="border-none bg-background/60 dark:bg-default-100/50 w-[720px] mb-5 "
                 shadow="sm"
+
                 >
                 <CardBody>
-                    <div className='flex flex-row-reverse justify-between'>
-                        <div className="relative ">
+                    <div className='flex flex-row-reverse justify-between '>
+                        <div className="relative w-[30%]">
                             <Image
                             alt="Album cover"
                             className="object-cover"
                             height={200}
                             shadow="md"
-                            src="https://res.cloudinary.com/dfelm3bvn/image/upload/v1731784033/gardening-2518377_1280_c2oopy.jpg"
+                            src={images[0]}
                             width="100%"
                             />
                         </div>
 
-                    <div className="flex flex-col col-span-6 md:col-span-8">
+                    <div className="flex flex-col col-span-6 md:col-span-8 w-[70%]">
                         <div className="flex justify-between items-start ">
                         <div className="flex flex-col gap-0 mt-4">
-                            <h3 className="font-semibold text-foreground/90">Looking Better Than 99% of People Over 40 is About One Thing</h3>
-                            <p className="text-small text-foreground/80 mt-4">Not specific workouts, diets, supplements, or ‘hacks’. Once you nail this there’s no stopping you.</p>
+                            <h3 className="font-semibold text-foreground/90">{title}</h3>
+                            <p className="text-small text-foreground/80 mt-4" dangerouslySetInnerHTML={{ __html: content.slice(0,250) }}></p>
+                            <p></p>
+                            <Link href={`/posts/${_id}`}>
+                              Read More..
+                            </Link>
                         </div>
                         <Button
                             isIconOnly
@@ -61,11 +70,11 @@ const PostCard = () => {
                         <div className="flex justify-around">
                             <div className="flex justify-around items-center gap-2">
                                 <ArrowUpIcon/>
-                                <p className="text-lg">100</p>
+                                <p className="text-lg">{upvotes}</p>
                             </div>
                             <div className="flex justify-around items-center gap-2">
                                 <ArrowDownIcon/>
-                                <p className="text-lg">123</p>
+                                <p className="text-lg">{downvotes}</p>
                             </div>
                             <div className="flex justify-around items-center gap-2">
                                 <CommentsIcon/>
