@@ -4,25 +4,24 @@
 import CreatePost from '@/src//components/UI/Post/CreatePost';
 import PostCard from '@/src//components/UI/Post/PostCard';
 import TextEditor from '@/src//components/UI/RichTextEditor/TextEditor';
+import { UseGetPosts } from '@/src//hooks/post.hook';
 import { fetchPost } from '@/src//service/post';
 import React, { useEffect } from 'react';
+import { Ipost } from '../../../../types';
 
 const HomePage = () => {
-    const [postData, setPostData] = React.useState([]);
-
-    //  let data=fetchPost();
-    //  console.log(data);
-    useEffect(()=>{
-        fetchPost()
-        .then(data=>setPostData(data))
-    },[])
-    //console.log(postData?.data);
+        const {
+            data: postData,
+            isLoading: postLoading,
+            isSuccess: postSuccess,
+        } = UseGetPosts();
+        
     
     return (
         <div>           
             <CreatePost/>
             {
-                postData?.data?.map((posts,index)=>
+                postData?.data?.map((posts:Ipost,index:string)=>
                     <PostCard key={index} posts={posts}/>
                 )
             }

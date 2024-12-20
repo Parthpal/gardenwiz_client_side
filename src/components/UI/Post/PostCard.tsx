@@ -10,10 +10,27 @@ import { Image } from '@nextui-org/image';
 import React, { useEffect } from 'react';
 import { ArrowDownIcon, ArrowUpIcon, CommentsIcon } from '../../icons';
 import Link from 'next/link';
+import { Ipost } from '../../../../types';
+import { upvotePost } from '@/src//service/post';
+import { useDOwnvote, useUpvote } from '@/src//hooks/post.hook';
+interface IpostCardProps{
+ posts:Ipost
+}
 
-const PostCard = ({posts}) => {
+const PostCard = ({posts}:IpostCardProps) => {
     const{_id,title,images,content,upvotes,downvotes}=posts;
+    const {mutate:upVotemutation}=useUpvote();
+    const {mutate:downVotemutation}=useDOwnvote();
+
     const [liked, setLiked] = React.useState(false);
+    const handleUpvote=(id:any)=>{
+        console.log('upvoteclicked',id);   
+        upVotemutation(id)
+    }
+    const handleDownvote=(id)=>{
+        console.log('downclicked',id);   
+        downVotemutation(id)
+    }
 
     return (
         <>
@@ -68,14 +85,14 @@ const PostCard = ({posts}) => {
                             size="sm"
                         /> */}
                         <div className="flex justify-around">
-                            <div className="flex justify-around items-center gap-2">
+                            <Button onClick={()=>handleUpvote(_id)} className="flex justify-around items-center gap-2 bg-white">
                                 <ArrowUpIcon/>
                                 <p className="text-lg">{upvotes}</p>
-                            </div>
-                            <div className="flex justify-around items-center gap-2">
+                            </Button>
+                            <Button onClick={()=>handleDownvote(_id)} className="flex justify-around items-center gap-2 bg-white">
                                 <ArrowDownIcon/>
                                 <p className="text-lg">{downvotes}</p>
-                            </div>
+                            </Button>
                             <div className="flex justify-around items-center gap-2">
                                 <CommentsIcon/>
                                 <p className="text-lg">23</p>

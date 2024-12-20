@@ -21,3 +21,18 @@ export interface IInput {
     | "danger"
     | undefined;
 }
+
+export interface Ipost{
+  _id: string;
+  title: string;
+  content: string;
+  userID: string;
+  categoryID: string;
+  images: string[];
+  premium: boolean;
+  upvotes: number;
+  downvotes: number;
+  createdAt: string; // ISO 8601 date string
+  updatedAt: string; // ISO 8601 date string
+  __v: number;
+}
