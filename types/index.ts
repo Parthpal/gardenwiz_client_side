@@ -36,3 +36,14 @@ export interface Ipost{
   updatedAt: string; // ISO 8601 date string
   __v: number;
 }
+
+export interface IUser {
+  _id: string; // Assuming the _id is a string
+  name: string;
+  role: string; // Could be a specific type like "USER" | "ADMIN"
+  email: string;
+  password: string;
+  status: string; // Could also be "BASIC" | "PREMIUM" or similar
+  profilePhoto: string; // URL as a string
+  __v: number; // Version field, typically a number
+}

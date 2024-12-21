@@ -24,11 +24,9 @@ const PostCard = ({posts}:IpostCardProps) => {
 
     const [liked, setLiked] = React.useState(false);
     const handleUpvote=(id:any)=>{
-        console.log('upvoteclicked',id);   
         upVotemutation(id)
     }
     const handleDownvote=(id)=>{
-        console.log('downclicked',id);   
         downVotemutation(id)
     }
 

@@ -29,10 +29,14 @@ import GWSelect from "../Form/GWSelect";
 import { fetchCategory } from "@/src//service/categories";
 import { UsefetchCategories, usefetchCategories } from "@/src//hooks/categories.hook";
 import { postData } from "@/src//service/post";
+import { getCurrentUser } from "@/src//service/AuthService";
+import { useUser } from "@/src//context/user.provider";
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 
 const CreatePost = () => {
+   const {user}=useUser();
+  
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreviews, setImagePreviews] = useState<string[] | []>([]);
   const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
@@ -103,11 +107,11 @@ const CreatePost = () => {
                 alt="nextui logo"
                 height={40}
                 radius="sm"
-                src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                src={user?.profilePhoto}
                 width={40}
               />
               <div className="flex flex-col">
-                <p className="text-md">Partha Pal</p>
+                <p className="text-md">{user?.name}</p>
               </div>
             </CardHeader>
             <Divider />
