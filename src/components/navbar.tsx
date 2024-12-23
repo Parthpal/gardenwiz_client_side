@@ -53,6 +53,7 @@ export const Navbar = () => {
       type="search"
     />
   );
+console.log(user);
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -85,7 +86,10 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-          <ThemeSwitch />
+         <NavbarItem className="hidden sm:flex gap-2">
+           <ThemeSwitch />
+        </NavbarItem>
+
           {user?.email ? (
           <NavbarItem className="hidden sm:flex gap-2">
               <NavbarDropDown/>
@@ -95,20 +99,18 @@ export const Navbar = () => {
             <Link href="/login">Login</Link>
           </NavbarItem>
         )}
-       
 
-        
-        <NavbarItem className="hidden md:flex" />
-      </NavbarContent>
+      </NavbarContent>     
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         <ThemeSwitch />
         <NavbarMenuToggle />
         <div className="flex gap-3 items-center">
-        <Avatar name="Joe" />
+        <Avatar name={user?.name}/>
         <NavbarDropDown/>
         </div>
       </NavbarContent>
+    
 
       <NavbarMenu>
         {searchInput}

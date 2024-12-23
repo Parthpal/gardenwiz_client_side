@@ -57,6 +57,7 @@ const CreatePost = () => {
     const postGardenData = {
       ...data,
       content,
+      userID:user?._id,
     };
     formData.append("data", JSON.stringify(postGardenData));
     for (let image of imageFiles) {

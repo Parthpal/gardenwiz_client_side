@@ -3,20 +3,39 @@
 "use client"
 import GWForm from "@/src//components/UI/Form/GWForm";
 import GWInput from "@/src//components/UI/Form/GWInput";
+import { useUser } from "@/src//context/user.provider";
 import { useUserLogin } from "@/src//hooks/auth.hook";
 import { loginUser } from "@/src//service/AuthService";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
+import { useEffect } from "react";
 
 const LoginPage = () => {
-  const {mutate:handleUserLogin,isPending}=useUserLogin();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { setIsLoading: userLoading } = useUser(); 
+  const redirect = searchParams.get("redirect");
+  const {mutate:handleUserLogin,isPending,isSuccess}=useUserLogin();
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
     handleUserLogin(data)
+    userLoading(true);
   };
+  
+ useEffect(() => {
+    if (!isPending && isSuccess) {
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [isPending, isSuccess]);
+
   return (
     <div className="flex flex-col lg:flex-row ">
       <div className="flex-1 lg:ml-48 md:mx-auto">
