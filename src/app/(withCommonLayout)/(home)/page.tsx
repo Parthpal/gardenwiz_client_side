@@ -8,24 +8,34 @@ import { UseGetPosts } from '@/src//hooks/post.hook';
 import { fetchPost } from '@/src//service/post';
 import React, { useEffect } from 'react';
 import { Ipost } from '../../../../types';
+import { useUser } from '@/src//context/user.provider';
 
 const HomePage = () => {
+    const {user}= useUser();
         const {
             data: postData,
             isLoading: postLoading,
             isSuccess: postSuccess,
         } = UseGetPosts();
         
-    
     return (
-        <div>           
-            <CreatePost/>
+        <div>    
             {
-                postData?.data?.map((posts:Ipost,index:string)=>
-                    <PostCard key={index} posts={posts}/>
+                user?.email ? (<>
+                    <CreatePost/>
+                    {
+                        postData?.data?.map((posts:Ipost,index:string)=>
+                            <PostCard key={index} posts={posts}/>
+                        )
+                    } 
+                </>):
+                (
+                    postData?.data?.map((posts:Ipost,index:string)=>
+                        <PostCard key={index} posts={posts}/>
+                    )
                 )
-            }
-            
+
+            }          
         </div>
     );
 };

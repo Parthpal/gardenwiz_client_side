@@ -53,7 +53,6 @@ export const Navbar = () => {
       type="search"
     />
   );
-console.log(user);
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">

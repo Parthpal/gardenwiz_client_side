@@ -21,7 +21,7 @@ const LoginPage = () => {
   const redirect = searchParams.get("redirect");
   const {mutate:handleUserLogin,isPending,isSuccess}=useUserLogin();
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+   // console.log(data);
     handleUserLogin(data)
     userLoading(true);
   };
