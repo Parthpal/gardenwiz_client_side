@@ -34,7 +34,7 @@ const PostCard = ({posts}:IpostCardProps) => {
         <>
             <Card
                 isBlurred
-                className="border-none bg-background/60 dark:bg-default-100/50 w-[720px] mb-5 "
+                className="border-none bg-background/60 dark:bg-default-100/50 w-full mb-5 "
                 shadow="sm"
 
                 >

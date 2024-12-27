@@ -25,7 +25,15 @@ const UpdateProfile = () => {
       setSize(size);
       onOpen();
     };
-    const methods = useForm();
+    const defaultValues = {
+      name: user?.name,
+    }
+    const methods = useForm({
+      defaultValues: {
+        name: user?.name,
+        email: user?.email,
+        profilePhoto: user?.profilePhoto,
+      },});
       const { control, handleSubmit } = methods;
       const submitHandler = methods.handleSubmit;
       const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -58,7 +66,7 @@ const UpdateProfile = () => {
        // setImagePreviews((prev) => prev.filter((_, i) => i !== index));
         setImageFiles([]);
       }
-    
+
     return (
             <ModalContent>
               {(onClose) => (
@@ -69,7 +77,7 @@ const UpdateProfile = () => {
                       <CardBody>
                         <FormProvider {...methods}>
                           <form className="space-y-5" onSubmit={submitHandler(onSubmit)}>
-                            <GWInput label="name" name="name"/>
+                            <GWInput  label="name" name="name"/>
                             <GWInput label="email" name="email"/>
                             <div className="min-w-fit flex-1">
                                 <label

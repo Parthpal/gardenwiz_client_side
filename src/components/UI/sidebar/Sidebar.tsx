@@ -7,6 +7,8 @@ import { Modal, useDisclosure } from '@nextui-org/modal';
 import React from 'react';
 import UpdateProfile from '../Profile/UpdateProfile';
 import { useUser } from '@/src//context/user.provider';
+import { UsefetchUsers } from '@/src//hooks/users.hook';
+import { fetchUser } from '@/src//service/Profile';
 
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
@@ -20,10 +22,11 @@ const Sidebar = () => {
           setSize(size);
           onOpen();
         };
+      //console.log(data?.data);
     return (
         <>
         <div className=''>
-            <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026708c" className="w-20 h-20 text-large" />
+            <Avatar src={user?.profilePhoto} className="w-20 h-20 text-large" />
             <div className='space-y-5 py-5'>
                 <h1>{user?.name}</h1>
                 <p>Followers</p>
