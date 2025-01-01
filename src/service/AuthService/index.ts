@@ -40,9 +40,7 @@ export const registerUser = async (userData: FieldValues) => {
   };
 
   export const getCurrentUser = async () => {
-    const accessToken = cookies().get("accessToken")?.value;
-    console.log(accessToken);
-    
+    const accessToken = cookies().get("accessToken")?.value;    
     let decodedToken = null;
   
     if (accessToken) {
@@ -56,6 +54,8 @@ export const registerUser = async (userData: FieldValues) => {
         role: decodedToken.role,
         status: decodedToken.status,
         profilePhoto: decodedToken.profilePhoto,
+        followerIds:decodedToken.followerIds,
+        followingIds:decodedToken.followingIds
       };
     }
   

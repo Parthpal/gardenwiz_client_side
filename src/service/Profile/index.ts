@@ -19,3 +19,20 @@ export const fetchUser=async()=>{
       throw new Error(error.message)
   }
 }
+
+export const addFollower = async (followerID:any,currentUserId:any) => {
+  try {
+    const { data } = await axiosInstance.put(`/user/${followerID}/follow`,{currentUser:currentUserId});
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+export const deleteFollower = async (followerID:string,currentUserId:string) => {
+  try {
+    const { data } = await axiosInstance.put(`/user/${followerID}/unfollow`,{currentUser:currentUserId});
+    return data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};

@@ -5,6 +5,7 @@ import { UsefetchUsers } from "@/src//hooks/users.hook";
 import { fetchUser } from "@/src//service/Profile";
 import { ReactNode } from "react";
 import { IUser } from "../../../../types";
+import { useUser } from "@/src//context/user.provider";
 
 export default function layout({
   children,
@@ -12,7 +13,8 @@ export default function layout({
 }: {
   children: ReactNode;
   sideposts: ReactNode;
-}) {
+}) 
+{
   return (
     <>
       {/* <div className="flex justify-center">

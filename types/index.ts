@@ -45,7 +45,7 @@ export interface IUser {
   password: string;
   status: string; // Could also be "BASIC" | "PREMIUM" or similar
   profilePhoto: string; // URL as a string
-  followerIds: string[],
-  followingIds: string[],
+  followerIds: string[];
+  followingIds: string[];
   __v: number; // Version field, typically a number
 }
