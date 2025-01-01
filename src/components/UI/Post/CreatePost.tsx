@@ -21,6 +21,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  ModalProps,
 } from "@nextui-org/modal";
 import { Input } from "@nextui-org/input";
 import { Image } from "@nextui-org/image";
@@ -32,11 +33,13 @@ import { postData } from "@/src//service/post";
 import { getCurrentUser } from "@/src//service/AuthService";
 import { useUser } from "@/src//context/user.provider";
 
+
+
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 
 const CreatePost = () => {
-   const {user}=useUser();
-  
+  const {user}=useUser();
+  const [scrollBehavior, setScrollBehavior] =React.useState<ModalProps["scrollBehavior"]>('outside');
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreviews, setImagePreviews] = useState<string[] | []>([]);
   const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
@@ -119,19 +122,21 @@ const CreatePost = () => {
             <CardBody>
             <div className="flex flex-wrap">
                 {sizes.map((size) => (
-                  <Button className="w-full bg-[#f4f4f4]" key={size} onPress={() => handleOpen(size)}>
-                    <Input className="w-full" size='lg' placeholder="What is in your mind" />
+                  <Button  className="w-full bg-[#f4f4f4]" key={size} onPress={() => handleOpen(size)}>
+                    <Input onValueChange={(v) => setScrollBehavior(v as ModalProps["scrollBehavior"])} className="w-full" size='lg' placeholder="What is in your mind" />
                   </Button>
                 ))}
             </div>
             </CardBody>
             <Divider />
           </Card>
+
           <Modal isOpen={isOpen}
-        onOpenChange={onOpenChange} 
-        isDismissable={false}
-        isKeyboardDismissDisabled={true}
-        size={size}
+          onOpenChange={onOpenChange} 
+          isDismissable={false}
+          isKeyboardDismissDisabled={true}
+          size={size}
+          scrollBehavior={scrollBehavior}
           >
             <ModalContent>
               {(onClose) => (
@@ -200,6 +205,7 @@ const CreatePost = () => {
               )}
             </ModalContent>
           </Modal>
+        
     </>
   );
 };

@@ -83,11 +83,11 @@ const PostCard = ({posts}:IpostCardProps) => {
                             size="sm"
                         /> */}
                         <div className="flex justify-around">
-                            <Button onClick={()=>handleUpvote(_id)} className="flex justify-around items-center gap-2 bg-white">
+                            <Button onPress={()=>handleUpvote(_id)} className="flex justify-around items-center gap-2 bg-white">
                                 <ArrowUpIcon/>
                                 <p className="text-lg">{upvotes}</p>
                             </Button>
-                            <Button onClick={()=>handleDownvote(_id)} className="flex justify-around items-center gap-2 bg-white">
+                            <Button onPress={()=>handleDownvote(_id)} className="flex justify-around items-center gap-2 bg-white">
                                 <ArrowDownIcon/>
                                 <p className="text-lg">{downvotes}</p>
                             </Button>
@@ -95,7 +95,6 @@ const PostCard = ({posts}:IpostCardProps) => {
                                 <CommentsIcon/>
                                 <p className="text-lg">23</p>
                             </div>
-
                         </div>
                         </div>
 

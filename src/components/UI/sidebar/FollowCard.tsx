@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import { useUser } from '@/src//context/user.provider';
-import { UseAddFollower, UsefetchUsers } from '@/src//hooks/users.hook';
+import { useAddFollower, UseAddFollower, UsefetchUsers } from '@/src//hooks/users.hook';
 import { addFollower, deleteFollower, fetchUser } from '@/src//service/Profile';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -15,8 +15,8 @@ const FollowCard = ({user}:{user:any}) => {
     const [allUserData,setAllUserData]=useState([]);
     const {user:currentUser,isLoading:userLoading}=useUser();
     const filterUser:IUser[]=allUserData.filter((userData:IUser)=>userData?._id===currentUser!._id)
-    //console.log(filterUser);
-    const [isFollowed, setIsFollowed] = React.useState(filterUser[0]?.followingIds?.includes(user?._id) || false);
+    //console.log(filterUser[0]);
+    const [isFollowed, setIsFollowed] = React.useState(false);
     const handleFollow = async (follwedCheck: boolean, id: string) => {
         // Optimistic update
         setIsFollowed(follwedCheck);
@@ -33,13 +33,23 @@ const FollowCard = ({user}:{user:any}) => {
         }
       };
     
-      useEffect(() => {
-        // Set initial state based on fetched data
-        if (!userLoading && currentUser) {
-          const isUserFollowed = currentUser.followingIds?.includes(user._id);
-          setIsFollowed(isUserFollowed);
-        }
-      }, [currentUser, userLoading, user._id]);
+      // useEffect(() => {
+      //   // Set initial state based on fetched data
+      //   if (!userLoading && currentUser) {
+      //     const isUserFollowed = currentUser.followingIds?.includes(user?._id);
+      //     setIsFollowed(isUserFollowed);
+      //   }
+      // }, [currentUser, userLoading, user._id]);
+
+      useEffect(()=>{
+        fetchUser()
+        .then((data)=>{
+          //console.log(data.data);
+          setAllUserData(data?.data); 
+        })
+        setIsFollowed(filterUser[0]?.followingIds?.includes(user?._id));
+      },[currentUser,userLoading])
+    //console.log(allUserData);
     
     // console.log(currentUser?.followingIds);
     // currentUser?.followerIds.map(followers=>{

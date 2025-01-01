@@ -13,7 +13,7 @@ export const UsefetchUsers=()=>{
     })
 }
 
-export const UseAddFollower = (followerID: string, currentUserId: string) => {
+export const useAddFollower = (followerID: string, currentUserId: string) => {
     const queryClient = useQueryClient();
     return useMutation<any,Error,{ followerID: string; currentUserId: string }>({
         mutationKey: ["add_follower"],
@@ -27,7 +27,7 @@ export const UseAddFollower = (followerID: string, currentUserId: string) => {
                 
     })
 }
-export const UseDeleteFollower = (followerID: string, currentUserId: string) => {
+export const useDeleteFollower = (followerID: string, currentUserId: string) => {
     const queryClient = useQueryClient();
     return useMutation<any,Error,{ followerID: string; currentUserId: string }>({
         mutationKey: ["delete_follower"],

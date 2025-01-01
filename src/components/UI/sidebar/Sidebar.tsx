@@ -13,7 +13,7 @@ import { fetchUser } from '@/src//service/Profile';
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const Sidebar = () => {
-        const {user}=useUser();
+        const {user,isLoading:userLoading}=useUser();
         const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
         const [size, setSize] = React.useState<Sizes>("3xl");
         const sizes:Sizes[]=["3xl"];
@@ -29,12 +29,12 @@ const Sidebar = () => {
             <Avatar src={user?.profilePhoto} className="w-20 h-20 text-large" />
             <div className='space-y-5 py-5'>
                 <h1>{user?.name}</h1>
-                <p>Followers({`${user?.followerIds?.length}`})</p>
+                <p>Followers({userLoading ? '0' : `${user?.followerIds?.length}`})</p>
                 <Button className="w-full flex justify-start p-0 bg-white" key={size} onPress={() => handleOpen(size)}>
                 <p>Edit Profile</p>
                 </Button>
             </div>
-            <h1 className='py-5'>Following({`${user?.followingIds?.length}`})</h1>
+            <h1 className='py-5'>Following({userLoading ? '0' : `${user?.followerIds?.length}`})</h1>
             <div className='space-y-5'>
                 <p>Xyz</p>
                 <p>zys</p>
