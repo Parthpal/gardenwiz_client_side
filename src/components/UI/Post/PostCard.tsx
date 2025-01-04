@@ -11,24 +11,24 @@ import React, { useEffect } from 'react';
 import { ArrowDownIcon, ArrowUpIcon, CommentsIcon } from '../../icons';
 import Link from 'next/link';
 import { Ipost } from '../../../../types';
-import { upvotePost } from '@/src//service/post';
+import { addComments, upvotePost } from '@/src//service/post';
 import { useDOwnvote, useUpvote } from '@/src//hooks/post.hook';
+import { useUser } from '@/src//context/user.provider';
 interface IpostCardProps{
  posts:Ipost
 }
 
 const PostCard = ({posts}:IpostCardProps) => {
-    const{_id,title,images,content,upvotes,downvotes}=posts;
+    const{_id,title,images,content,upvotes,downvotes,comments}=posts;
     const {mutate:upVotemutation}=useUpvote();
     const {mutate:downVotemutation}=useDOwnvote();
-
     const [liked, setLiked] = React.useState(false);
     const handleUpvote=(id:any)=>{
         upVotemutation(id)
     }
-    const handleDownvote=(id)=>{
+    const handleDownvote=(id:any)=>{
         downVotemutation(id)
-    }
+    } 
 
     return (
         <>
@@ -36,7 +36,6 @@ const PostCard = ({posts}:IpostCardProps) => {
                 isBlurred
                 className="border-none bg-background/60 dark:bg-default-100/50 w-full mb-5 "
                 shadow="sm"
-
                 >
                 <CardBody>
                     <div className='flex flex-row-reverse justify-between '>
@@ -91,59 +90,17 @@ const PostCard = ({posts}:IpostCardProps) => {
                                 <ArrowDownIcon/>
                                 <p className="text-lg">{downvotes}</p>
                             </Button>
-                            <div className="flex justify-around items-center gap-2">
-                                <CommentsIcon/>
-                                <p className="text-lg">23</p>
-                            </div>
+                            <Button className="flex justify-around items-center gap-2 bg-white">
+                            <CommentsIcon/>
+                            <p className="text-lg">{comments?.length??'0'}</p>
+                            </Button>
                         </div>
-                        </div>
-
-                        <div className="flex w-full items-center justify-center">
-                        <Button
-                            isIconOnly
-                            className="data-[hover]:bg-foreground/10"
-                            radius="full"
-                            variant="light"
-                        >
-                            {/* <RepeatOneIcon className="text-foreground/80" /> */}
-                        </Button>
-                        <Button
-                            isIconOnly
-                            className="data-[hover]:bg-foreground/10"
-                            radius="full"
-                            variant="light"
-                        >
-                            {/* <PreviousIcon /> */}
-                        </Button>
-                        <Button
-                            isIconOnly
-                            className="w-auto h-auto data-[hover]:bg-foreground/10"
-                            radius="full"
-                            variant="light"
-                        >
-                            {/* <PauseCircleIcon size={54} /> */}
-                        </Button>
-                        <Button
-                            isIconOnly
-                            className="data-[hover]:bg-foreground/10"
-                            radius="full"
-                            variant="light"
-                        >
-                            {/* <NextIcon /> */}
-                        </Button>
-                        <Button
-                            isIconOnly
-                            className="data-[hover]:bg-foreground/10"
-                            radius="full"
-                            variant="light"
-                        >
-                            {/* <ShuffleIcon className="text-foreground/80" /> */}
-                        </Button>
                         </div>
                     </div>
                     </div>
                 </CardBody>
             </Card>
+
         </>
     );
 };

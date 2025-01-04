@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable padding-line-between-statements */
-"use server"
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { addFollower, deleteFollower, fetchUser } from "../service/Profile"
 import { FieldValues } from "react-hook-form"
@@ -13,11 +13,11 @@ export const UsefetchUsers=()=>{
     })
 }
 
-export const useAddFollower = (followerID: string, currentUserId: string) => {
+export const useAddFollower = () => {
     const queryClient = useQueryClient();
-    return useMutation<any,Error,{ followerID: string; currentUserId: string }>({
+    return useMutation<any,Error,{ followerID: string, currentUserId: string }>({
         mutationKey: ["add_follower"],
-        mutationFn: async ({followerID,currentUserId}) => await addFollower(followerID,currentUserId),
+        mutationFn: async ({ followerID, currentUserId}) => await addFollower(followerID, currentUserId),
         onSuccess: () => {
             queryClient.invalidateQueries(["GET_Users"]);
           },
@@ -27,7 +27,7 @@ export const useAddFollower = (followerID: string, currentUserId: string) => {
                 
     })
 }
-export const useDeleteFollower = (followerID: string, currentUserId: string) => {
+export const useDeleteFollower = () => {
     const queryClient = useQueryClient();
     return useMutation<any,Error,{ followerID: string; currentUserId: string }>({
         mutationKey: ["delete_follower"],

@@ -10,7 +10,6 @@ export const postData = async (userData: FieldValues) => {
     try {
       const { data } = await axiosInstance.post("/create-post", userData,);
       //console.log(data); 
-      
       return data;
     } catch (error: any) {
       throw new Error(error);
@@ -20,6 +19,15 @@ export const postData = async (userData: FieldValues) => {
   export const fetchPost=async(): Promise<any>=>{
       try {
           const {data}=await axiosInstance.get('/posts')
+         //console.log(data);
+          return data;
+      } catch (error:any) {
+          throw new Error(error.message)
+      }
+  }
+  export const fetchPostFromID=async(id:string): Promise<any>=>{
+      try {
+          const {data}=await axiosInstance.get(`/posts/${id}`)
          //console.log(data);
           return data;
       } catch (error:any) {
@@ -37,6 +45,14 @@ export const postData = async (userData: FieldValues) => {
   export const downvotePost=async(id:string): Promise<any>=>{
       try {
           const {data}=await axiosInstance.patch(`/posts/downvote/${id}`)
+          return data;
+      } catch (error:any) {
+          throw new Error(error.message)
+      }
+  }
+  export const addComments=async(id:string,commentsData:any): Promise<any>=>{
+      try {
+          const {data}=await axiosInstance.put(`/posts/comments/${id}`,commentsData)
           return data;
       } catch (error:any) {
           throw new Error(error.message)

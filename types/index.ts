@@ -28,6 +28,7 @@ export interface Ipost{
   content: string;
   userID: string;
   categoryID: string;
+  comments:IComments[];
   images: string[];
   premium: boolean;
   upvotes: number;
@@ -35,6 +36,13 @@ export interface Ipost{
   createdAt: string; // ISO 8601 date string
   updatedAt: string; // ISO 8601 date string
   __v: number;
+}
+
+export interface IComments{
+  userID: string;
+  comment: string;
+  _id: string;
+  createdAt: string;
 }
 
 export interface IUser {

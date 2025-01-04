@@ -3,58 +3,42 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import { useUser } from '@/src//context/user.provider';
-import { useAddFollower, UseAddFollower, UsefetchUsers } from '@/src//hooks/users.hook';
+import { useAddFollower,useDeleteFollower, UsefetchUsers } from '@/src//hooks/users.hook';
 import { addFollower, deleteFollower, fetchUser } from '@/src//service/Profile';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { Card, CardHeader } from '@nextui-org/card';
 import React, { useEffect, useState } from 'react';
 import { IUser } from '../../../../types';
+import { useQuery } from '@tanstack/react-query';
+
 
 const FollowCard = ({user}:{user:any}) => {
-    const [allUserData,setAllUserData]=useState([]);
     const {user:currentUser,isLoading:userLoading}=useUser();
+    const {mutate:addFollower}=useAddFollower();
+    const {mutate:deleteFollower}=useDeleteFollower();
+    const [allUserData,setAllUserData]=useState([]);
     const filterUser:IUser[]=allUserData.filter((userData:IUser)=>userData?._id===currentUser!._id)
     //console.log(filterUser[0]);
-    const [isFollowed, setIsFollowed] = React.useState(false);
-    const handleFollow = async (follwedCheck: boolean, id: string) => {
-        // Optimistic update
-        setIsFollowed(follwedCheck);
-        try {
-          if (follwedCheck) {
-            await addFollower(id, currentUser!._id);
-          } else {
-            await deleteFollower(id, currentUser!._id);
-          }
-        } catch (error) {
-          // Revert update in case of error
-          setIsFollowed(!follwedCheck);
-          alert("Failed to update follow status. Please try again.");
-        }
-      };
-    
-      // useEffect(() => {
-      //   // Set initial state based on fetched data
-      //   if (!userLoading && currentUser) {
-      //     const isUserFollowed = currentUser.followingIds?.includes(user?._id);
-      //     setIsFollowed(isUserFollowed);
-      //   }
-      // }, [currentUser, userLoading, user._id]);
-
-      useEffect(()=>{
-        fetchUser()
-        .then((data)=>{
-          //console.log(data.data);
-          setAllUserData(data?.data); 
-        })
-        setIsFollowed(filterUser[0]?.followingIds?.includes(user?._id));
-      },[currentUser,userLoading])
-    //console.log(allUserData);
-    
-    // console.log(currentUser?.followingIds);
-    // currentUser?.followerIds.map(followers=>{
-    //     console.log(followers);
-    // })
+    const [isFollowed, setIsFollowed] = React.useState(filterUser[0]?.followingIds?.includes(user?._id));
+    const handleFollow =(follwedCheck: boolean, id: string) => {
+      // Optimistic update
+      setIsFollowed(follwedCheck);
+      if(follwedCheck){
+        addFollower({followerID: id, currentUserId: currentUser!._id})
+      }
+      else{
+        deleteFollower({followerID: id, currentUserId: currentUser!._id})
+      }
+    };
+    useEffect(()=>{
+      fetchUser()
+      .then((data)=>{
+        //console.log(data.data);
+        setAllUserData(data?.data);  
+      })
+      setIsFollowed(filterUser[0]?.followingIds?.includes(user?._id));
+    },[currentUser,userLoading])
     
     return (
         <>

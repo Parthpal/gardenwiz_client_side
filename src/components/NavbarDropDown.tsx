@@ -17,13 +17,13 @@ const NavbarDropDown = () => {
     const handleLogout = () => {
         logout();
         userLoading(true);
-    
         if (protectedRoutes.some((route) => pathname.match(route))) {
           router.push("/");
         }
       };
       const handleNavigation = (pathname: string) => {
         router.push(pathname);
+        window.location.reload(); 
       };
     return (
         <>
@@ -32,10 +32,10 @@ const NavbarDropDown = () => {
               <Avatar className="cursor-pointer" src={user?.profilePhoto} />
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              {/* <DropdownItem key="profile" onPress={() => handleNavigation("/profile")}>
+              <DropdownItem key="profile" onPress={() => handleNavigation("/profile")}>
                 Profile
               </DropdownItem>
-              <DropdownItem  key="setting" onPress={() => handleNavigation("/profile/settings")}>
+              {/* <DropdownItem  key="setting" onPress={() => handleNavigation("/profile/settings")}>
                 Settings
               </DropdownItem>
               <DropdownItem key="create-post" onPress={() => handleNavigation("/profile/create-post")}>

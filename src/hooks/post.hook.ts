@@ -28,9 +28,9 @@ export const useUpvote = () => {
 }
 export const useDOwnvote = () => {
     const queryClient = useQueryClient();
-    return useMutation<any,Error,FieldValues>({
+    return useMutation<any,Error,{id:string}>({
         mutationKey: ["post_downvote"],
-        mutationFn: async (id) => await downvotePost(id),
+        mutationFn: async (id:any) => await downvotePost(id),
         onSuccess: () => {
             queryClient.invalidateQueries(["GET_POSTS"]);
           },

@@ -25,9 +25,6 @@ const UpdateProfile = () => {
       setSize(size);
       onOpen();
     };
-    const defaultValues = {
-      name: user?.name,
-    }
     const methods = useForm({
       defaultValues: {
         name: user?.name,
