@@ -1,7 +1,7 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 "use client"
-import { Avatar } from '@nextui-org/avatar';
+import { Avatar, AvatarGroup } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { Modal, useDisclosure } from '@nextui-org/modal';
 import React from 'react';
@@ -9,6 +9,7 @@ import UpdateProfile from '../Profile/UpdateProfile';
 import { useUser } from '@/src//context/user.provider';
 import { UsefetchUsers } from '@/src//hooks/users.hook';
 import { fetchUser } from '@/src//service/Profile';
+import Link from 'next/link';
 
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
@@ -23,6 +24,8 @@ const Sidebar = () => {
           onOpen();
         };
       //console.log(data?.data);
+      // console.log(user?.followingIds?.name);
+      
     return (
         <>
         <div className=''>
@@ -30,15 +33,44 @@ const Sidebar = () => {
             <div className='space-y-5 py-5'>
                 <h1>{user?.name}</h1>
                 <p>Followers({userLoading ? '0' : `${user?.followerIds?.length}`})</p>
+                <Link href='/profile/followers'>
+                <AvatarGroup
+                    isBordered
+                    max={2}
+                    renderCount={(count) => (
+                      <p className="text-small text-foreground font-medium ms-2">+{count} others</p>
+                    )}
+                    total={user?.followerIds?.length}
+                  >
+                  {
+                    user?.followerIds?.map((follower:any)=>(
+                      <Avatar key={follower?._id} src={follower?.profilePhoto} />
+                    ))
+                  }
+                </AvatarGroup>
+                </Link>
                 <Button className="w-full flex justify-start p-0 bg-white" key={size} onPress={() => handleOpen(size)}>
                 <p>Edit Profile</p>
                 </Button>
             </div>
-            <h1 className='py-5'>Following({userLoading ? '0' : `${user?.followerIds?.length}`})</h1>
-            <div className='space-y-5'>
-                <p>Xyz</p>
-                <p>zys</p>
-                <p>See all ..</p>
+            <h1 className='py-5'>Following({userLoading ? '0' : `${user?.followingIds?.length}`})</h1>
+            <div>     
+            <Link href='/profile/followings'>                         
+            <AvatarGroup
+                    isBordered
+                    max={2}
+                    renderCount={(count) => (
+                      <p className="text-small text-foreground font-medium ms-2">+{count} others</p>
+                    )}
+                    total={user?.followingIds?.length}
+                  >
+                  {
+                    user?.followingIds?.map((followings:any)=>(
+                      <Avatar key={followings?._id} src={followings?.profilePhoto} />
+                    ))
+                  }
+            </AvatarGroup>
+            </Link>
             </div>
 
         </div>

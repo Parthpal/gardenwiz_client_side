@@ -23,8 +23,10 @@ const Sideposts = () => {
             const CurrentUser:IUser[]=user?data.filter((userData:IUser)=>userData?._id===user._id):[];
             if(!userLoading && user){
                 const filteredData = await data?.filter((userData: IUser) => userData._id !== CurrentUser[0]?._id);
-                const filteredData2 = await filteredData?.filter((userData: IUser) =>!(CurrentUser[0]?.followingIds?.includes(userData?._id)));
-                //console.log(filteredData2)
+                const filteredData2 = await filteredData?.filter((userData: IUser) =>{
+                return !(CurrentUser[0]?.followingIds.some(following=>following?._id===userData?._id))
+                });
+                console.log(filteredData2)
                 // const filteredData2 = await filteredData?.filter((userData: IUser) =>(user?.followingIds?.includes(userData?._id)));
                setFilteredUserData(filteredData2);
             }

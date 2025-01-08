@@ -3,7 +3,7 @@
 "use client"
 import { addComments, fetchPostFromID } from '@/src//service/post';
 import React, { useEffect, useState } from 'react';
-import { Ipost } from '../../../../../types';
+import { IComments, Ipost } from '../../../../../types';
 import LightGallery from "lightgallery/react";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
@@ -19,6 +19,7 @@ import GWTextarea from '@/src//components/UI/Form/GWTextArea';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody } from '@nextui-org/card';
 import { Input, Textarea } from '@nextui-org/input';
+import CommentCard from '@/src//components/UI/Post/CommentCard';
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const PostDetails = ({ params }: { params: { postID: string } }) => {
@@ -37,7 +38,6 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
             setPostData(data.data)
         })
     },[])
-
     const methods = useForm({});
     const { control, handleSubmit } = methods;
     const submitHandler = methods.handleSubmit;
@@ -78,13 +78,13 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
             </LightGallery>
             <div className="flex flex-wrap">
                 {sizes.map((size) => (
-                  <Button className="w-full h-full bg-white" key={size} onPress={() => handleOpen(size)}>
+                  <Button className="w-full h-full bg-white p-0" key={size} onPress={() => handleOpen(size)}>
                         <Textarea
                         disableAnimation
                         disableAutosize
                         classNames={{
-                            base: "w-full",
-                            input: "resize-y min-h-[100px]",
+                            base: "w-full outline-none",
+                            input: "resize-y border-0 min-h-[100px]",
                         }}
                         label=""
                         placeholder="What your thoughts"
@@ -93,13 +93,14 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
                   </Button>
                 ))}
             </div>
-            <div>
-             {postData?.comments?.length?<h1 className='font-semibold text-2xl'>All Comments{postData?.comments?.length}</h1>:<h1 className='font-semibold text-2xl'>No Comments</h1>}
+            <div className='space-y-4'>
+             {postData?.comments?.length?<h1 className='font-semibold text-2xl'>All Comments</h1>:<h1 className='font-semibold text-2xl'>No Comments</h1>}
                 {
-                    postData?.comments?.map((comment)=>
-                    <p key={comment._id}>{comment.comment}</p>
+                    postData?.comments?.map((userComments:IComments)=>(
+                      <CommentCard key={userComments._id} userComments={userComments}/>
                     )
-                }
+                    )
+             }
             </div>
             </div>
             <div></div>

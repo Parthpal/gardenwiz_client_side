@@ -90,10 +90,10 @@ const PostCard = ({posts}:IpostCardProps) => {
                                 <ArrowDownIcon/>
                                 <p className="text-lg">{downvotes}</p>
                             </Button>
-                            <Button className="flex justify-around items-center gap-2 bg-white">
+                            <Link className="flex justify-around items-center gap-2 bg-white" href={`/posts/${_id}`}>
                             <CommentsIcon/>
                             <p className="text-lg">{comments?.length??'0'}</p>
-                            </Button>
+                            </Link>
                         </div>
                         </div>
                     </div>
