@@ -42,7 +42,8 @@
 		"next-themes": "^0.2.1",
 		"react-hook-form": "^7.53.2",
 		"react-quill": "^2.0.0",
-		"sonner": "^1.7.0"
+		"sonner": "^1.7.0",
+		"sweetalert2": "^11.15.10"
 	},
 	"devDependencies": {
 		"@types/node": "20.5.7",

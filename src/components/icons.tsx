@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IconSvgProps } from "../../types";
-
+import { SVGProps } from "react";
 
 
 export const Logo: React.FC<IconSvgProps> = ({
@@ -306,3 +306,15 @@ export const ArrowDownIcon: React.FC<IconSvgProps> = (props) => {
     </svg>
   );
 };
+
+export const DotThreeIcons = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    width="1em"
+    height="1em"
+    fill="currentColor"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+  </svg>
+);

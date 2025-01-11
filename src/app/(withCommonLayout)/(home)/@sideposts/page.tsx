@@ -11,11 +11,6 @@ import { UsefetchUsers } from '@/src//hooks/users.hook';
 const Sideposts = () => {
     const{user,isLoading:userLoading}=useUser();
     const [allUserData,setAllUserData]=useState([]);
-   // const CurrentUser:IUser[]=allUserData.filter((userData:IUser)=>userData?._id===user!._id)
-    //const [userData,setUserData]= useState<IUser[]>([])
-    //console.log('userloading',userLoading);
-
-    
     const [filteredUserData, setFilteredUserData] = useState<IUser[]>([]);
         useEffect(()=>{
             const getUser=async()=>{

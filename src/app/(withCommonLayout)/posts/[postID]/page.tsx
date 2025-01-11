@@ -20,24 +20,37 @@ import { Button } from '@nextui-org/button';
 import { Card, CardBody } from '@nextui-org/card';
 import { Input, Textarea } from '@nextui-org/input';
 import CommentCard from '@/src//components/UI/Post/CommentCard';
+import { useAddComments, UseGetPostsId } from '@/src//hooks/post.hook';
+import { UsefetchUsers } from '@/src//hooks/users.hook';
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const PostDetails = ({ params }: { params: { postID: string } }) => {
     const{user}=useUser();
-    const [postData,setPostData]=useState<Ipost|undefined>(undefined);
+    const [postData,setPostData]=useState<Ipost|undefined>();
     const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
     const [size, setSize] = React.useState<Sizes>("3xl");
     const sizes:Sizes[]=["3xl"];
+    const{mutate:addCommentsMutation,isPending}=useAddComments();
+    const {refetch,data:pData,isLoading:fetchLoading}=UseGetPostsId(params.postID);
     const handleOpen = (size : Sizes) => {
         setSize(size);
         onOpen();
       };
+   // console.log(data.data+'postdata');
+
+    // useEffect(()=>{
+    //     fetchPostFromID(params.postID)
+    //     .then(data=>{
+    //         setPostData(data.data)
+    //         //console.log(data,'fetchId');
+    //     })
+    // },[])
+    
     useEffect(()=>{
-        fetchPostFromID(params.postID)
-        .then(data=>{
-            setPostData(data.data)
-        })
-    },[])
+            setPostData(pData)
+            //console.log(data,'fetchId');
+    },[pData])
+
     const methods = useForm({});
     const { control, handleSubmit } = methods;
     const submitHandler = methods.handleSubmit;
@@ -46,8 +59,12 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
         ...data,
         userID:user?._id,
         };
-        addComments(params.postID,commentsData);
+        // addComments(params.postID,commentsData);
+        addCommentsMutation({ id: params.postID, commentData: commentsData })
     };
+    if(isPending && fetchLoading){
+      return <h1>loading..</h1>
+    }
     return (
         <>
          <div className='grid grid-cols-1 lg:grid-cols-[1fr,3fr,1fr] mx-5'>
@@ -96,8 +113,8 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
             <div className='space-y-4'>
              {postData?.comments?.length?<h1 className='font-semibold text-2xl'>All Comments</h1>:<h1 className='font-semibold text-2xl'>No Comments</h1>}
                 {
-                    postData?.comments?.map((userComments:IComments)=>(
-                      <CommentCard key={userComments._id} userComments={userComments}/>
+                    postData?.comments?.map((userComments)=>(
+                      <CommentCard key={userComments._id} postId={postData?._id} userComments={userComments}/>
                     )
                     )
              }
@@ -121,7 +138,7 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
                             className="max-w-lg"
                             label="Description"/>
                             <Button color="primary" className='w-full my-2' size="lg" type="submit">
-                              Add Comment
+                              {isPending?'Comment Adding':'Add Comment'}
                             </Button>
                           </form>
                         </FormProvider>
