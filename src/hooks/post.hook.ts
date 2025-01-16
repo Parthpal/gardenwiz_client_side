@@ -1,7 +1,7 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addComments, downvotePost, fetchComments, fetchPost, fetchPostFromID, upvotePost } from "../service/post"
+import { addComments, deleteComments, downvotePost, editComment, fetchComments, fetchPost, fetchPostFromID, upvotePost } from "../service/post"
 import { FieldValues } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -80,7 +80,35 @@ export const useAddComments = () => {
           },
           onError: (error) => {
             toast.error(error.message);
-          },
-                
+          },   
     })
+}
+  export const useDeleteComments = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any,Error,{id:string,postId:string}>({
+      mutationKey: ["delete_comments"],
+      mutationFn: async ({id,postId}) => await deleteComments(id, postId),
+      onSuccess: () => {
+         queryClient.invalidateQueries(["GET_POSTS_Id"]);
+         toast.message('Comments Deleted');  
+        },
+        onError: (error) => {
+         toast.error(error.message);
+        },   
+  })
+}
+
+export const useEditComments = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any,Error,{commentID:any,commentsData:any}>({
+      mutationKey: ["delete_comments"],
+      mutationFn: async ({commentID,commentsData}) => await editComment(commentID, commentsData),
+      onSuccess: () => {
+         queryClient.invalidateQueries(["GET_POSTS_Id"]);
+         toast.message('Comments Edited');  
+        },
+        onError: (error) => {
+         toast.error(error.message);
+        },   
+  })
 }

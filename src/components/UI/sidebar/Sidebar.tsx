@@ -32,6 +32,9 @@ const Sidebar = () => {
             <Avatar src={user?.profilePhoto} className="w-20 h-20 text-large" />
             <div className='space-y-5 py-5'>
                 <h1>{user?.name}</h1>
+                <Link href='/profile/Checkout'>
+                <Button color="primary" variant="solid">Verify Account</Button>
+                </Link>
                 <p>Followers({userLoading ? '0' : `${user?.followerIds?.length}`})</p>
                 <Link href='/profile/followers'>
                 <AvatarGroup
@@ -49,11 +52,11 @@ const Sidebar = () => {
                   }
                 </AvatarGroup>
                 </Link>
-                <Button className="w-full flex justify-start p-0 bg-white" key={size} onPress={() => handleOpen(size)}>
+                <Button className="w-full flex justify-start my-2 p-0 bg-white" key={size} onPress={() => handleOpen(size)}>
                 <p>Edit Profile</p>
                 </Button>
             </div>
-            <h1 className='py-5'>Following({userLoading ? '0' : `${user?.followingIds?.length}`})</h1>
+            <h1 className=''>Following({userLoading ? '0' : `${user?.followingIds?.length}`})</h1>
             <div>     
             <Link href='/profile/followings'>                         
             <AvatarGroup

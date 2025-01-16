@@ -5,13 +5,14 @@ import { IInput } from "../../../../types";
 
 interface IProps extends IInput {
   type?: string;
+  value?:string
 }
 
 export default function GWTextarea({
   name,
   label,
   variant = "bordered",
-  className
+  className,
 }: IProps) {
   const {
     register,

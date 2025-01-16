@@ -36,15 +36,6 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
         setSize(size);
         onOpen();
       };
-   // console.log(data.data+'postdata');
-
-    // useEffect(()=>{
-    //     fetchPostFromID(params.postID)
-    //     .then(data=>{
-    //         setPostData(data.data)
-    //         //console.log(data,'fetchId');
-    //     })
-    // },[])
     
     useEffect(()=>{
             setPostData(pData)
@@ -62,9 +53,6 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
         // addComments(params.postID,commentsData);
         addCommentsMutation({ id: params.postID, commentData: commentsData })
     };
-    if(isPending && fetchLoading){
-      return <h1>loading..</h1>
-    }
     return (
         <>
          <div className='grid grid-cols-1 lg:grid-cols-[1fr,3fr,1fr] mx-5'>

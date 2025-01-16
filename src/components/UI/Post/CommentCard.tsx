@@ -16,6 +16,7 @@ import { deleteComments, editComment } from '@/src//service/post';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import GWTextarea from '../Form/GWTextArea';
+import { useDeleteComments, useEditComments } from '@/src//hooks/post.hook';
 
 type ICommentProps={
 userID:IUser,
@@ -26,6 +27,7 @@ createdAt?:string,
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const CommentCard = ({userComments,postId}:{userComments:ICommentProps,postId:any}) => {
     const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
+    const{mutate:deleteCommentMutation}=useDeleteComments();
     const [size, setSize] = React.useState<Sizes>("3xl");
     const sizes:Sizes[]=["3xl"];
     const handleOpen = (size : Sizes) => {
@@ -34,10 +36,13 @@ const CommentCard = ({userComments,postId}:{userComments:ICommentProps,postId:an
       };
     const {user:currentUser,isLoading:userLoading}=useUser();
     const{comment,userID:commentUserId,_id:commentID}=userComments;
+    const {mutate:editCommentMutation}=useEditComments();
     const handleDelete=(id:any)=>{
-        deleteComments(id,postId);
+      deleteCommentMutation({id,postId});
     }
-    const methods = useForm({});
+    const methods = useForm({defaultValues:{
+      comments:comment,
+    },});
     const { control, handleSubmit } = methods;
     const submitHandler = methods.handleSubmit;
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -45,7 +50,7 @@ const CommentCard = ({userComments,postId}:{userComments:ICommentProps,postId:an
         ...data,
         postId:postId
         };
-        editComment(commentID,commentsData)
+        editCommentMutation({commentID,commentsData});
     };
     return (<>
         <Card className="max-w-full">
@@ -104,7 +109,9 @@ const CommentCard = ({userComments,postId}:{userComments:ICommentProps,postId:an
                         <GWTextarea
                         name='comments'
                         className="max-w-lg"
-                        label="Description"/>
+                        label="Description"
+                        value={comment}
+                        />
                         <Button color="primary" className='w-full my-2' size="lg" type="submit">
                           Add Comment
                         </Button>
