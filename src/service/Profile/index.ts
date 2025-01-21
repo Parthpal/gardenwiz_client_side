@@ -10,6 +10,14 @@ export const updateUser = async (userData: FieldValues,id:string) => {
       throw new Error(error);
     }
   };
+export const updateUserStatus = async (id:string) => {
+    try {
+      const { data } = await axiosInstance.patch(`/user/status/${id}`);
+      return data;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
 
 export const fetchUser=async()=>{
   try {

@@ -30,11 +30,12 @@ export interface Ipost{
   categoryID: string;
   comments:IComments[];
   images: string[];
-  premium: boolean;
+  // premium: boolean;
   upvotes: number;
   downvotes: number;
   createdAt: string; // ISO 8601 date string
   updatedAt: string; // ISO 8601 date string
+  tags:string;
   __v: number;
 }
 

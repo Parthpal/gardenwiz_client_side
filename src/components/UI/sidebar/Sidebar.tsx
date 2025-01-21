@@ -10,6 +10,7 @@ import { useUser } from '@/src//context/user.provider';
 import { UsefetchUsers } from '@/src//hooks/users.hook';
 import { fetchUser } from '@/src//service/Profile';
 import Link from 'next/link';
+import { VerifiedComponent } from '../../icons';
 
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
@@ -32,9 +33,13 @@ const Sidebar = () => {
             <Avatar src={user?.profilePhoto} className="w-20 h-20 text-large" />
             <div className='space-y-5 py-5'>
                 <h1>{user?.name}</h1>
-                <Link href='/profile/Checkout'>
-                <Button color="primary" variant="solid">Verify Account</Button>
-                </Link>
+                {
+                  user?.status==='PREMIUM'?
+                  <Button color="primary" variant="bordered">Verified<span><VerifiedComponent/></span></Button>:
+                  <Link href='/profile/Checkout'>
+                  <Button color="primary" variant="solid">Verify Account</Button>
+                  </Link>
+                }
                 <p>Followers({userLoading ? '0' : `${user?.followerIds?.length}`})</p>
                 <Link href='/profile/followers'>
                 <AvatarGroup

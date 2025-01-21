@@ -5,19 +5,23 @@
 import GWInput from '@/src//components/UI/Form/GWInput';
 import { useUser } from '@/src//context/user.provider';
 import { paymentData, postPaymentData, postPaymentIntent } from '@/src//service/Payment';
+import { updateUserStatus } from '@/src//service/Profile';
 import { Button } from '@nextui-org/button';
 import { CardHeader } from '@nextui-org/card';
 import { CardCvcElement, CardElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 
 const CheckOutForm = () => {
-    const [membership_prices,setMembershipPrice]=useState(0);
+    //const [membership_prices,setMembershipPrice]=useState(0);
+    let membership_prices=19.99;
     const {user}=useUser();
+    let user_name=user?.name;
+    const router=useRouter();
     //const package_array=name.split(" ");
    // const package_name=package_array[0];
-
     const [clientSecret, setClientSecret] = useState("");
     const [transactionId,setTransactionId]=useState("");
     const stripe = useStripe();
@@ -25,14 +29,14 @@ const CheckOutForm = () => {
     const [error,setError]=useState('');
     const methods = useForm({
       defaultValues: {
-        name: user?.name,
+        name:'',
       },});
       const { control, handleSubmit,reset } = methods;
       useEffect(() => {
         if (user) {
           reset({ name: user?.name }); // Update form with user data
         }
-      }, [user, reset]);
+      }, [user]);
       useEffect(() => {
         // Create PaymentIntent as soon as the page loads
         if (membership_prices > 0) {
@@ -44,10 +48,12 @@ const CheckOutForm = () => {
                 );
         }
       }, [membership_prices]);
-    
+      if (!user) {
+        return <p>Loading...</p>;
+      }
     const submitHandler = methods.handleSubmit;
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        setMembershipPrice(19.99);
+        //setMembershipPrice(19.99);
         if (!stripe || !elements) {
             console.error('Stripe.js has not loaded yet.');
             return;
@@ -102,7 +108,6 @@ const CheckOutForm = () => {
                 if(paymentIntent.status === 'succeeded'){
                     console.log('transaction id',paymentIntent.id);
                     setTransactionId(paymentIntent.id);
-
                     // now save the payment in the database
                     const payment = {
                         email: user?.email,
@@ -114,7 +119,7 @@ const CheckOutForm = () => {
                     
                     const res = await postPaymentData(payment);
                     console.log('payment saved', res.data);
-                    if (res.data?.paymentResult?.insertedId) {
+                    if (res?.data?._id) {
                         Swal.fire({
                             position: "top-end",
                             icon: "success",
@@ -122,11 +127,12 @@ const CheckOutForm = () => {
                             showConfirmButton: false,
                             timer: 1500
                         });
-                                        // navigate('/dashboard/paymentHistory')
-                                        // const res=axiosSecure.put(`/users/${user.email}`,{
-                                        //   badge:package_name
-                                        // })
-                                        // console.log(res.data);
+                                router.push('/')
+                                updateUserStatus(user?._id)
+                                // const res=axiosSecure.put(`/users/${user.email}`,{
+                                //   badge:package_name
+                                // })
+                                // console.log(res.data);
                                         
                                     }
                 }

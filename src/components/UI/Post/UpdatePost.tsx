@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable padding-line-between-statements */
 "use client";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -35,7 +33,7 @@ import { useUser } from "@/src//context/user.provider";
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 
-const CreatePost = () => {
+const UpdatePost = () => {
   const {user}=useUser();
   const [tagsData,setTagsData]=useState([]);
   const [scrollBehavior, setScrollBehavior] =React.useState<ModalProps["scrollBehavior"]>('outside');
@@ -225,4 +223,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default UpdatePost;
