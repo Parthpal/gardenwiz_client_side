@@ -102,3 +102,11 @@ export const postData = async (userData: FieldValues) => {
         throw new Error(error.message)
     }
 }
+  export const deletePosts=async(id:string): Promise<any>=>{
+    try {
+        const {data}=await axiosInstance.delete(`/posts/${id}`)
+        return data;
+    } catch (error:any) {
+        throw new Error(error.message)
+    }
+}

@@ -12,10 +12,9 @@ import { ArrowDownIcon, ArrowUpIcon, CommentsIcon, Crown, DragDots, HeartIcon } 
 import Link from 'next/link';
 import { Ipost } from '../../../../types';
 import { addComments, upvotePost } from '@/src//service/post';
-import { useDOwnvote, useUpvote } from '@/src//hooks/post.hook';
+import { useDeletePosts, useDOwnvote, useUpvote } from '@/src//hooks/post.hook';
 import { useUser } from '@/src//context/user.provider';
 import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import { Tooltip } from '@heroui/tooltip';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 
@@ -28,6 +27,7 @@ const PostCard = ({posts}:IpostCardProps) => {
     const{_id,title,images,content,upvotes,downvotes,comments,tags,userID}=posts;
     const {mutate:upVotemutation}=useUpvote();
     const {mutate:downVotemutation}=useDOwnvote();
+    const {mutate:deletePostMutate}=useDeletePosts();
     const [liked, setLiked] = React.useState(false);
     const handleUpvote=(id:any)=>{
         upVotemutation(id)
@@ -43,6 +43,9 @@ const PostCard = ({posts}:IpostCardProps) => {
            footer: '<a style="color: blue;" href="/profile/Checkout">Verify Your Account!</a>'   
           });
     } 
+    const handleDelete=(id:any)=>{
+        deletePostMutate({id});
+      }
     return (
         <>
         <Card
@@ -135,7 +138,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                             <DropdownItem key='Edit'>
                                 Edit
                             </DropdownItem>
-                            <DropdownItem key="delete">
+                            <DropdownItem key="delete" onPress={()=>handleDelete(_id)}>
                                 Delete
                             </DropdownItem>
                             </DropdownMenu>

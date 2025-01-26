@@ -1,7 +1,7 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addComments, deleteComments, downvotePost, editComment, fetchComments, fetchPost, fetchPostFromID, upvotePost } from "../service/post"
+import { addComments, deleteComments, deletePosts, downvotePost, editComment, fetchComments, fetchPost, fetchPostFromID, upvotePost } from "../service/post"
 import { FieldValues } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -91,6 +91,20 @@ export const useAddComments = () => {
       onSuccess: () => {
          queryClient.invalidateQueries(["GET_POSTS_Id"]);
          toast.message('Comments Deleted');  
+        },
+        onError: (error) => {
+         toast.error(error.message);
+        },   
+  })
+}
+export const useDeletePosts = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any,Error,{id:string}>({
+      mutationKey: ["delete_comments"],
+      mutationFn: async ({id}) => await deletePosts(id),
+      onSuccess: () => {
+         queryClient.invalidateQueries(["GET_POSTS_Id"]);
+         toast.message('Post Deleted');  
         },
         onError: (error) => {
          toast.error(error.message);
