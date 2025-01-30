@@ -7,28 +7,45 @@ import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter } from '@nextui-org/card';
 import { Image } from '@nextui-org/image';
 
-import React, { useEffect } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { ArrowDownIcon, ArrowUpIcon, CommentsIcon, Crown, DragDots, HeartIcon } from '../../icons';
 import Link from 'next/link';
 import { Ipost } from '../../../../types';
-import { addComments, upvotePost } from '@/src//service/post';
+import { addComments, postData, upvotePost } from '@/src//service/post';
 import { useDeletePosts, useDOwnvote, useUpvote } from '@/src//hooks/post.hook';
 import { useUser } from '@/src//context/user.provider';
 import Swal from 'sweetalert2';
 import { Tooltip } from '@heroui/tooltip';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalProps, useDisclosure } from '@nextui-org/modal';
+import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import GWInput from '../Form/GWInput';
+import GWSelect from '../Form/GWSelect';
+import TextEditor from '../RichTextEditor/TextEditor';
+import { UsefetchCategories } from '@/src//hooks/categories.hook';
 
 interface IpostCardProps{
  posts:Ipost
 }
-
+type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const PostCard = ({posts}:IpostCardProps) => {
     const {user}=useUser();
-    const{_id,title,images,content,upvotes,downvotes,comments,tags,userID}=posts;
+    const{_id,title,images,content,upvotes,downvotes,comments,tags,userID,categoryID}=posts;
     const {mutate:upVotemutation}=useUpvote();
     const {mutate:downVotemutation}=useDOwnvote();
     const {mutate:deletePostMutate}=useDeletePosts();
     const [liked, setLiked] = React.useState(false);
+    const [tagsData,setTagsData]=React.useState([]);
+    const [scrollBehavior, setScrollBehavior] =React.useState<ModalProps["scrollBehavior"]>('outside');
+    const [imageFiles, setImageFiles] = React.useState<File[] | []>([]);
+    const [imagePreviews, setImagePreviews] = React.useState<string[] | []>([]);
+    const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
+    const [size, setSize] = React.useState<Sizes>("3xl");
+    const sizes:Sizes[]=["3xl"];
+    const handleOpen = (size : Sizes) => {
+      setSize(size);
+      onOpen();
+    }; 
     const handleUpvote=(id:any)=>{
         upVotemutation(id)
     }
@@ -45,6 +62,82 @@ const PostCard = ({posts}:IpostCardProps) => {
     } 
     const handleDelete=(id:any)=>{
         deletePostMutate({id});
+      }
+    const handleEdit=(id:any)=>{
+        
+      }
+
+       // post update related functions
+    const [contents, setContents] = React.useState("");
+    const methods =  useForm({
+          defaultValues: {
+            title: title,
+            // categoryID:,
+            tags: tags,
+          },});
+    const { control, handleSubmit } = methods;
+    const submitHandler = methods.handleSubmit;
+    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+      const formData = new FormData();
+      const postGardenData = {
+        ...data,
+        content,
+        userID:user?._id,
+      };
+      formData.append("data", JSON.stringify(postGardenData));
+      for (let image of imageFiles) {
+        formData.append("itemImages", image);
+      }
+      console.log(formData);
+      postData(formData)
+    };
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files![0];
+      setImageFiles((prev) => [...prev, file]);
+  
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreviews((prev) => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      }
+      
+    };
+    const handleDeleteImage = (index: number) => {
+        // Remove the image preview and file at the given index
+        setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+        setImageFiles((prev) => prev.filter((_, i) => i !== index));
+      };
+    const {
+      data: categoriesData,
+      isLoading: categoryLoading,
+      isSuccess: categorySuccess,
+    } = UsefetchCategories();
+    console.log(categoriesData);
+    useEffect(() => {
+      fetch('/data.json')
+        .then((response) => response.json())
+        .then((data) => setTagsData(data));
+    }, []);
+    let categoryOption: { key: string; label: string }[] = [];
+    let tagsOption: { key: string; label: string }[] = [];
+    console.log(categoriesData?.data);
+    console.log(tagsData);
+      if (categoriesData?.data && !categoryLoading) {
+        categoryOption = categoriesData.data
+          .sort()
+          .map((category: { _id: string; name: string }) => ({
+            key: category._id,
+            label: category.name,
+          }));
+      }
+      if (tagsData) {
+        tagsOption = tagsData.sort()
+          .map((tag:{id: string; name: string }) => ({
+            key: tag.name,
+            label: tag.name,
+          }));
       }
     return (
         <>
@@ -78,7 +171,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                         {                               
                             (user?.status==='PREMIUM') ?
                             <Link className="w-full text-sm flex justify-start my-2 p-0 bg-white" href={`/posts/${_id}`}>
-                              Read More..
+                            Read More..
                             </Link>:<></>
                         }
                         </>:
@@ -86,10 +179,10 @@ const PostCard = ({posts}:IpostCardProps) => {
                         {
                             user?.status==='BASIC' && tags==='Premium' ?
                             <Button className="w-full text-sm flex justify-start my-2 p-0 bg-white" onPress={handleTriggerModal}>
-                              Read More..
+                            Read More..
                             </Button>:<>
                             <Link className="w-full text-sm flex justify-start my-2 p-0 bg-white" href={`/posts/${_id}`}>
-                              Read More..
+                            Read More..
                             </Link>
                             </>
                         }
@@ -125,7 +218,7 @@ const PostCard = ({posts}:IpostCardProps) => {
             </Button>
             </Tooltip>
             <p className="text-2xl">
-              {
+            {
                     ((user?._id ===userID))?(
                         <>
                         <Dropdown>
@@ -135,7 +228,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                             </Button>
                             </DropdownTrigger>
                             <DropdownMenu aria-label="Link Actions">
-                            <DropdownItem key='Edit'>
+                            <DropdownItem key={size} onPress={() => handleOpen(size)}>
                                 Edit
                             </DropdownItem>
                             <DropdownItem key="delete" onPress={()=>handleDelete(_id)}>
@@ -151,14 +244,60 @@ const PostCard = ({posts}:IpostCardProps) => {
             </div>
             </CardFooter>
         </Card>
-        {/* <>
-        <template id="my-template">
-          <swal-title>Hey!</swal-title>
-          <swal-html>
-            <p>This is a custom modal created using SweetAlert2!</p>
-          </swal-html>
-        </template>
-      </> */}
+        {/* Edit post modal */}
+        <Modal isOpen={isOpen}
+        onOpenChange={onOpenChange} 
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        size={size}
+        scrollBehavior={scrollBehavior}
+        >
+        <ModalContent>
+            {(onClose) => (
+            <>
+                <ModalHeader className="flex flex-col gap-1">Create a Post</ModalHeader>
+                <ModalBody>
+                <Card>
+                    <CardBody>
+                    <FormProvider {...methods}>
+                        <form className="space-y-5" onSubmit={submitHandler(onSubmit)}>
+                        <GWInput label="title" name="title"/>
+                        <GWSelect label="category" name="categoryID" options={categoryOption} defaultSelectedKeys={[categoryID]}/>
+                        <GWSelect label="tags" name="tags" options={tagsOption} defaultSelectedKeys={[tags]}/>
+                        <TextEditor content={content} setContent={setContents} />
+                        <div className="min-w-fit flex-1">
+                            <label
+                                className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400"
+                                htmlFor="image"
+                            >
+                                Upload image
+                            </label>
+                            <input
+                                multiple
+                                className="hidden"
+                                id="image"
+                                type="file"
+                                onChange={(e) => handleImageChange(e)}
+                            />
+                        </div>
+
+                        <Button color="primary" className='w-full my-2' size="lg" type="submit">
+                            Update Post
+                        </Button>
+                        </form>
+                    </FormProvider>
+                    </CardBody>
+                </Card>
+                </ModalBody>
+                <ModalFooter>
+                <Button color="danger" variant="flat" onPress={onClose}>
+                    Close
+                </Button>
+                </ModalFooter>
+            </>
+            )}
+        </ModalContent>
+        </Modal>
         </>
     );
 };

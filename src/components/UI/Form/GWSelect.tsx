@@ -10,6 +10,7 @@ interface IProps {
   label: string;
   variant?: "bordered" | "faded" | "flat" | "filled";
   disabled?: boolean;
+  defaultSelectedKeys?:string[];
 }
 
 const GWSelect = ({
@@ -18,6 +19,7 @@ const GWSelect = ({
   label,
   variant = "bordered",
   disabled,
+  defaultSelectedKeys,
 }: IProps) => {
   const { control } = useFormContext(); // Access form methods from react-hook-form
 
@@ -33,6 +35,7 @@ const GWSelect = ({
             variant={variant}
             isDisabled={disabled}
             aria-label={label}
+            defaultSelectedKeys={defaultSelectedKeys}
           >
             {options.map((option) => (
               <SelectItem key={option.key} value={option.key}>
