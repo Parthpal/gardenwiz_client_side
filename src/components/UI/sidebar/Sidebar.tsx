@@ -7,7 +7,7 @@ import { Modal, useDisclosure } from '@nextui-org/modal';
 import React from 'react';
 import UpdateProfile from '../Profile/UpdateProfile';
 import { useUser } from '@/src//context/user.provider';
-import { UsefetchUsers } from '@/src//hooks/users.hook';
+import {  } from '@/src//hooks/users.hook';
 import { fetchUser } from '@/src//service/Profile';
 import Link from 'next/link';
 import { VerifiedComponent } from '../../icons';

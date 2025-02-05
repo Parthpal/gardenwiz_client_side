@@ -21,7 +21,7 @@ const Sideposts = () => {
                 const filteredData2 = await filteredData?.filter((userData: IUser) =>{
                 return !(CurrentUser[0]?.followingIds.some(following=>following?._id===userData?._id))
                 });
-                console.log(filteredData2)
+                //console.log(filteredData2)
                 // const filteredData2 = await filteredData?.filter((userData: IUser) =>(user?.followingIds?.includes(userData?._id)));
                setFilteredUserData(filteredData2);
             }

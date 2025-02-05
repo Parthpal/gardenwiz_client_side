@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import { useUser } from '@/src//context/user.provider';
-import { useAddFollower,useDeleteFollower, UsefetchUsers } from '@/src//hooks/users.hook';
+import { useAddFollower,useDeleteFollower,  } from '@/src//hooks/users.hook';
 import { addFollower, deleteFollower, fetchUser } from '@/src//service/Profile';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';

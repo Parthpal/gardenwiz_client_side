@@ -44,3 +44,12 @@ export const deleteFollower = async (followerID:string,currentUserId:string) => 
     throw new Error(error);
   }
 };
+
+export const addFavouritePosts=async(userId:any,postData:any): Promise<any>=>{
+  try {   
+      const {data}=await axiosInstance.put(`/user/${userId}/favouritePost`,postData)
+      return data;
+  } catch (error:any) {
+      throw new Error(error.message)
+  }
+}

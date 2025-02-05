@@ -56,5 +56,6 @@ export interface IUser {
   profilePhoto: string; // URL as a string
   followerIds: string[];
   followingIds: string[];
+  favoritePosts: string[];
   __v: number; // Version field, typically a number
 }

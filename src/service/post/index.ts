@@ -17,6 +17,15 @@ export const postData = async (userData: FieldValues) => {
       throw new Error(error);
     }
     };
+    export const updatePostData = async (userData: FieldValues,id:string) => {
+        try {
+          const { data } = await axiosInstance.put(`/update-post/${id}`, userData,);
+          //console.log(data); 
+          return data;
+        } catch (error: any) {
+          throw new Error(error);
+        }
+        };
 
   export const fetchPost=async(): Promise<any>=>{
       try {
@@ -28,21 +37,6 @@ export const postData = async (userData: FieldValues) => {
       }
   }
   export const fetchPostFromID=async(id:string): Promise<any>=>{
-    // const config = {
-    //     headers: {
-    //       "Cache-Control": "no-store", // To disable caching (if required)
-    //     },
-    //     next: {
-    //       tags: ["postsID"], // Relevant only for Next.js
-    //     },
-    //   };
-    //   try {
-    //     const res = await fetch(
-    //         `${envConfig.baseApi}/posts/${id}`,
-    //         config,
-    //       );
-        
-    //       return res.json();
  try{
         const {data}=await axiosInstance.get(`/posts/${id}`);
        // console.log(data);
@@ -77,8 +71,7 @@ export const postData = async (userData: FieldValues) => {
     }
 }
   export const addComments=async(id:string,commentsData:any): Promise<any>=>{
-      try {
-          console.log('comments'+id,commentsData);    
+      try {   
           const {data}=await axiosInstance.put(`/posts/comments/${id}`,commentsData)
           revalidateTag('postsID');
           return data;

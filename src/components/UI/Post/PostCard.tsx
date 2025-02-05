@@ -7,11 +7,11 @@ import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter } from '@nextui-org/card';
 import { Image } from '@nextui-org/image';
 
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { ArrowDownIcon, ArrowUpIcon, CommentsIcon, Crown, DragDots, HeartIcon } from '../../icons';
 import Link from 'next/link';
-import { Ipost } from '../../../../types';
-import { addComments, postData, upvotePost } from '@/src//service/post';
+import { Ipost, IUser } from '../../../../types';
+import { addComments, postData, updatePostData, upvotePost } from '@/src//service/post';
 import { useDeletePosts, useDOwnvote, useUpvote } from '@/src//hooks/post.hook';
 import { useUser } from '@/src//context/user.provider';
 import Swal from 'sweetalert2';
@@ -23,22 +23,34 @@ import GWInput from '../Form/GWInput';
 import GWSelect from '../Form/GWSelect';
 import TextEditor from '../RichTextEditor/TextEditor';
 import { UsefetchCategories } from '@/src//hooks/categories.hook';
+import { addFavouritePosts } from '@/src//service/Profile';
+import { UsefetchUsers } from '@/src//hooks/users.hook';
 
 interface IpostCardProps{
  posts:Ipost
 }
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const PostCard = ({posts}:IpostCardProps) => {
-    const {user}=useUser();
-    const{_id,title,images,content,upvotes,downvotes,comments,tags,userID,categoryID}=posts;
+    const {user,isLoading:userLoading}=useUser();
+    const { data:userdata} = UsefetchUsers();
+    //const [cUser,setcUser]=useState<IUser>([])
+   // console.log(userdata?.data);
+    const [filteredUserData, setFilteredUserData] = useState<IUser[]>([]);
+    useEffect(()=>{
+      const CurrentUser:IUser[]=user?userdata?.data?.filter((userData:IUser)=>userData?._id===user._id):[];
+      setFilteredUserData(CurrentUser ?? [])
+    },[user,userLoading])
+    // console.log(cUser);
+    //console.log(filteredUserData);
+    const{_id,title,images,content:postContent,upvotes,downvotes,comments,tags,userID,categoryID}=posts;
     const {mutate:upVotemutation}=useUpvote();
     const {mutate:downVotemutation}=useDOwnvote();
     const {mutate:deletePostMutate}=useDeletePosts();
     const [liked, setLiked] = React.useState(false);
     const [tagsData,setTagsData]=React.useState([]);
     const [scrollBehavior, setScrollBehavior] =React.useState<ModalProps["scrollBehavior"]>('outside');
-    const [imageFiles, setImageFiles] = React.useState<File[] | []>([]);
-    const [imagePreviews, setImagePreviews] = React.useState<string[] | []>([]);
+    const [imageFiles, setImageFiles] = React.useState<File[] | string[]>(images);
+    const [imagePreviews, setImagePreviews] = React.useState<string[] | []>(images);
     const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
     const [size, setSize] = React.useState<Sizes>("3xl");
     const sizes:Sizes[]=["3xl"];
@@ -63,38 +75,41 @@ const PostCard = ({posts}:IpostCardProps) => {
     const handleDelete=(id:any)=>{
         deletePostMutate({id});
       }
-    const handleEdit=(id:any)=>{
-        
-      }
-
        // post update related functions
-    const [contents, setContents] = React.useState("");
+    const [content, setContent] = React.useState(postContent);
     const methods =  useForm({
           defaultValues: {
             title: title,
-            // categoryID:,
+            categoryID:categoryID,
             tags: tags,
           },});
     const { control, handleSubmit } = methods;
     const submitHandler = methods.handleSubmit;
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
       const formData = new FormData();
-      const postGardenData = {
+      const images:string[]=[];
+      //console.log(images);   
+      for (let image of imageFiles) {
+       // console.log(image,'imagedata');
+        if(typeof image === 'string')  {
+          images.push(image)
+        }
+        else{
+          formData.append("itemImages", image);
+        }
+      }
+      const updateGardenData = {
         ...data,
         content,
-        userID:user?._id,
+        images
       };
-      formData.append("data", JSON.stringify(postGardenData));
-      for (let image of imageFiles) {
-        formData.append("itemImages", image);
-      }
-      console.log(formData);
-      postData(formData)
+     formData.append("data", JSON.stringify(updateGardenData));
+     //console.log(formData);
+     updatePostData(formData,_id)
     };
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files![0];
       setImageFiles((prev) => [...prev, file]);
-  
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -109,12 +124,16 @@ const PostCard = ({posts}:IpostCardProps) => {
         setImagePreviews((prev) => prev.filter((_, i) => i !== index));
         setImageFiles((prev) => prev.filter((_, i) => i !== index));
       };
+    const addToFavourite=(id:string)=>{
+      //alert('add to fab clicked'+id)
+      addFavouritePosts(user?._id,{postID:id})
+    }
     const {
       data: categoriesData,
       isLoading: categoryLoading,
       isSuccess: categorySuccess,
     } = UsefetchCategories();
-    console.log(categoriesData);
+   // console.log(categoriesData);
     useEffect(() => {
       fetch('/data.json')
         .then((response) => response.json())
@@ -122,8 +141,8 @@ const PostCard = ({posts}:IpostCardProps) => {
     }, []);
     let categoryOption: { key: string; label: string }[] = [];
     let tagsOption: { key: string; label: string }[] = [];
-    console.log(categoriesData?.data);
-    console.log(tagsData);
+   // console.log(categoriesData?.data);
+   // console.log(tagsData);
       if (categoriesData?.data && !categoryLoading) {
         categoryOption = categoriesData.data
           .sort()
@@ -163,7 +182,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                     <div className="flex justify-between items-start ">
                     <div className="flex flex-col gap-0 mt-4">
                         {tags==='Premium'? <h3 className="font-semibold text-foreground/90">{title} <span className='text-yellow-500'>Premium Content  <Crown className='inline-block text-2xl align-middle'/></span></h3>:<h3 className="font-semibold text-foreground/90">{title}</h3>}       
-                        <p className="text-small text-foreground/80 mt-4 inline-block" dangerouslySetInnerHTML={{ __html: content.slice(0,250) }}></p>
+                        <p className="text-small text-foreground/80 mt-4 inline-block" dangerouslySetInnerHTML={{ __html: postContent.slice(0,250) }}></p>
                         <p></p>
                         {
                         (user?.status==='PREMIUM') ? 
@@ -212,14 +231,24 @@ const PostCard = ({posts}:IpostCardProps) => {
             </div>
             <div>
             <div className="flex align-middle">
-            <Tooltip content="Add to Favorite">
-            <Button isIconOnly aria-label="Like" color="success">
-                <HeartIcon /> 
-            </Button>
-            </Tooltip>
+            
+              {
+                filteredUserData[0]?.favoritePosts?.includes(_id)?
+                <></>:
+                <>
+                  <Tooltip content="Add to Favorite">
+                    <Button  isIconOnly aria-label="Like" color="success" onPress={()=>addToFavourite(_id)}>
+                        <HeartIcon /> 
+                    </Button>
+                  </Tooltip>
+                </>
+              }
+
+            
+
             <p className="text-2xl">
             {
-                    ((user?._id ===userID))?(
+                ((user?._id ===userID))?(
                         <>
                         <Dropdown>
                             <DropdownTrigger>
@@ -238,7 +267,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                         </Dropdown>
                         </>):(
                 <></>)
-                }
+            }
             </p>
             </div>
             </div>
@@ -264,7 +293,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                         <GWInput label="title" name="title"/>
                         <GWSelect label="category" name="categoryID" options={categoryOption} defaultSelectedKeys={[categoryID]}/>
                         <GWSelect label="tags" name="tags" options={tagsOption} defaultSelectedKeys={[tags]}/>
-                        <TextEditor content={content} setContent={setContents} />
+                        <TextEditor content={postContent} setContent={setContent} />
                         <div className="min-w-fit flex-1">
                             <label
                                 className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400"
@@ -280,7 +309,29 @@ const PostCard = ({posts}:IpostCardProps) => {
                                 onChange={(e) => handleImageChange(e)}
                             />
                         </div>
-
+                        {imagePreviews.length > 0 && (
+                            <div className="flex gap-5 my-5 flex-wrap">
+                              {imagePreviews.map((imageDataUrl, index) => (
+                                <div
+                                  key={imageDataUrl}
+                                  className="relative size-48 rounded-xl border-2 border-dashed border-default-300 p-2"
+                                >
+                                  <img
+                                    alt="item"
+                                    className="h-full w-full object-cover object-center rounded-md"
+                                    src={imageDataUrl}
+                                  />
+                                  {/* Add the delete button */}
+                                  <button
+                                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                                    onClick={() => handleDeleteImage(index)}
+                                  >
+                                    ✕
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}  
                         <Button color="primary" className='w-full my-2' size="lg" type="submit">
                             Update Post
                         </Button>
