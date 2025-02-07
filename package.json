@@ -9,6 +9,7 @@
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
+		"@egjs/react-infinitegrid": "^4.12.0",
 		"@heroui/tooltip": "^2.2.8",
 		"@nextui-org/avatar": "^2.0.33",
 		"@nextui-org/button": "2.2.7",
@@ -46,14 +47,17 @@
 		"react-hook-form": "^7.53.2",
 		"react-quill": "^2.0.0",
 		"react-tabs": "^6.1.0",
+		"react-virtualized-auto-sizer": "^1.0.25",
 		"sonner": "^1.7.0",
 		"sweetalert2": "^11.15.10",
-		"sweetalert2-react-content": "^5.1.0"
+		"sweetalert2-react-content": "^5.1.0",
+		"virtua": "^0.40.0"
 	},
 	"devDependencies": {
 		"@types/node": "20.5.7",
 		"@types/react": "^18.3.18",
 		"@types/react-dom": "^18.3.5",
+		"@types/react-window": "^1.8.8",
 		"@typescript-eslint/eslint-plugin": "8.11.0",
 		"@typescript-eslint/parser": "8.11.0",
 		"autoprefixer": "10.4.19",
