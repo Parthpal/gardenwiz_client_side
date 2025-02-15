@@ -12,14 +12,22 @@ import TextEditor from '../RichTextEditor/TextEditor';
 import { Button } from '@nextui-org/button';
 import { log } from 'console';
 import { updateUser } from '@/src//service/Profile';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import GWForm from '../Form/GWForm';
+import { changePassword, logout } from '@/src//service/AuthService';
+import { useUserChangePassword } from '@/src//hooks/auth.hook';
+import { useRouter } from 'next/navigation';
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
-const UpdateProfile = () => {
+const UpdateProfile = ({onClose}:any) => {
+  const router = useRouter();
     const {user}=useUser();
+    const {mutate:passwordChange}=useUserChangePassword();
     const [imageFiles, setImageFiles] = useState<File[] | []>([]);
     const [imagePreviews, setImagePreviews] = useState<string>('');
-    const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
+    const { isOpen, onOpen,onOpenChange } = useDisclosure();
     const [size, setSize] = React.useState<Sizes>("3xl");
     const sizes:Sizes[]=["3xl"];
+
   
     const handleOpen = (size : Sizes) => {
       setSize(size);
@@ -42,10 +50,19 @@ const UpdateProfile = () => {
         for (let image of imageFiles) {
           formData.append("profilePhoto", image);
         }
-         console.log(formData);
+         //console.log(formData);
        // postData(formData)
        updateUser(formData,user!._id)
+       onClose()
       };
+      const onSubmitChangePassword:SubmitHandler<FieldValues>=(data)=>{
+          passwordChange(data);  
+          setTimeout(()=>{
+            onClose(); 
+            logout();
+            router.push('/login');
+          },2000) 
+      }
       const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         setImageFiles((prev) => [...prev, file]);
@@ -65,71 +82,85 @@ const UpdateProfile = () => {
       }
 
     return (
-            <ModalContent>
-              {(onClose) => (
-                <>
-                  <ModalHeader className="flex flex-col gap-1">Update Your Profile</ModalHeader>
-                  <ModalBody>
-                    <Card>
-                      <CardBody>
-                        <FormProvider {...methods}>
-                          <form className="space-y-5" onSubmit={submitHandler(onSubmit)}>
-                            <GWInput  label="name" name="name"/>
-                            <GWInput label="email" name="email"/>
-                            <div className="min-w-fit flex-1">
-                                <label
-                                  className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400"
-                                  htmlFor="image"
-                                >
-                                  Upload image
-                                </label>
-                                <input
-                                  className="hidden"
-                                  id="image"
-                                  type="file"
-                                  onChange={(e) => handleImageChange(e)}
-                                />
-                            </div>
-                            {
-                              imageFiles?.length ?
-                              <div
-                              key={imagePreviews}
-                              className="relative size-48 rounded-xl border-2 border-dashed border-default-300 p-2"
-                            >
-                              <img
-                                alt="item"
-                                className="h-full w-full object-cover object-center rounded-md"
-                                src={imagePreviews}
-                              />
-                              {/* Add the delete button */}
-                              <button
-                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
-                                onClick={()=>handleDeleteImage()}
-                              >
-                                ✕
-                              </button>
-                        </div> :
-                        <></>
-                            }
+    <ModalContent>
+      {(onClose) => (<>
+      <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+      <ModalBody>
+      <Tabs>
+          <TabList>
+                  <Tab>Edit Profile</Tab>
+                  <Tab>Change Password</Tab>
+          </TabList>
+                <TabPanel>
+                <Card>
+                            <CardBody>
+                              <FormProvider {...methods}>
+                                <form className="space-y-5" onSubmit={submitHandler(onSubmit)}>
+                                  <GWInput  label="name" name="name"/>
+                                  <GWInput label="email" name="email"/>
+                                  <div className="min-w-fit flex-1">
+                                      <label
+                                        className="flex h-14 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-default-200 text-default-500 shadow-sm transition-all duration-100 hover:border-default-400"
+                                        htmlFor="image"
+                                      >
+                                        Upload image
+                                      </label>
+                                      <input
+                                        className="hidden"
+                                        id="image"
+                                        type="file"
+                                        onChange={(e) => handleImageChange(e)}
+                                      />
+                                  </div>
+                                  {
+                                    imageFiles?.length ?
+                                    <div
+                                    key={imagePreviews}
+                                    className="relative size-48 rounded-xl border-2 border-dashed border-default-300 p-2"
+                                  >
+                                    <img
+                                      alt="item"
+                                      className="h-full w-full object-cover object-center rounded-md"
+                                      src={imagePreviews}
+                                    />
+                                    {/* Add the delete button */}
+                                    <button
+                                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center text-sm"
+                                      onClick={()=>handleDeleteImage()}
+                                    >
+                                      ✕
+                                    </button>
+                              </div> :
+                              <></>
+                                  }
 
-                            <Button color="primary" className='w-full my-2' size="lg" type="submit">
-                              Post
-                            </Button>
-                          </form>
-                        </FormProvider>
-                      </CardBody>
-                    </Card>
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="danger" variant="flat" onPress={onClose}>
-                      Close
-                    </Button>
-                  </ModalFooter>
-                </>
-              )}
-            </ModalContent>
-         
-    );
+                                  <Button color="primary" className='w-full my-2' size="lg" type="submit">
+                                    Post
+                                  </Button>
+                                </form>
+                              </FormProvider>
+                            </CardBody>
+                </Card>
+                </TabPanel>
+                <TabPanel>
+                  <GWForm onSubmit={onSubmitChangePassword}>
+                  <GWInput  className="my-5 px-5 " color="primary" label="Old Password" name="oldPassword" type="password" />
+                  <GWInput className="my-5 px-5" color="primary" label="New Password" name="newPassword" type="password"  />
+                  <Button
+                  className="w-full my-2 rounded-md bg-primary font-semibold text-white"
+                  size="lg"
+                  type="submit"
+                >
+                  Submit
+                  </Button>
+                  </GWForm>
+                </TabPanel>
+             </Tabs>
+      </ModalBody>
+      </>
+      )}
+</ModalContent> 
+            );
 };
 
 export default UpdateProfile;

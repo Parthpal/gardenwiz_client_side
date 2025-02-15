@@ -11,6 +11,8 @@ import CreatePost from '@/src//components/UI/Post/CreatePost';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { UsefetchUsers } from '@/src//hooks/users.hook';
+import ProfileSidebarSkeleton from '@/src//components/ProfileSidebarSkeleton';
+import PostCardSkeleton from '@/src//components/PostCardSkeleton';
 
 const ProfilePage = () => {
     const {user,isLoading:userLoading}=useUser();
@@ -33,7 +35,9 @@ const ProfilePage = () => {
     
      const filtered_Favourite_posts=postData?.data.filter((data:Ipost)=>filteredUserData[0]?.favoritePosts?.includes(data?._id))
     //console.log(filtered_Favourite_posts,'favpost');
-    
+    if(postLoading){
+      return <PostCardSkeleton/>
+    }
     return (
         // 
         //     <h1 className='text-5xl mt-5'> {user?.name}</h1>
@@ -46,7 +50,8 @@ const ProfilePage = () => {
             
         // </div>
         <>
-        <div className='mx-32 space-y-10'>
+        
+      <div className='mx-32 space-y-10'>
         <Tabs>
         <TabList>
           <Tab>Home</Tab>

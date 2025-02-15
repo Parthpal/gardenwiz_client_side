@@ -3,7 +3,7 @@
 "use client"
 import { Avatar, AvatarGroup } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
-import { Modal, useDisclosure } from '@nextui-org/modal';
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import React from 'react';
 import UpdateProfile from '../Profile/UpdateProfile';
 import { useUser } from '@/src//context/user.provider';
@@ -11,6 +11,7 @@ import {  } from '@/src//hooks/users.hook';
 import { fetchUser } from '@/src//service/Profile';
 import Link from 'next/link';
 import { VerifiedComponent } from '../../icons';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
@@ -31,7 +32,7 @@ const Sidebar = () => {
         <>
         <div className=''>
             <Avatar src={user?.profilePhoto} className="w-20 h-20 text-large" />
-            <div className='space-y-5 py-5'>
+            <div className='space-y-4 py-5'>
                 <h1>{user?.name}</h1>
                 {
                   user?.status==='PREMIUM'?
@@ -57,30 +58,27 @@ const Sidebar = () => {
                   }
                 </AvatarGroup>
                 </Link>
-                <Button className="w-full flex justify-start my-2 p-0 bg-white" key={size} onPress={() => handleOpen(size)}>
+                <h1 className='m-0'>Following({userLoading ? '0' : `${user?.followingIds?.length}`})</h1>  
+                <Link href='/profile/followings'>                         
+                <AvatarGroup
+                        isBordered
+                        max={2}
+                        renderCount={(count) => (
+                          <p className="text-small text-foreground font-medium ms-2">+{count} others</p>
+                        )}
+                        total={user?.followingIds?.length}
+                      >
+                      {
+                        user?.followingIds?.map((followings:any)=>(
+                          <Avatar key={followings?._id} src={followings?.profilePhoto} />
+                        ))
+                      }
+                </AvatarGroup>
+                </Link>
+                <Button className="w-full m-0 flex justify-start p-0 text-md bg-white" key={size} onPress={() => handleOpen(size)}>
                 <p>Edit Profile</p>
-                </Button>
+                </Button>                     
             </div>
-            <h1 className=''>Following({userLoading ? '0' : `${user?.followingIds?.length}`})</h1>
-            <div>     
-            <Link href='/profile/followings'>                         
-            <AvatarGroup
-                    isBordered
-                    max={2}
-                    renderCount={(count) => (
-                      <p className="text-small text-foreground font-medium ms-2">+{count} others</p>
-                    )}
-                    total={user?.followingIds?.length}
-                  >
-                  {
-                    user?.followingIds?.map((followings:any)=>(
-                      <Avatar key={followings?._id} src={followings?.profilePhoto} />
-                    ))
-                  }
-            </AvatarGroup>
-            </Link>
-            </div>
-
         </div>
         <Modal isOpen={isOpen}
         onOpenChange={onOpenChange} 
@@ -88,7 +86,7 @@ const Sidebar = () => {
         isKeyboardDismissDisabled={true}
         size={size}
           >
-            <UpdateProfile/>
+            <UpdateProfile onClose={onClose}/>
          </Modal>   
         </> );
 };

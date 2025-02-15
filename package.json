@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@egjs/react-infinitegrid": "^4.12.0",
+		"@heroui/skeleton": "^2.2.6",
 		"@heroui/tooltip": "^2.2.8",
 		"@nextui-org/avatar": "^2.0.33",
 		"@nextui-org/button": "2.2.7",
@@ -35,13 +36,16 @@
 		"@stripe/react-stripe-js": "^3.1.1",
 		"@stripe/stripe-js": "^5.5.0",
 		"@tanstack/react-query": "^5.62.3",
+		"@types/imagesloaded": "^4.1.6",
 		"axios": "^1.7.8",
 		"clsx": "2.1.1",
 		"framer-motion": "^11.15.0",
+		"imagesloaded": "^5.0.0",
 		"intl-messageformat": "^10.5.0",
 		"jodit-react": "^4.1.2",
 		"jwt-decode": "^4.0.0",
 		"lightgallery": "^2.8.2",
+		"masonry-layout": "^4.2.2",
 		"next": "14.2.4",
 		"next-themes": "^0.2.1",
 		"react-hook-form": "^7.53.2",
@@ -54,6 +58,7 @@
 		"virtua": "^0.40.0"
 	},
 	"devDependencies": {
+		"@types/masonry-layout": "^4.2.8",
 		"@types/node": "20.5.7",
 		"@types/react": "^18.3.18",
 		"@types/react-dom": "^18.3.5",

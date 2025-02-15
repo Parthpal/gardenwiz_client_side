@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+"use server";
 import { FieldValues } from "react-hook-form";
 import axiosInstance from "../../lib/AxiosInstance";
 
@@ -10,6 +11,7 @@ export const updateUser = async (userData: FieldValues,id:string) => {
       throw new Error(error);
     }
   };
+
 export const updateUserStatus = async (id:string) => {
     try {
       const { data } = await axiosInstance.patch(`/user/status/${id}`);

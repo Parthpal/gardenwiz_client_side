@@ -65,7 +65,7 @@ const CreatePost = () => {
     for (let image of imageFiles) {
       formData.append("itemImages", image);
     }
-    console.log(formData);
+   // console.log(formData);
     postData(formData)
   };
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +91,7 @@ const CreatePost = () => {
     isLoading: categoryLoading,
     isSuccess: categorySuccess,
   } = UsefetchCategories();
-  console.log(categoriesData);
+ // console.log(categoriesData);
   useEffect(() => {
     fetch('/data.json')
       .then((response) => response.json())
@@ -100,8 +100,8 @@ const CreatePost = () => {
 
   let categoryOption: { key: string; label: string }[] = [];
   let tagsOption: { key: string; label: string }[] = [];
-  console.log(categoriesData?.data);
-  console.log(tagsData);
+  //console.log(categoriesData?.data);
+  //console.log(tagsData);
     if (categoriesData?.data && !categoryLoading) {
       categoryOption = categoriesData.data
         .sort()

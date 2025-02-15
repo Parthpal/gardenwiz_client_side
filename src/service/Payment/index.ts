@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+"use server";
 import { FieldValues } from "react-hook-form";
 import axiosInstance from "../../lib/AxiosInstance";
 

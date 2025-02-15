@@ -1,5 +1,5 @@
 /* eslint-disable padding-line-between-statements */
-'use server'
+"use server";
 import { FieldValues } from "react-hook-form";
 import axiosInstance from "../../lib/AxiosInstance";
 import { log } from "console";

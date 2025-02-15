@@ -7,6 +7,7 @@ import { IUser } from '../../../../../types';
 import { fetchUser } from '@/src//service/Profile';
 import { useUser } from '@/src//context/user.provider';
 import { UsefetchUsers } from '@/src//hooks/users.hook';
+import RecentPostLoading from './loading';
 
 const Sideposts = () => {
     const{user,isLoading:userLoading}=useUser();

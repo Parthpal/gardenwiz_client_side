@@ -10,6 +10,8 @@ import React, { useEffect } from 'react';
 import { Ipost } from '../../../../types';
 import { useUser } from '@/src//context/user.provider';
 import { VList, WindowVirtualizer } from 'virtua';
+import HomePageContent from '@/src//components/HomePageContent';
+import PostCardSkeleton from '@/src//components/PostCardSkeleton';
 
 
 const HomePage = () => {
@@ -20,7 +22,15 @@ const HomePage = () => {
             isLoading: postLoading,
             isSuccess: postSuccess,
         } = UseGetPosts();
-        
+        if (postLoading) {
+            return (
+              <>
+                {Array(4).fill(null).map((_, index) => (
+                  <PostCardSkeleton key={index} />
+                ))}
+              </>
+            );
+          }
     return (
         <div>    
             {
@@ -52,7 +62,7 @@ const HomePage = () => {
                         <PostCard key={index} posts={posts}/>
                     )
                 )
-
+                
             }          
         </div>
     );

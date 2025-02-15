@@ -51,7 +51,7 @@ export const Navbar = () => {
   const { mutate: handleSearch, data,isPending,isSuccess } = useSearchItems();
     console.log(data);
    const searchTerm = useDebounce(watch("searchInput"));
-    console.log(searchTerm);
+   // console.log(searchTerm);
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [size, setSize] = useState("md");
    // const [scrollBehavior, setScrollBehavior] =useState<ModalProps["scrollBehavior"]>('outside');

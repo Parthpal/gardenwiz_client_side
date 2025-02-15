@@ -4,16 +4,19 @@
 import GWForm from "@/src//components/UI/Form/GWForm";
 import GWInput from "@/src//components/UI/Form/GWInput";
 import { useUser } from "@/src//context/user.provider";
-import { useUserLogin } from "@/src//hooks/auth.hook";
-import { loginUser } from "@/src//service/AuthService";
+import { useForgetPassword, useUserLogin } from "@/src//hooks/auth.hook";
+import { forgetPassword, loginUser } from "@/src//service/AuthService";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import { FieldValues, SubmitHandler } from "react-hook-form";
+import { FieldValues, FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useEffect } from "react";
-
+import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/modal";
+import { Card, CardBody } from "@nextui-org/card";
+import { Input } from "@nextui-org/input";
+type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const LoginPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -25,7 +28,7 @@ const LoginPage = () => {
     handleUserLogin(data)
     userLoading(true);
   };
-  
+
  useEffect(() => {
     if (!isPending && isSuccess) {
       if (redirect) {
@@ -35,8 +38,28 @@ const LoginPage = () => {
       }
     }
   }, [isPending, isSuccess]);
+  //modal related
+  const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
+  const{mutate:forgetPasswordMutate,isPending:forgotPassIsPending,isSuccess:forgotPassIsSuccess}=useForgetPassword();
+  const [size, setSize] = React.useState<Sizes>("3xl");
+  const sizes:Sizes[]=["3xl"];
 
-  return (
+  const handleOpen = (size : Sizes) => {
+    setSize(size);
+    onOpen();
+  };
+
+  const handleForgetPass=(e:any)=>{
+    e.preventDefault();
+    const formData=new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    //console.log(data);
+    forgetPasswordMutate(data);
+    setTimeout(() => {
+            onClose();
+          }, 2000)
+  }
+  return (<>
     <div className="flex flex-col lg:flex-row ">
       <div className="flex-1 lg:ml-48 md:mx-auto">
         <Image
@@ -65,12 +88,43 @@ const LoginPage = () => {
             </GWForm>
             <div className="text-center">
                  Don&apos;t have an account ? <Link className="text-[#1d772e]" href={"/register"}>Register</Link>
-              </div>
+            </div>
+            <div className="text-center">
+                 <Button key={size} onPress={() => handleOpen(size)} className='p-0 m-0 border-0 bg-white'color="primary"  variant="faded">
+                    Forget your Password?
+                </Button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
+    <Modal isOpen={isOpen}
+          onOpenChange={onOpenChange} 
+          isDismissable={false}
+          isKeyboardDismissDisabled={true}
+          size={size}
+          >
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">Enter Registered Email</ModalHeader>
+                  <ModalBody>
+                    <Card>
+                      <CardBody>
+                          <form onSubmit={handleForgetPass} className="space-y-5">
+                            <Input className="my-5 px-5 " color="success" label="email" name="email" type="email"/>
+                            <Button color="primary" className='w-full my-2' size="lg" type="submit">
+                              Request Reset Link
+                            </Button>
+                          </form>
+                      </CardBody>
+                    </Card>
+                  </ModalBody>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+  </>);
 };
 
 export default LoginPage;
