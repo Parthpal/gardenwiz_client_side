@@ -23,3 +23,12 @@ export const postPaymentData = async (paymentData: FieldValues) => {
     }
 };
 
+export const fetchPayment=async(): Promise<any>=>{
+  try {
+      const {data}=await axiosInstance.get('/payments')
+     //console.log(data);
+      return data;
+  } catch (error:any) {
+      throw new Error(error.message)
+  }
+}
