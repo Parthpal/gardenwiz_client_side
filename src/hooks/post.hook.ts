@@ -1,7 +1,7 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addComments, deleteComments, deletePosts, downvotePost, editComment, fetchComments, fetchPost, fetchPostFromID, upvotePost } from "../service/post"
+import { addComments, deleteComments, deletePosts, downvotePost, editComment, fetchComments, fetchPost, fetchPostFromID, postData, upvotePost } from "../service/post"
 import { FieldValues } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -13,24 +13,30 @@ export const UseGetPosts=()=>{
         refetchOnMount: true,
     })
 }
+
+
+export const useCreatePost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<any, Error, FieldValues>({
+      mutationKey: ["create_post"],
+      mutationFn: async (userData) => await postData(userData),
+      onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["GET_POSTS"] }); // Invalidate post list
+          toast.success("Post created successfully!");
+      },
+      onError: (error) => {
+          toast.error(error.message || "Failed to create post");
+      },
+  });
+};
+
 export const UseGetPostsId=(id: string)=>{
     return useQuery({
         queryKey: ["GET_POSTS_Id", id],
         queryFn: async () => await fetchPostFromID(id),
-        staleTime: 0,
-        refetchOnMount: true,
     })
 }
-// export const UseGetPostsId = (id: string) => {
-//   return useQuery(
-//       ["GET_POSTS_Id", id],  // Query key includes the ID to uniquely identify the query
-//       async () => fetchPostFromID(id),  // Directly use the ID in the fetch function
-//       {
-//           staleTime: 0,  // Data is considered stale immediately
-//           refetchOnMount: true,  // Refetch the data when the component is mounted
-//       }
-//   );
-// };
 
 export const useUpvote = () => {
     const queryClient = useQueryClient();

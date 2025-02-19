@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable padding-line-between-statements */
 'use client'
 import React, {SVGProps} from "react";
@@ -15,36 +16,11 @@ import {Chip} from '@heroui/chip'
 import {User} from "@heroui/user";
 import { Tooltip } from "@heroui/tooltip";
 import { DeleteIcon, EditIcon, EyeIcon } from "@/src//components/icons";
-import { UseGetPosts } from "@/src//hooks/post.hook";
+import { useDeletePosts, UseGetPosts } from "@/src//hooks/post.hook";
 import { Ipost } from "../../../../../../types";
+import Link from "next/link";
+import { Button } from "@nextui-org/button";
 
-
-const rows = [
-  {
-    key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
-  },
-  {
-    key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
-  },
-  {
-    key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
-  },
-  {
-    key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
-  },
-];
 
 const columns = [
   {
@@ -66,8 +42,12 @@ const columns = [
 ];
 
 export default function GetAllPosts() {
+  const {mutate:deletePostMutate}=useDeletePosts();
   const{data:postData}=UseGetPosts();
  // console.log(postData?.data);
+ const handleDelete=(id:any)=>{
+  deletePostMutate({id});
+}
   return (
 <Table aria-label="Example table with dynamic content">
       <TableHeader columns={columns}>
@@ -81,20 +61,22 @@ export default function GetAllPosts() {
               <TableCell>{row?.title}</TableCell>
               <TableCell>
               <div className="relative flex items-center gap-2">
-                <Tooltip content="Details">
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <EyeIcon />
-                  </span>
-                </Tooltip>
-                <Tooltip content="Edit user">
+                <Link href={`/posts/${row?._id}`}>
+                  <Tooltip content="Details">
+                    <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                      <EyeIcon />
+                    </span>
+                  </Tooltip>
+                </Link>
+                {/* <Tooltip content="Edit post">
                   <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                     <EditIcon />
                   </span>
-                </Tooltip>
-                <Tooltip color="danger" content="Delete user">
-                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                </Tooltip> */}
+                <Tooltip color="danger" content="Delete post">
+                  <Button  variant="light" isIconOnly onPress={()=>handleDelete(row?._id)} className=" p-0 m-0 min-w-0 w-auto h-auto  text-lg text-default-400 cursor-pointer active:opacity-50">
                     <DeleteIcon />
-                  </span>
+                  </Button >
                 </Tooltip>
               </div>
               </TableCell>

@@ -36,7 +36,7 @@ export const postData = async (userData: FieldValues) => {
           throw new Error(error.message)
       }
   }
-  export const fetchPostFromID=async(id:string): Promise<any>=>{
+export const fetchPostFromID=async(id:string): Promise<any>=>{
  try{
         const {data}=await axiosInstance.get(`/posts/${id}`);
        // console.log(data);

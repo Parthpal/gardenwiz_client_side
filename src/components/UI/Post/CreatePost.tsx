@@ -32,11 +32,15 @@ import { UsefetchCategories } from "@/src//hooks/categories.hook";
 import { postData } from "@/src//service/post";
 import { getCurrentUser } from "@/src//service/AuthService";
 import { useUser } from "@/src//context/user.provider";
+import { useCreatePost } from "@/src//hooks/post.hook";
+import { UseGetUsersById } from "@/src//hooks/users.hook";
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 
 const CreatePost = () => {
   const {user}=useUser();
+  const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
+  const{mutate:createPostMutate}=useCreatePost();
   const [tagsData,setTagsData]=useState([]);
   const [scrollBehavior, setScrollBehavior] =React.useState<ModalProps["scrollBehavior"]>('outside');
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
@@ -66,7 +70,11 @@ const CreatePost = () => {
       formData.append("itemImages", image);
     }
    // console.log(formData);
-    postData(formData)
+    // postData(formData)
+    createPostMutate(formData)
+    setTimeout(() => {
+      onClose();
+    }, 3000)
   };
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];
@@ -125,11 +133,11 @@ const CreatePost = () => {
                 alt="nextui logo"
                 height={40}
                 radius="sm"
-                src={user?.profilePhoto}
+                src={CurrentuserData?.data?.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/64/64572.png' }
                 width={40}
               />
               <div className="flex flex-col">
-                <p className="text-md">{user?.name}</p>
+                <p className="text-md">{CurrentuserData?.data?.name}</p>  
               </div>
             </CardHeader>
             <Divider />

@@ -7,41 +7,40 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure
 import React from 'react';
 import UpdateProfile from '../Profile/UpdateProfile';
 import { useUser } from '@/src//context/user.provider';
-import {  } from '@/src//hooks/users.hook';
+import { UseGetUsersById } from '@/src//hooks/users.hook';
 import { fetchUser } from '@/src//service/Profile';
 import Link from 'next/link';
 import { VerifiedComponent } from '../../icons';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import ProfileLoading from '@/src//app/(withCommonLayout)/(user)/profile/Loading';
 
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const Sidebar = () => {
         const {user,isLoading:userLoading}=useUser();
+        const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
         const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
         const [size, setSize] = React.useState<Sizes>("3xl");
         const sizes:Sizes[]=["3xl"];
-      
+
         const handleOpen = (size : Sizes) => {
           setSize(size);
           onOpen();
         };
-      //console.log(data?.data);
-      // console.log(user?.followingIds?.name);
-      
     return (
         <>
         <div className=''>
-            <Avatar src={user?.profilePhoto} className="w-20 h-20 text-large" />
+            <Avatar src={CurrentuserData?.data?.profilePhoto} className="w-20 h-20 text-large" />
             <div className='space-y-4 py-5'>
-                <h1>{user?.name}</h1>
+                <h1>{CurrentuserData?.data?.name}</h1>
                 {
-                  user?.status==='PREMIUM'?
+                  CurrentuserData?.data?.status==='PREMIUM'?
                   <Button color="primary" variant="bordered">Verified<span><VerifiedComponent/></span></Button>:
                   <Link href='/profile/Checkout'>
                   <Button color="primary" variant="solid">Verify Account</Button>
                   </Link>
                 }
-                <p>Followers({userLoading ? '0' : `${user?.followerIds?.length}`})</p>
+                <p>Followers({currentuserload  ? '0' : `${CurrentuserData?.data?.followerIds?.length}`})</p>
                 <Link href='/profile/followers'>
                 <AvatarGroup
                     isBordered
@@ -52,13 +51,13 @@ const Sidebar = () => {
                     total={user?.followerIds?.length}
                   >
                   {
-                    user?.followerIds?.map((follower:any)=>(
+                   user?.followerIds?.map((follower:any)=>(
                       <Avatar key={follower?._id} src={follower?.profilePhoto} />
                     ))
                   }
                 </AvatarGroup>
                 </Link>
-                <h1 className='m-0'>Following({userLoading ? '0' : `${user?.followingIds?.length}`})</h1>  
+                <h1 className='m-0'>Following({currentuserload  ? '0' : `${CurrentuserData?.data?.followingIds?.length}`})</h1>  
                 <Link href='/profile/followings'>                         
                 <AvatarGroup
                         isBordered

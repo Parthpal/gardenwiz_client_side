@@ -58,10 +58,10 @@ const columns = [
     key: "price",
     label: "Price",
   },
-  {
-    key: "status",
-    label: "status",
-  },
+  // {
+  //   key: "status",
+  //   label: "status",
+  // },
   {
     key: "transactionId",
     label: "Transaction Id ",
@@ -72,9 +72,9 @@ export default function GetPaymentDetails() {
   const{data:paymentdata}=UsefetchPayment();
   console.log(paymentdata?.data);
   return (
-<Table isCompact={true}>
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+<Table  fullWidth={false}>
+      <TableHeader  columns={columns}>
+        {(column) => <TableColumn align="center" key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
       <TableBody className="space-x-4">
         {paymentdata?.data?.map((row:any) =>
@@ -87,7 +87,7 @@ export default function GetPaymentDetails() {
               {/* </TableCell> */}
               <TableCell>{row?.email}</TableCell>
               <TableCell>{row?.price}</TableCell>
-              <TableCell>{row?.status}</TableCell>
+              {/* <TableCell>{row?.status}</TableCell> */}
               <TableCell>{row?.transactionId}</TableCell>
               {/* <TableCell>
               <div className="relative flex items-center gap-2">

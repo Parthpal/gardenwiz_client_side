@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { FieldValues } from "react-hook-form"
 import { changePassword, forgetPassword, loginUser, registerUser, resetPassword } from "../service/AuthService"
 import { toast } from "sonner"
@@ -17,6 +17,7 @@ export const useUserRegistration = () => {
           },      
     })
 }
+
 export const useUserChangePassword = () => {
     return useMutation<any,Error,FieldValues>({
         mutationKey: ["USER_Password_Change"],

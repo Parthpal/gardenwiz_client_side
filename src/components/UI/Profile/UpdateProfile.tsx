@@ -17,10 +17,13 @@ import GWForm from '../Form/GWForm';
 import { changePassword, logout } from '@/src//service/AuthService';
 import { useUserChangePassword } from '@/src//hooks/auth.hook';
 import { useRouter } from 'next/navigation';
+import { UseGetUsersById, useUpdateUser } from '@/src//hooks/users.hook';
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const UpdateProfile = ({onClose}:any) => {
   const router = useRouter();
     const {user}=useUser();
+    const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
+    const{mutate:userDataUpdateMutate}=useUpdateUser();
     const {mutate:passwordChange}=useUserChangePassword();
     const [imageFiles, setImageFiles] = useState<File[] | []>([]);
     const [imagePreviews, setImagePreviews] = useState<string>('');
@@ -35,25 +38,34 @@ const UpdateProfile = ({onClose}:any) => {
     };
     const methods = useForm({
       defaultValues: {
-        name: user?.name,
-        email: user?.email,
-        profilePhoto: user?.profilePhoto,
+        name: CurrentuserData?.data?.name,
+        email: CurrentuserData?.data?.email,
+        profilePhoto:CurrentuserData?.data?.profilePhoto,
       },});
       const { control, handleSubmit } = methods;
       const submitHandler = methods.handleSubmit;
       const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        const formData = new FormData();
-        const postGardenData = {
+        const userData = new FormData();
+       //const images:string[]=[];
+
+        for (let image of imageFiles) {
+            if(image instanceof File)  {
+              userData.append("profilePhoto", image);
+              delete data.profilePhoto
+            }
+        }
+        const updatedUserData = {
           ...data,
         };
-        formData.append("data", JSON.stringify(postGardenData));
-        for (let image of imageFiles) {
-          formData.append("profilePhoto", image);
-        }
-         //console.log(formData);
+        userData.append("data", JSON.stringify(updatedUserData));
+        //console.log(userData);
        // postData(formData)
-       updateUser(formData,user!._id)
-       onClose()
+        userDataUpdateMutate({ userData , id:user?._id })
+       //updateUser(formData,user!._id)
+
+       setTimeout(() => {
+        onClose();
+      }, 2000)
       };
       const onSubmitChangePassword:SubmitHandler<FieldValues>=(data)=>{
           passwordChange(data);  
@@ -84,7 +96,7 @@ const UpdateProfile = ({onClose}:any) => {
     return (
     <ModalContent>
       {(onClose) => (<>
-      <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+      <ModalHeader className="flex flex-col gap-1">Update Profile</ModalHeader>
       <ModalBody>
       <Tabs>
           <TabList>

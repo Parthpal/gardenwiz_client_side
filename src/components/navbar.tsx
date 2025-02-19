@@ -42,9 +42,11 @@ import { Divider } from "@nextui-org/divider";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalProps, useDisclosure } from "@nextui-org/modal";
 import { Ipost } from "../../types";
 import PostCard from "./UI/Post/PostCard";
+import { UseGetUsersById } from "../hooks/users.hook";
 
 export const Navbar = () => {
   const {user}=useUser();
+  const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
   const [searchResult,setSearchResult]=useState([]);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
  // console.log(useDebounce(watch('searchInput')));
@@ -176,7 +178,7 @@ export const Navbar = () => {
         <ThemeSwitch />
         <NavbarMenuToggle />
         <div className="flex gap-3 items-center">
-        <Avatar name={user?.name}/>
+        <Avatar name={CurrentuserData?.data?.name}/>
         <NavbarDropDown/>
         </div>
       </NavbarContent>

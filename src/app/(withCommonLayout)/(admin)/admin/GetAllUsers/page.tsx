@@ -71,7 +71,7 @@ export default function GetAllUsers() {
   const{data:userData}=UsefetchUsers();
   console.log(userData?.data);
   return (
-<Table isCompact={true}>
+<Table>
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>

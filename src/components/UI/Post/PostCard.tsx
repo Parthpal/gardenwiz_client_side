@@ -4,7 +4,7 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import { Button } from '@nextui-org/button';
-import { Card, CardBody, CardFooter } from '@nextui-org/card';
+import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Image } from '@nextui-org/image';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -24,14 +24,17 @@ import GWSelect from '../Form/GWSelect';
 import TextEditor from '../RichTextEditor/TextEditor';
 import { UsefetchCategories } from '@/src//hooks/categories.hook';
 import { addFavouritePosts } from '@/src//service/Profile';
-import { UsefetchUsers } from '@/src//hooks/users.hook';
+import { useAddFavouritePost, UsefetchUsers, UseGetUsersById } from '@/src//hooks/users.hook';
+import { Divider } from '@nextui-org/divider';
+import { Avatar } from '@nextui-org/avatar';
 
 interface IpostCardProps{
- posts:Ipost
+ posts:any
 }
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const PostCard = ({posts}:IpostCardProps) => {
     const {user,isLoading:userLoading}=useUser();
+    const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
     const { data:userdata} = UsefetchUsers();
     //const [cUser,setcUser]=useState<IUser>([])
    // console.log(userdata?.data);
@@ -46,6 +49,7 @@ const PostCard = ({posts}:IpostCardProps) => {
     const {mutate:upVotemutation}=useUpvote();
     const {mutate:downVotemutation}=useDOwnvote();
     const {mutate:deletePostMutate}=useDeletePosts();
+    const {mutate:addFavoritePostMutate}=useAddFavouritePost();
     const [liked, setLiked] = React.useState(false);
     const [tagsData,setTagsData]=React.useState([]);
     const [scrollBehavior, setScrollBehavior] =React.useState<ModalProps["scrollBehavior"]>('outside');
@@ -126,7 +130,12 @@ const PostCard = ({posts}:IpostCardProps) => {
       };
     const addToFavourite=(id:string)=>{
       //alert('add to fab clicked'+id)
-      addFavouritePosts(user?._id,{postID:id})
+     // addFavouritePosts(user?._id,{postID:id})
+     let userId=user?._id;
+     let postData={
+      postID:id
+     }
+      addFavoritePostMutate({ userId, postData })
     }
     const {
       data: categoriesData,
@@ -165,6 +174,13 @@ const PostCard = ({posts}:IpostCardProps) => {
             className="border-none bg-background/60 dark:bg-default-100/50 w-full mb-5 "
             shadow="sm"
             >
+            <CardHeader className="flex gap-3">
+              <Avatar isBordered radius="md" src={userID?.profilePhoto} />
+              <div className="flex flex-col">
+                <p className="text-md">{userID?.name}</p>
+              </div>
+            </CardHeader>
+            <Divider />
             <CardBody>
                 <div className='flex flex-row-reverse justify-between '>
                     <div className="relative w-[30%]">
@@ -178,17 +194,17 @@ const PostCard = ({posts}:IpostCardProps) => {
                         />
                     </div>
 
-                <div className="flex flex-col col-span-6 md:col-span-8 w-[70%]">
+                <div className="flex flex-col col-span-6 md:col-span-8 w-[65%]">
                     <div className="flex justify-between items-start ">
                     <div className="flex flex-col gap-0 mt-4">
-                        {tags==='Premium'? <h3 className="font-semibold text-foreground/90">{title} <span className='text-yellow-500'>Premium Content  <Crown className='inline-block text-2xl align-middle'/></span></h3>:<h3 className="font-semibold text-foreground/90">{title}</h3>}       
+                        {tags==='Premium'? <h3 className="font-semibold text-foreground/90">{title} <span className='text-yellow-500'>Premium<Crown className='inline-block text-2xl align-middle'/></span></h3>:<h3 className="font-semibold text-foreground/90">{title}</h3>}       
                         <p className="text-small text-foreground/80 mt-4 inline-block" dangerouslySetInnerHTML={{ __html: postContent.slice(0,250) }}></p>
                         <p></p>
                         {
-                        (user?.status==='PREMIUM') ? 
+                        (CurrentuserData?.data?.status==='PREMIUM') ? 
                         <>
                         {                               
-                            (user?.status==='PREMIUM') ?
+                            (CurrentuserData?.data?.status==='PREMIUM') ?
                             <Link className="w-full text-sm flex justify-start my-2 p-0 bg-white" href={`/posts/${_id}`}>
                             Read More..
                             </Link>:<></>
@@ -196,7 +212,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                         </>:
                         <>
                         {
-                            user?.status==='BASIC' && tags==='Premium' ?
+                            (CurrentuserData?.data?.status==='BASIC' && tags==='Premium' && userID._id!==CurrentuserData?.data?._id) ?
                             <Button className="w-full text-sm flex justify-start my-2 p-0 bg-white" onPress={handleTriggerModal}>
                             Read More..
                             </Button>:<>
@@ -244,11 +260,9 @@ const PostCard = ({posts}:IpostCardProps) => {
                 </>
               }
 
-            
-
             <p className="text-2xl">
             {
-                ((user?._id ===userID))?(
+                ((CurrentuserData?.data?._id ===userID._id))?(
                         <>
                         <Dropdown>
                             <DropdownTrigger>

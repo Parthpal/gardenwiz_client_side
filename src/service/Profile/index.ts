@@ -3,7 +3,7 @@
 import { FieldValues } from "react-hook-form";
 import axiosInstance from "../../lib/AxiosInstance";
 
-export const updateUser = async (userData: FieldValues,id:string) => {
+export const updateUser = async (userData: FieldValues,id:any) => {
     try {
       const { data } = await axiosInstance.put(`/user/${id}`, userData);
       return data;
@@ -28,6 +28,17 @@ export const fetchUser=async()=>{
   } catch (error:any) {
       throw new Error(error.message)
   }
+}
+
+export const fetchUserFromID=async(id:string): Promise<any>=>{
+  
+  try{
+          const {data}=await axiosInstance.get(`/user/${id}`);
+        // console.log(data);
+          return data;
+     } catch (error:any) {
+            throw new Error(error.message)
+        }
 }
 
 export const addFollower = async (followerID:any,currentUserId:any) => {
