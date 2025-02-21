@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import { useUser } from '@/src//context/user.provider';
-import { useAddFollower,useDeleteFollower,  } from '@/src//hooks/users.hook';
+import { useAddFollower,useDeleteFollower, useDeleteFollowing,  } from '@/src//hooks/users.hook';
 import { addFollower, deleteFollower, fetchUser } from '@/src//service/Profile';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -11,15 +11,16 @@ import { Card, CardHeader } from '@nextui-org/card';
 import React, { useEffect, useState } from 'react';
 import { IUser } from '../../../../types';
 import { useQuery } from '@tanstack/react-query';
+import FollowCardSkeleton from '../../FollowerCardSkeleton';
 
 
-const FollowCard = ({user}:{user:any}) => {
+const FollowCard = ({user}:{user:IUser}) => {
     const {user:currentUser,isLoading:userLoading}=useUser();
     const {mutate:addFollower}=useAddFollower();
-    const {mutate:deleteFollower}=useDeleteFollower();
+    const {mutate:deleteFollower}=useDeleteFollowing();
     const [allUserData,setAllUserData]=useState([]);
     const filterUser:IUser[]=allUserData.filter((userData:IUser)=>userData?._id===currentUser!._id)
-    //console.log(filterUser[0]);
+    //console.log(filterUser[0],'follow card');
     const [isFollowed, setIsFollowed] = React.useState(filterUser[0]?.followingIds?.includes(user?._id));
     const handleFollow =(follwedCheck: boolean, id: string) => {
       // Optimistic update
@@ -28,7 +29,7 @@ const FollowCard = ({user}:{user:any}) => {
         addFollower({followerID: id, currentUserId: currentUser!._id})
       }
       else{
-        deleteFollower({followerID: id, currentUserId: currentUser!._id})
+        deleteFollower({followingID: id, currentUserId: currentUser!._id})
       }
     };
     useEffect(()=>{
@@ -39,7 +40,6 @@ const FollowCard = ({user}:{user:any}) => {
       })
       setIsFollowed(filterUser[0]?.followingIds?.includes(user?._id));
     },[currentUser,userLoading])
-    
     return (
         <>
             <Card className="max-w-[340px] my-2">

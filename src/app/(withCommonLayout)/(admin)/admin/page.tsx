@@ -1,9 +1,10 @@
 import React from 'react';
+import PostPerMonth from './PostPerMonth/page';
 
 const AdminProfilePage = () => {
     return (
         <div>
-            <h1>Admin dashboard</h1>
+            <PostPerMonth/>
         </div>
     );
 };

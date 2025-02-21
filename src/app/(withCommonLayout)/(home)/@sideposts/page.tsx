@@ -7,10 +7,11 @@ import { IUser } from '../../../../../types';
 import { fetchUser } from '@/src//service/Profile';
 import { useUser } from '@/src//context/user.provider';
 import { UsefetchUsers } from '@/src//hooks/users.hook';
-import RecentPostLoading from './loading';
+import FollowCardSkeleton from '@/src//components/FollowerCardSkeleton';
+import { UseGetPosts } from '@/src//hooks/post.hook';
 
 const Sideposts = () => {
-    const{user,isLoading:userLoading}=useUser();
+    const{user,isLoading:userLoading}=useUser() ;      
     const [allUserData,setAllUserData]=useState([]);
     const [filteredUserData, setFilteredUserData] = useState<IUser[]>([]);
         useEffect(()=>{
@@ -29,6 +30,9 @@ const Sideposts = () => {
             }
             getUser()
         },[user,userLoading])
+        if(userLoading){
+            <FollowCardSkeleton/>
+        }
     return (<>
         {
             user?._id ? <div className='top-0 sticky'>

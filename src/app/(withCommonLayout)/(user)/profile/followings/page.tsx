@@ -2,25 +2,42 @@
 /* eslint-disable padding-line-between-statements */
 'use client'
 import { useUser } from "@/src//context/user.provider";
+import { useDeleteFollowing, UseGetUsersById } from "@/src//hooks/users.hook";
+import { Button } from "@nextui-org/button";
 import { Image } from "@nextui-org/image";
 import React from "react";
 
 const FollowingPage = () => {
   const { user } = useUser();
+  const{mutate:deleteFollowing}=useDeleteFollowing();
+  const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
+  console.log(CurrentuserData?.data);
+  
+  const handleUnfollowUser=(followingID:string)=>{
+    const currentUserId=user?._id ?? '';
+    deleteFollowing({followingID,currentUserId})
+  }
+
   return (
     <div className="gap-4 grid grid-cols-2 sm:grid-cols-3">
-      {user?.followingIds?.map((item: any, index) => (
+      {CurrentuserData?.data?.followingIds?.map((item: any, index) => (
         /* eslint-disable no-console */
-        <div className="mx-auto">
+        <div className="flex flex-col items-center align-middle space-y-2">
           <Image
             key={item._id}
-            alt="NextUI hero Image with delay"
+            alt="following image"
             height={200}
             radius="full"
             width={200}
-            src={`https://app.requestly.io/delay/1000/${item.profilePhoto}`}
+            src={`${item.profilePhoto}` || 'https://cdn-icons-png.flaticon.com/512/1144/1144760.png'}
           />
-          <p className="text-center">{item.name}</p>
+          <p className="">{item.name}</p>
+          <div className="">
+          <Button onPress={()=>handleUnfollowUser(item._id)} className="" color="primary" variant="bordered">
+              Unfollow
+          </Button>
+          </div>
+
         </div>
       ))}
     </div>

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable padding-line-between-statements */
 'use client'
-import React, {SVGProps} from "react";
+import React, {SVGProps, useState} from "react";
 import {
   Table,
   TableHeader,
@@ -18,7 +18,8 @@ import { Tooltip } from "@heroui/tooltip";
 import { DeleteIcon, EditIcon, EyeIcon } from "@/src//components/icons";
 import { UseGetPosts } from "@/src//hooks/post.hook";
 import { Ipost } from "../../../../../../types";
-import { UsefetchUsers } from "@/src//hooks/users.hook";
+import { UsefetchUsers, useModifyUser, useUpdateUser } from "@/src//hooks/users.hook";
+import { Button } from "@nextui-org/button";
 
 
 const rows = [
@@ -68,12 +69,20 @@ const columns = [
 ];
 
 export default function GetAllUsers() {
+  const {mutate:userUpdate}=useModifyUser()
   const{data:userData}=UsefetchUsers();
-  console.log(userData?.data);
+  const handleBlockUser=(id:string,isBlocked:boolean)=>{
+    const userData={
+      ban:isBlocked
+    }
+    //console.log(userData);
+    
+    userUpdate({ userData, id })
+  }
   return (
 <Table>
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+      <TableHeader className="text-center" columns={columns}>
+        {(column) => <TableColumn  key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
       <TableBody className="space-x-4">
         {userData?.data?.map((row:any) =>
@@ -88,21 +97,9 @@ export default function GetAllUsers() {
               <TableCell>{row?.status}</TableCell>
               <TableCell>
               <div className="relative flex items-center gap-2">
-                <Tooltip content="Details">
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <EyeIcon />
-                  </span>
-                </Tooltip>
-                <Tooltip content="Edit user">
-                  <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <EditIcon />
-                  </span>
-                </Tooltip>
-                <Tooltip color="danger" content="Delete user">
-                  <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <DeleteIcon />
-                  </span>
-                </Tooltip>
+                <Button onPress={()=>handleBlockUser(row?._id,!row?.ban)} color={row?.ban?"success":"danger"} variant="bordered">
+                {row?.ban?'UnBlock User':'Block User'}
+                </Button>
               </div>
               </TableCell>
           </TableRow>

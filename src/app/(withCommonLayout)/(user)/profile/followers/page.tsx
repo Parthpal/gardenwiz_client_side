@@ -20,7 +20,7 @@ const FollowersPage = () => {
             height={200}
             radius='full'
             width={200}
-            src={`https://app.requestly.io/delay/1000/${item.profilePhoto}`}    
+            src={`${item.profilePhoto}` || 'https://cdn-icons-png.flaticon.com/512/1144/1144760.png'}    
              />
             <p className='text-center'>{item.name}</p>
         </div>

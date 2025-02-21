@@ -112,7 +112,7 @@ const LoginPage = () => {
                     <Card>
                       <CardBody>
                           <form onSubmit={handleForgetPass} className="space-y-5">
-                            <Input className="my-5 px-5 " color="success" label="email" name="email" type="email"/>
+                            <Input className="my-5 px-5 " color="primary" label="email" name="email" type="email"/>
                             <Button color="primary" className='w-full my-2' size="lg" type="submit">
                               Request Reset Link
                             </Button>

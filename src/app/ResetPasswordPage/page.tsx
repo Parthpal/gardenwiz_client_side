@@ -27,8 +27,9 @@ export default function ResetPasswordPage() {
     const submitHandler = methods.handleSubmit;
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
       if(!email && !token){    
-        toast.error('Your are Unauthorized to access this')
+        return toast.error('Your are Unauthorized to access this')
       }
+
       const userData = {
         ...data,
       };

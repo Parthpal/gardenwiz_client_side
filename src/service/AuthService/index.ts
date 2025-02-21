@@ -58,7 +58,6 @@ export const registerUser = async (userData: FieldValues) => {
         _id: decodedToken._id,
         name: decodedToken.name,
         email: decodedToken.email,
-        mobileNumber: decodedToken.mobileNumber,
         role: decodedToken.role,
         status: decodedToken.status,
         profilePhoto: decodedToken.profilePhoto,

@@ -1,13 +1,6 @@
 /* eslint-disable prettier/prettier */
 'use client'
 import React, { ReactNode, useState } from "react";
-import {
-    Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerBody,
-    DrawerFooter
-  } from "@heroui/drawer";
 import { Button } from "@nextui-org/button";
 import { useDisclosure } from "@nextui-org/modal";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
@@ -17,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const {isOpen, onOpen, onClose,onOpenChange} = useDisclosure();
   const [placement, setPlacement] = React.useState("left");
   const [size, setSize] = useState("md");
-  const handleOpen = (size) => {
+  const handleOpen = (size:Sizes) => {
     setSize(size);
     onOpen
   };
@@ -27,7 +20,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (<>
      <div className="flex flex-row">
         <div className="w-[20%] min-h-screen border-1 border-black bg-[#16a34a] space-y-4">
-          <h1 className="text-center text-white">Admin layout</h1>
+          <h1 className="text-center text-white">Admin InterFace</h1>
           {/*user Management */}
           <Dropdown>
             <DropdownTrigger>
@@ -61,9 +54,9 @@ export default function Layout({ children }: { children: ReactNode }) {
               <Button className="w-full rounded-none bg-white">Graphs & Analytics</Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-              <DropdownItem key="postPerMonth">Monthly Payments</DropdownItem>
-              <DropdownItem key="copy" href="/admin/PostPerMonth">Posts Per month</DropdownItem>
-              <DropdownItem key="edit">User Activity</DropdownItem>
+              {/* <DropdownItem key="postPerMonth">Monthly Payments</DropdownItem> */}
+              <DropdownItem key="copy" href="/admin/PostPerMonth">Posts Data</DropdownItem>
+              {/* <DropdownItem key="edit">User Activity</DropdownItem> */}
             </DropdownMenu>
          </Dropdown>
         </div>

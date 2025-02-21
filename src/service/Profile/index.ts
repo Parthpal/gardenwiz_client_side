@@ -11,6 +11,14 @@ export const updateUser = async (userData: FieldValues,id:any) => {
       throw new Error(error);
     }
   };
+export const modifyUser= async (userData: FieldValues,id:any) => {
+    try {
+      const { data } = await axiosInstance.put(`/user/update/${id}`, userData);
+      return data;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
 
 export const updateUserStatus = async (id:string) => {
     try {
@@ -49,9 +57,9 @@ export const addFollower = async (followerID:any,currentUserId:any) => {
     throw new Error(error);
   }
 };
-export const deleteFollower = async (followerID:string,currentUserId:string) => {
+export const deleteFollowing = async (followingID:string,currentUserId:string|undefined) => {
   try {
-    const { data } = await axiosInstance.put(`/user/${followerID}/unfollow`,{currentUser:currentUserId});
+    const { data } = await axiosInstance.put(`/user/${followingID}/unfollow`,{currentUser:currentUserId});
     return data;
   } catch (error: any) {
     throw new Error(error);

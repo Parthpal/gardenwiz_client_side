@@ -2,7 +2,7 @@
 /* eslint-disable padding-line-between-statements */
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addFavouritePosts, addFollower, deleteFollower, fetchUser, fetchUserFromID, updateUser } from "../service/Profile"
+import { addFavouritePosts, addFollower, deleteFollower, deleteFollowing, fetchUser, fetchUserFromID, modifyUser, updateUser } from "../service/Profile"
 import { FieldValues } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -39,6 +39,21 @@ export const useUpdateUser = () => {
       },
   });
 };
+export const useModifyUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, { userData: any; id: any }>({
+      mutationKey: ["modification_user"],
+      mutationFn: async ({ userData, id }) => await modifyUser(userData, id),
+      onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
+          queryClient.invalidateQueries({ queryKey: ['GET_POSTS'] });
+          toast.success("User updated successfully!");
+      },
+      onError: (error) => {
+          toast.error(error.message || "Failed to update user");
+      },
+  });
+};
 
 export const useAddFollower = () => {
     const queryClient = useQueryClient();
@@ -54,13 +69,14 @@ export const useAddFollower = () => {
                 
     })
 }
-export const useDeleteFollower = () => {
+export const useDeleteFollowing = () => {
     const queryClient = useQueryClient();
-    return useMutation<any,Error,{ followerID: string; currentUserId: string }>({
-        mutationKey: ["delete_follower"],
-        mutationFn: async ({followerID,currentUserId}) => await deleteFollower(followerID,currentUserId),
+    return useMutation<any,Error,{ followingID: string; currentUserId: string | 'undefined' }>({
+        mutationKey: ["delete_following"],
+        mutationFn: async ({followingID,currentUserId}) => await deleteFollowing(followingID,currentUserId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['AllUsers'] });
+            toast.success('You have unfollowed successfully. Stay connected anytime!')
+            queryClient.invalidateQueries({ queryKey: ['Fetch_By_Users_Id'] });
           },
           onError: (error) => {
             toast.error(error.message);
@@ -68,7 +84,6 @@ export const useDeleteFollower = () => {
                 
     })
 }
-
 export const useAddFavouritePost = () => {
   const queryClient = useQueryClient();
 

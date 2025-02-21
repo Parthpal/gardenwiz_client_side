@@ -10,6 +10,7 @@ import { useUser } from "@/src//context/user.provider";
 import HomePageContent from "@/src//components/HomePageContent";
 import Loading from "./Loading";
 import PostCardSkeleton from "@/src//components/PostCardSkeleton";
+import { useRouter } from "next/navigation";
 
   export default function Layout({
       children,
@@ -20,10 +21,16 @@ import PostCardSkeleton from "@/src//components/PostCardSkeleton";
   }) 
       {
       const {user,isLoading}=useUser();
+      const router = useRouter();
+      useEffect(() => {
+        if (user?.role === 'ADMIN') {
+          router.push('/admin'); // Redirect admin to the dashboard
+        }
+      }, [user, router]);
       if(isLoading){
         return <Loading/>
       }
-      return user?.email?(
+      return user?.email && user?.role==='USER'?(
             <>     
             <div className="container mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-3">
@@ -37,6 +44,8 @@ import PostCardSkeleton from "@/src//components/PostCardSkeleton";
               </div>
             </div>
             </>):(
-            <HomePageContent/>)
+                   <HomePageContent/>
+                 )
+
       ;
       }

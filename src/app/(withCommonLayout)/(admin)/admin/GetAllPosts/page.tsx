@@ -49,9 +49,9 @@ export default function GetAllPosts() {
   deletePostMutate({id});
 }
   return (
-<Table aria-label="Example table with dynamic content">
+<Table aria-label="">
       <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+        {(column) => <TableColumn align="center" key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
       <TableBody>
         {postData?.data?.map((row:any) =>

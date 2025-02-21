@@ -16,7 +16,7 @@ import PostCardSkeleton from '@/src//components/PostCardSkeleton';
 
 const HomePage = () => {
     
-    const {user}= useUser();
+    const {user,isLoading}= useUser();
         const {
             data: postData,
             isLoading: postLoading,

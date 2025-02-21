@@ -57,5 +57,6 @@ export interface IUser {
   followerIds: string[];
   followingIds: string[];
   favoritePosts: string[];
+  ban: boolean;
   __v: number; // Version field, typically a number
 }
