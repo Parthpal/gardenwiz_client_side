@@ -9,45 +9,11 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-  getKeyValue
 } from "@heroui/table";
 
-import {Chip} from '@heroui/chip'
 import {User} from "@heroui/user";
-import { Tooltip } from "@heroui/tooltip";
-import { DeleteIcon, EditIcon, EyeIcon } from "@/src//components/icons";
-import { UseGetPosts } from "@/src//hooks/post.hook";
-import { Ipost } from "../../../../../../types";
 import { UsefetchUsers, useModifyUser, useUpdateUser } from "@/src//hooks/users.hook";
 import { Button } from "@nextui-org/button";
-
-
-const rows = [
-  {
-    key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
-  },
-  {
-    key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
-  },
-  {
-    key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
-  },
-  {
-    key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
-  },
-];
 
 const columns = [
 {
@@ -75,8 +41,6 @@ export default function GetAllUsers() {
     const userData={
       ban:isBlocked
     }
-    //console.log(userData);
-    
     userUpdate({ userData, id })
   }
   return (
@@ -89,9 +53,9 @@ export default function GetAllUsers() {
           <TableRow key={row._id}>
               <TableCell>
                 <User
-                    avatarProps={{radius: "lg", src: row?.profilePhoto}}
-                    description={row?.email}
-                    name={row?.name}/>
+                avatarProps={{radius: "lg", src: row?.profilePhoto}}
+                description={row?.email}
+                name={row?.name}/>
               </TableCell>
               <TableCell>{row?.role}</TableCell>
               <TableCell>{row?.status}</TableCell>

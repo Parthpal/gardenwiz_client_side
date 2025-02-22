@@ -50,30 +50,33 @@ export const Navbar = () => {
   const [searchResult,setSearchResult]=useState([]);
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
  // console.log(useDebounce(watch('searchInput')));
-  const { mutate: handleSearch, data,isPending,isSuccess } = useSearchItems();
-    console.log(data);
+  const { mutate: handleSearch, data:searchedResultData,isPending,isSuccess } = useSearchItems();
+   // console.log(data);
    const searchTerm = useDebounce(watch("searchInput"));
-   // console.log(searchTerm);
+  // console.log(searchTerm);
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [size, setSize] = useState("md");
    // const [scrollBehavior, setScrollBehavior] =useState<ModalProps["scrollBehavior"]>('outside');
   useEffect(() => {
     if (searchTerm) {
-      handleSearch(searchTerm);
+       handleSearch(searchTerm);
+      // searchItems(searchTerm)
     }
   }, [searchTerm]);
   useEffect(() => {
     if (!searchTerm) {
       setSearchResult([]);
     }
-    if(!isPending && isSuccess && data && searchTerm){
-      setSearchResult(data?.data?.hits || []); 
+    if(!isPending && isSuccess && searchedResultData && searchTerm){
       onOpen(); // for modal opening
+      setSearchResult(searchedResultData?.data || []); 
     }
-  }, [searchTerm, isPending, isSuccess, data]);
+  }, [searchTerm, isPending, isSuccess, searchedResultData]);
   const onSubmit = () =>{
     // searchItems(data);
   }
+  //console.log(searchResult,'current search');
+  
   
   return (
     <NextUINavbar maxWidth="xl" position="sticky">

@@ -9,15 +9,11 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-  getKeyValue
 } from "@heroui/table";
 
-import {Chip} from '@heroui/chip'
-import {User} from "@heroui/user";
 import { Tooltip } from "@heroui/tooltip";
 import { DeleteIcon, EditIcon, EyeIcon } from "@/src//components/icons";
 import { useDeletePosts, UseGetPosts } from "@/src//hooks/post.hook";
-import { Ipost } from "../../../../../../types";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
 
