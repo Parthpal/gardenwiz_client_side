@@ -13,6 +13,8 @@ import 'react-tabs/style/react-tabs.css';
 import { UsefetchUsers, UseGetUsersById } from '@/src//hooks/users.hook';
 import ProfileSidebarSkeleton from '@/src//components/ProfileSidebarSkeleton';
 import PostCardSkeleton from '@/src//components/PostCardSkeleton';
+import classNames from "classnames";
+import Sidebar from '@/src//components/UI/sidebar/Sidebar';
 
 const ProfilePage = () => {
     const {user,isLoading:userLoading}=useUser();
@@ -39,11 +41,14 @@ const ProfilePage = () => {
     }
     return (
       <>   
-      <div className='mx-32 space-y-10'>
-        <Tabs>
+      <div className='lg:mx-32 mx-0 space-y-10'>
+        <Tabs id="controlled-tabs">
         <TabList>
           <Tab>Home</Tab>
           <Tab>Favorites</Tab>
+          <Tab className="lg:hidden inline cursor-pointer focus:border-2 focus:outline-black rounded-md p-2 border-black">
+            Settings
+          </Tab>
         </TabList>
         <TabPanel>
             <h1 className='text-5xl mt-5'> {CurrentuserData?.data?.name}</h1>
@@ -60,6 +65,12 @@ const ProfilePage = () => {
                    <PostCard key={index} posts={posts}/>
               )
             }
+        </TabPanel>
+        <TabPanel>
+          <div className='flex items-center justify-center lg:hidden '>
+          <Sidebar/>
+          </div>
+
         </TabPanel>
       </Tabs>
       </div>

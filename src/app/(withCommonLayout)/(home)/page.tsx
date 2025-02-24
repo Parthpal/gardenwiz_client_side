@@ -3,74 +3,81 @@
 "use client"
 import CreatePost from '@/src//components/UI/Post/CreatePost';
 import PostCard from '@/src//components/UI/Post/PostCard';
-import TextEditor from '@/src//components/UI/RichTextEditor/TextEditor';
 import { UseGetPosts } from '@/src//hooks/post.hook';
-import { fetchPost } from '@/src//service/post';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Ipost } from '../../../../types';
 import { useUser } from '@/src//context/user.provider';
 import { VList, WindowVirtualizer } from 'virtua';
-import HomePageContent from '@/src//components/HomePageContent';
 import PostCardSkeleton from '@/src//components/PostCardSkeleton';
+import { UseGetUsersById } from '@/src//hooks/users.hook';
+import Sideposts from './@sideposts/page';
 
 
 const HomePage = () => {
     
-    const {user,isLoading}= useUser();
+    const {user}= useUser();
+    const {data:CurrentuserData}=UseGetUsersById(user?._id);
         const {
             data: postData,
             isLoading: postLoading,
-            isSuccess: postSuccess,
         } = UseGetPosts();
+    //console.log(CurrentuserData?.data?.followingIds);
+    const followingIdsSet = new Set(
+        CurrentuserData?.data?.followingIds?.map((user: any) => user._id)
+    );
     
-   //console.log(user?.followingIds,'followinid');
-   const userFollowingIds:any[]=[];
-       user?.followingIds.map((userData:any)=>{
-        //console.log(data?._id);
-        if(userData?._id!==''){
-        userFollowingIds.push(userData?._id)
-        }
-    })
-    const followingPostOnly = postData?.data?.filter((data:any) =>userFollowingIds.includes(data?.userID?._id)); 
-        if (postLoading) {
-            return (
-              <>
-                {Array(4).fill(null).map((_, index) => (
-                  <PostCardSkeleton key={index} />
-                ))}
-              </>
-            );
-          }
+    const filteredPosts = postData?.data?.filter((post: any) =>
+        followingIdsSet.has(post.userID._id)
+    );
+    if (postLoading) {
+        return (
+          <>
+            {Array(4).fill(null).map((_, index) => (
+              <PostCardSkeleton key={index} />
+            ))}
+          </>
+        );
+      }
+
     return (
         <div>    
             {
                 user?.email ? (<>
                     <CreatePost/>
-                    <div>
-                    <WindowVirtualizer>
-                        {Array.from({ length: 1000 }).map((_, i) => (
-                            <div
-                            key={i}
-                            style={{
-                                marginTop:'10px',
-                                background: "white",
-                            }}
-                            >
-                                        {
-                        followingPostOnly?.map((posts:Ipost,index:string)=>
-                            <PostCard key={index} posts={posts}/>
-                        )
-                    } 
-                     
-                     </div>
-                     ))}
-                     </WindowVirtualizer>
+                    <div className='flex flex-col align-middle justify-center block lg:hidden mx-2'>
+                    <h1 className="text-large">Who to Follow</h1>
+                        <Sideposts/>
                     </div>
+                    {
+                       CurrentuserData?.data?.followingIds.length > 0?
+                        <div>
+                        <WindowVirtualizer>
+                            {Array.from({ length: 1000 }).map((_, i) => (
+                                <div
+                                key={i}
+                                style={{
+                                    marginTop:'10px',
+                                    // background: "white",
+                                }}
+                                >
+                        {
+                            filteredPosts?.map((posts:Ipost,index:any)=>
+                                <PostCard key={index} posts={posts}/>
+                            )
+                        } 
+                         
+                         </div>
+                         ))}
+                         </WindowVirtualizer>
+                        </div>:
+                         <h1 className='text-center'>Unlock exclusive gardening tips by following fellow gardeners! 🌱👩‍🌾</h1>
+                    }
                 </>):
                 (
-                    postData?.data?.map((posts:Ipost,index:string)=>
-                        <PostCard key={index} posts={posts}/>
-                    )
+                    // postData?.data?.map((posts:Ipost,index:string)=>
+                    //     <PostCard key={index} posts={posts}/>
+                    // )
+                    <h1 className='text-center'>Unlock exclusive gardening tips by following fellow gardeners! 🌱👩‍🌾</h1>
                 )
                 
             }          

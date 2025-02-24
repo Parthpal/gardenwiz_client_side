@@ -30,9 +30,11 @@ const Sidebar = () => {
     return (
         <>
         <div className=''>
-            <Avatar src={CurrentuserData?.data?.profilePhoto} className="w-20 h-20 text-large" />
-            <div className='space-y-4 py-5'>
-                <h1>{CurrentuserData?.data?.name}</h1>
+          <div className='flex lg:items-start lg:justify-start items-center justify-center'>
+          <Avatar src={CurrentuserData?.data?.profilePhoto} className="w-20 h-20 text-large" />
+          </div>
+            <div className='space-y-4 py-5 flex flex-col items-center justify-center lg:items-start lg:justify-start'>
+                <h1 className='text-2xl'>{CurrentuserData?.data?.name}</h1>
                 {
                   CurrentuserData?.data?.status==='PREMIUM'?
                   <Button color="primary" variant="bordered">Verified<span><VerifiedComponent/></span></Button>:
@@ -74,8 +76,8 @@ const Sidebar = () => {
                       }
                 </AvatarGroup>
                 </Link>
-                <Button className="w-full m-0 flex justify-start p-0 text-md bg-white" key={size} onPress={() => handleOpen(size)}>
-                <p>Edit Profile</p>
+                <Button color="primary" variant="bordered" className="text-medium" key={size} onPress={() => handleOpen(size)}>
+                Edit Profile
                 </Button>                     
             </div>
         </div>
@@ -84,6 +86,7 @@ const Sidebar = () => {
         isDismissable={false}
         isKeyboardDismissDisabled={true}
         size={size}
+
           >
             <UpdateProfile onClose={onClose}/>
          </Modal>   

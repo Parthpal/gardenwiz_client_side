@@ -8,7 +8,7 @@ interface IProps {
   }[];
   name: string;
   label: string;
-  variant?: "bordered" | "faded" | "flat" | "filled";
+  variant?:"bordered" | "flat" | "faded" | "underlined";
   disabled?: boolean;
   defaultSelectedKeys?:string[];
 }

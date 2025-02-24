@@ -4,25 +4,35 @@
 import GWForm from "@/src//components/UI/Form/GWForm";
 import GWInput from "@/src//components/UI/Form/GWInput";
 import { useUserRegistration } from "@/src//hooks/auth.hook";
-import { registerUser } from "@/src//service/AuthService";
+import { logout, registerUser } from "@/src//service/AuthService";
 import { Button } from "@nextui-org/button";
 import { log } from "console";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { FieldValues, SubmitHandler } from 'react-hook-form';
 
 const RegisterPage = () => {
-   const {mutate:handleRegistration,isPending}=useUserRegistration();
+   const {mutate:handleRegistration,isPending,isSuccess}=useUserRegistration();
+   const router=useRouter();
     const onSubmit: SubmitHandler<FieldValues> =async (data) => {
       const userData = {
         ...data,
         profilePhoto:
           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
       };
-      console.log(userData);
+      //console.log(userData);
       handleRegistration(userData)
       };
+      useEffect(()=>{
+        if(isSuccess && !isPending){
+          logout();
+          setTimeout(()=>{
+            router.push('/login')
+          },1000)    
+        }
+      },[isSuccess,isPending])
     return (
         <div className="flex flex-col lg:flex-row ">
         <div className="flex-1 lg:ml-48 md:mx-auto">

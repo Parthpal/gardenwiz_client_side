@@ -1,11 +1,7 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 'use client'
-import FollowCard from "@/src//components/UI/sidebar/FollowCard";
-import { UsefetchUsers } from "@/src//hooks/users.hook";
-import { fetchUser } from "@/src//service/Profile";
 import { ReactNode, useEffect } from "react";
-import { IUser } from "../../../../types";
 import { useUser } from "@/src//context/user.provider";
 import HomePageContent from "@/src//components/HomePageContent";
 import Loading from "./Loading";
@@ -27,9 +23,11 @@ import { useRouter } from "next/navigation";
           router.push('/admin'); // Redirect admin to the dashboard
         }
       }, [user, router]);
+
       if(isLoading){
         return <Loading/>
       }
+
       return user?.email && user?.role==='USER'?(
             <>     
             <div className="container mx-auto">
@@ -37,7 +35,7 @@ import { useRouter } from "next/navigation";
                 <div className="col-span-2 lg:ml-8">
                   {children}
                 </div>
-                <div className="ml-8">
+                <div className="ml-8 hidden lg:block">
                   <h1 className="text-large">Who to Follow</h1>
                   {sideposts}
                 </div>
@@ -45,7 +43,5 @@ import { useRouter } from "next/navigation";
             </div>
             </>):(
                    <HomePageContent/>
-                 )
-
-      ;
+                 );
       }

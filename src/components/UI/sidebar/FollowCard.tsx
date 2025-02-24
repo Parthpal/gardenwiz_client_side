@@ -3,16 +3,13 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import { useUser } from '@/src//context/user.provider';
-import { useAddFollower,useDeleteFollower, useDeleteFollowing,  } from '@/src//hooks/users.hook';
-import { addFollower, deleteFollower, fetchUser } from '@/src//service/Profile';
+import { useAddFollower, useDeleteFollowing,  } from '@/src//hooks/users.hook';
+import { addFollower,fetchUser } from '@/src//service/Profile';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { Card, CardHeader } from '@nextui-org/card';
 import React, { useEffect, useState } from 'react';
 import { IUser } from '../../../../types';
-import { useQuery } from '@tanstack/react-query';
-import FollowCardSkeleton from '../../FollowerCardSkeleton';
-
 
 const FollowCard = ({user}:{user:IUser}) => {
     const {user:currentUser,isLoading:userLoading}=useUser();
@@ -27,6 +24,9 @@ const FollowCard = ({user}:{user:IUser}) => {
       setIsFollowed(follwedCheck);
       if(follwedCheck){
         addFollower({followerID: id, currentUserId: currentUser!._id})
+        setTimeout(()=>{
+          window.location.reload(); 
+        },1000)
       }
       else{
         deleteFollower({followingID: id, currentUserId: currentUser!._id})
@@ -36,13 +36,23 @@ const FollowCard = ({user}:{user:IUser}) => {
       fetchUser()
       .then((data)=>{
         //console.log(data.data);
-        setAllUserData(data?.data);  
+        setAllUserData(data?.data) 
       })
       setIsFollowed(filterUser[0]?.followingIds?.includes(user?._id));
     },[currentUser,userLoading])
+
+    // if (currentUser && userLoading) {
+    //   return (
+    //     <>
+    //       {Array(4).fill(null).map((_, index) => (
+    //         <FollowCardSkeleton key={index} />
+    //       ))}
+    //     </>
+    //   );
+    // }
     return (
         <>
-            <Card className="max-w-[340px] my-2">
+            <Card className="lg:max-w-[340px] w-full">
                 <CardHeader className="justify-between">
                     <div className="flex gap-5">
                     <Avatar

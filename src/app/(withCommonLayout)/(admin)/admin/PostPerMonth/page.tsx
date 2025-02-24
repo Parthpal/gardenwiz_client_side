@@ -18,13 +18,13 @@ const PostPerMonth = () => {
     if (!categoriesData?.data || !postData?.data) return;
   
     //Map category IDs to category names
-    const categoryMap = categoriesData.data.reduce((acc, cat) => {
+    const categoryMap = categoriesData.data.reduce((acc:any, cat:any) => {
       acc[cat._id] = cat.name;
       return acc;
     }, {});
   
     // Process Post Data & Group by Category Name
-    const groupedData = postData.data.reduce((acc, post) => {
+    const groupedData = postData.data.reduce((acc:any, post:any) => {
       const categoryName = categoryMap[post.categoryID] || "Unknown";
   
       if (!acc[categoryName]) {
@@ -38,7 +38,7 @@ const PostPerMonth = () => {
     }, {});
   
     setChartData(Object.values(groupedData));
-  }, [categoriesData, postData]); // ✅ Run effect when data updates
+  }, [categoriesData, postData]); 
     return (
       <ResponsiveContainer width="100%" height={400}>
       <BarChart data={chartData}>

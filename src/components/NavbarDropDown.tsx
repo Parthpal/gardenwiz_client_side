@@ -11,6 +11,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-o
 import { Avatar } from '@nextui-org/avatar';
 import { UseGetUsersById } from '../hooks/users.hook';
 
+
 const NavbarDropDown = () => {
     const router = useRouter();
     const pathname = usePathname();
@@ -33,7 +34,8 @@ const NavbarDropDown = () => {
             <DropdownTrigger>
               <Avatar className="cursor-pointer" src={CurrentuserData?.data?.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/64/64572.png'} />
             </DropdownTrigger>
-            <DropdownMenu aria-label="Static Actions">
+            <DropdownMenu aria-label="Static Actions"
+            >
               {/* <DropdownItem key="profile" onPress={() => handleNavigation("/profile")}> */}
               <DropdownItem key="profile" href='/profile'>
                 Profile

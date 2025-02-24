@@ -14,7 +14,6 @@ export const UseGetPosts=()=>{
     })
 }
 
-
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
 
@@ -44,7 +43,7 @@ export const useUpvote = () => {
         mutationKey: ["post_upvote"],
         mutationFn: async (id:any) => await upvotePost(id),
         onSuccess: () => {
-            queryClient.invalidateQueries(["GET_POSTS"]);
+            queryClient.invalidateQueries({ queryKey: ["GET_POSTS"] });
           },
           onError: (error) => {
             toast.error(error.message);
@@ -58,7 +57,7 @@ export const useDOwnvote = () => {
         mutationKey: ["post_downvote"],
         mutationFn: async (id:any) => await downvotePost(id),
         onSuccess: () => {
-            queryClient.invalidateQueries(["GET_POSTS"]);
+            queryClient.invalidateQueries({ queryKey: ["GET_POSTS"] });
           },
           onError: (error) => {
             toast.error(error.message);
@@ -80,8 +79,7 @@ export const useAddComments = () => {
         mutationKey: ["add_comments"],
         mutationFn: async ({id,commentData}) => await addComments(id, commentData),
         onSuccess: (_, { id }) => {
-           queryClient.invalidateQueries(["GET_POSTS_Id"]);
-            queryClient.refetchQueries(["GET_POSTS_Id"]);  // Force refetch
+           queryClient.invalidateQueries({ queryKey: ["GET_POSTS_Id"] });
             toast.message('Comments Added');  
           },
           onError: (error) => {
@@ -95,7 +93,7 @@ export const useAddComments = () => {
       mutationKey: ["delete_comments"],
       mutationFn: async ({id,postId}) => await deleteComments(id, postId),
       onSuccess: () => {
-         queryClient.invalidateQueries(["GET_POSTS_Id"]);
+         queryClient.invalidateQueries({ queryKey: ["GET_POSTS_Id"] });
          toast.message('Comments Deleted');  
         },
         onError: (error) => {
@@ -109,7 +107,7 @@ export const useDeletePosts = () => {
       mutationKey: ["delete_comments"],
       mutationFn: async ({id}) => await deletePosts(id),
       onSuccess: () => {
-         queryClient.invalidateQueries(["GET_POSTS_Id"]);
+         queryClient.invalidateQueries({ queryKey: ["GET_POSTS_Id"] });
          toast.message('Post Deleted');  
         },
         onError: (error) => {
@@ -124,7 +122,7 @@ export const useEditComments = () => {
       mutationKey: ["delete_comments"],
       mutationFn: async ({commentID,commentsData}) => await editComment(commentID, commentsData),
       onSuccess: () => {
-         queryClient.invalidateQueries(["GET_POSTS_Id"]);
+         queryClient.invalidateQueries({ queryKey: ["GET_POSTS_Id"] });
          toast.message('Comments Edited');  
         },
         onError: (error) => {

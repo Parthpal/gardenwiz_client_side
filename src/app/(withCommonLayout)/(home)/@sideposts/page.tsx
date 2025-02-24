@@ -6,9 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { IUser } from '../../../../../types';
 import { fetchUser } from '@/src//service/Profile';
 import { useUser } from '@/src//context/user.provider';
-import { UsefetchUsers } from '@/src//hooks/users.hook';
 import FollowCardSkeleton from '@/src//components/FollowerCardSkeleton';
-import { UseGetPosts } from '@/src//hooks/post.hook';
 
 const Sideposts = () => {
     const{user,isLoading:userLoading}=useUser() ;      
@@ -21,7 +19,7 @@ const Sideposts = () => {
             if(!userLoading && user){
                 const filteredData = await data?.filter((userData: IUser) => userData._id !== CurrentUser[0]?._id);
                 const filteredData2 = await filteredData?.filter((userData: IUser) =>{
-                return !(CurrentUser[0]?.followingIds.some(following=>following?._id===userData?._id))
+                return !(CurrentUser[0]?.followingIds.some((following:any)=>following?._id===userData?._id))
                 });
                 //console.log(filteredData2)
                 // const filteredData2 = await filteredData?.filter((userData: IUser) =>(user?.followingIds?.includes(userData?._id)));
@@ -35,7 +33,7 @@ const Sideposts = () => {
         }
     return (<>
         {
-            user?._id ? <div className='top-0 sticky'>
+            user?._id ? <div className='top-0 sticky space-y-2 mb-2'>
             {
             filteredUserData?.map((user:IUser)=>(
             <FollowCard key={user?._id} user={user}/>

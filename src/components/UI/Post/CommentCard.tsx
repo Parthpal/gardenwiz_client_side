@@ -25,7 +25,7 @@ _id:string,
 createdAt?:string,
 }
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
-const CommentCard = ({userComments,postId}:{userComments:ICommentProps,postId:any}) => {
+const CommentCard = ({userComments,postId}:{userComments:any,postId:any}) => {
     const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
     const{mutate:deleteCommentMutation}=useDeleteComments();
     const [size, setSize] = React.useState<Sizes>("3xl");

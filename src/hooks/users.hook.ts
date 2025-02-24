@@ -2,7 +2,7 @@
 /* eslint-disable padding-line-between-statements */
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addFavouritePosts, addFollower, deleteFollower, deleteFollowing, fetchUser, fetchUserFromID, modifyUser, updateUser } from "../service/Profile"
+import { addFavouritePosts, addFollower,deleteFollowing, fetchUser, fetchUserFromID, modifyUser, updateUser } from "../service/Profile"
 import { FieldValues } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -61,7 +61,10 @@ export const useAddFollower = () => {
         mutationKey: ["add_follower"],
         mutationFn: async ({ followerID, currentUserId}) => await addFollower(followerID, currentUserId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['GET_POSTS'] });
+            // queryClient.invalidateQueries({ queryKey: ['GET_POSTS'] });
+            // queryClient.invalidateQueries({ queryKey: ['Fetch_By_Users_Id'] });
+             queryClient.invalidateQueries({ queryKey: ["AllUsers"] });
+             queryClient.invalidateQueries({ queryKey: ["Fetch_By_Users_Id"] });
           },
           onError: (error) => {
             toast.error(error.message);

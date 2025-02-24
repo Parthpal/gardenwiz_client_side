@@ -53,7 +53,7 @@ const PostCard = ({posts}:IpostCardProps) => {
     const [liked, setLiked] = React.useState(false);
     const [tagsData,setTagsData]=React.useState([]);
     const [scrollBehavior, setScrollBehavior] =React.useState<ModalProps["scrollBehavior"]>('outside');
-    const [imageFiles, setImageFiles] = React.useState<File[] | string[]>(images);
+    const [imageFiles, setImageFiles] = React.useState<File[] | string[] | any>(images);
     const [imagePreviews, setImagePreviews] = React.useState<string[] | []>(images);
     const { isOpen, onOpen,onOpenChange,onClose } = useDisclosure();
     const [size, setSize] = React.useState<Sizes>("3xl");
@@ -113,7 +113,7 @@ const PostCard = ({posts}:IpostCardProps) => {
     };
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files![0];
-      setImageFiles((prev) => [...prev, file]);
+      setImageFiles((prev:any) => [...prev, file]);
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -126,7 +126,7 @@ const PostCard = ({posts}:IpostCardProps) => {
     const handleDeleteImage = (index: number) => {
         // Remove the image preview and file at the given index
         setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-        setImageFiles((prev) => prev.filter((_, i) => i !== index));
+        setImageFiles((prev:any) => prev.filter((_, i:any) => i !== index));
       };
     const addToFavourite=(id:string)=>{
       //alert('add to fab clicked'+id)
@@ -182,8 +182,8 @@ const PostCard = ({posts}:IpostCardProps) => {
             </CardHeader>
             <Divider />
             <CardBody>
-                <div className='flex flex-row-reverse justify-between '>
-                    <div className="relative w-[30%]">
+                <div className='flex lg:flex-row-reverse flex-col-reverse  justify-between '>
+                    <div className="relative lg:w-[30%] w-full">
                         <Image
                         alt="image"
                         className="object-cover"
@@ -194,7 +194,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                         />
                     </div>
 
-                <div className="flex flex-col col-span-6 md:col-span-8 w-[65%]">
+                <div className="flex flex-col col-span-6 md:col-span-8 lg:w-[65%] w-full">
                     <div className="flex justify-between items-start ">
                     <div className="flex flex-col gap-0 mt-4">
                         {tags==='Premium'? <h3 className="font-semibold text-foreground/90">{title} <span className='text-yellow-500'>Premium<Crown className='inline-block text-2xl align-middle'/></span></h3>:<h3 className="font-semibold text-foreground/90">{title}</h3>}       
@@ -205,7 +205,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                         <>
                         {                               
                             (CurrentuserData?.data?.status==='PREMIUM') ?
-                            <Link className="w-full text-sm flex justify-start my-2 p-0 bg-white" href={`/posts/${_id}`}>
+                            <Link className="w-full text-sm flex justify-start my-2 p-0" href={`/posts/${_id}`}>
                             Read More..
                             </Link>:<></>
                         }
@@ -213,10 +213,10 @@ const PostCard = ({posts}:IpostCardProps) => {
                         <>
                         {
                             (CurrentuserData?.data?.status==='BASIC' && tags==='Premium' && userID._id!==CurrentuserData?.data?._id) ?
-                            <Button className="w-full text-sm flex justify-start my-2 p-0 bg-white" onPress={handleTriggerModal}>
+                            <Button isIconOnly variant="light" className="w-full text-sm flex justify-start my-2 p-0" onPress={handleTriggerModal}>
                             Read More..
                             </Button>:<>
-                            <Link className="w-full text-sm flex justify-start my-2 p-0 bg-white" href={`/posts/${_id}`}>
+                            <Link className="w-full text-sm flex justify-start my-2 p-0" href={`/posts/${_id}`}>
                             Read More..
                             </Link>
                             </>
@@ -231,15 +231,15 @@ const PostCard = ({posts}:IpostCardProps) => {
             <CardFooter className="flex w-full justify-between items-center my-5 align-middle">
             <div className="flex flex-col">
                     <div className="flex justify-around space-x-5 ">
-                        <Button onPress={()=>handleUpvote(_id)} className="flex justify-around items-center bg-white">
+                        <Button isIconOnly variant="light" onPress={()=>handleUpvote(_id)} className="flex justify-around items-center">
                             <ArrowUpIcon/>
                             <p className="text-lg">{upvotes}</p>
                         </Button>
-                        <Button onPress={()=>handleDownvote(_id)} className="flex justify-around items-center bg-white">
+                        <Button isIconOnly variant="light" onPress={()=>handleDownvote(_id)} className="flex justify-around items-center">
                             <ArrowDownIcon/>
                             <p className="text-lg">{downvotes}</p>
                         </Button>
-                        <Link className="flex justify-around items-center bg-white gap-2 pl-5" href={`/posts/${_id}`}>
+                        <Link className="flex justify-around items-center gap-2 pl-5" href={`/posts/${_id}`}>
                         <CommentsIcon/>
                         <p className="text-lg">{comments?.length??'0'}</p>
                         </Link>
@@ -266,7 +266,7 @@ const PostCard = ({posts}:IpostCardProps) => {
                         <>
                         <Dropdown>
                             <DropdownTrigger>
-                            <Button className='p-0 mx-0 bg-white text-2xl'>
+                            <Button isIconOnly variant="light" className='p-0 mx-0 isIconOnly variant="light" text-2xl'>
                             <DragDots/>
                             </Button>
                             </DropdownTrigger>

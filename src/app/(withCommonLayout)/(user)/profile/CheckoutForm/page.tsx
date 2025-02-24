@@ -4,7 +4,7 @@
 'use client'
 import GWInput from '@/src//components/UI/Form/GWInput';
 import { useUser } from '@/src//context/user.provider';
-import { paymentData, postPaymentData, postPaymentIntent } from '@/src//service/Payment';
+import {postPaymentData, postPaymentIntent } from '@/src//service/Payment';
 import { updateUserStatus } from '@/src//service/Profile';
 import { Button } from '@nextui-org/button';
 import { CardHeader } from '@nextui-org/card';
@@ -26,7 +26,7 @@ const CheckOutForm = () => {
     const [transactionId,setTransactionId]=useState("");
     const stripe = useStripe();
     const elements = useElements();
-    const [error,setError]=useState('');
+    const [error,setError]=useState<any>('');
     const methods = useForm({
       defaultValues: {
         name:'',

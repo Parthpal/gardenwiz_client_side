@@ -34,7 +34,7 @@ import NavbarDropDown from "./NavbarDropDown";
 import { useUser } from "../context/user.provider";
 import { useForm } from "react-hook-form";
 import useDebounce from "../hooks/debounce.hook";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchItems } from "../hooks/search.hook";
 import { searchItems } from "../service/Search";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
@@ -43,7 +43,7 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalProps, u
 import { Ipost } from "../../types";
 import PostCard from "./UI/Post/PostCard";
 import { UseGetUsersById } from "../hooks/users.hook";
-
+type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 export const Navbar = () => {
   const {user}=useUser();
   const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
@@ -54,9 +54,8 @@ export const Navbar = () => {
    // console.log(data);
    const searchTerm = useDebounce(watch("searchInput"));
   // console.log(searchTerm);
-    const {isOpen, onOpen, onClose} = useDisclosure();
-    const [size, setSize] = useState("md");
-   // const [scrollBehavior, setScrollBehavior] =useState<ModalProps["scrollBehavior"]>('outside');
+    const {isOpen, onOpen, onClose,onOpenChange} = useDisclosure();
+    const [size, setSize] = React.useState<Sizes>("2xl");
   useEffect(() => {
     if (searchTerm) {
        handleSearch(searchTerm);
@@ -72,13 +71,19 @@ export const Navbar = () => {
       setSearchResult(searchedResultData?.data || []); 
     }
   }, [searchTerm, isPending, isSuccess, searchedResultData]);
-  const onSubmit = () =>{
-    // searchItems(data);
-  }
   //console.log(searchResult,'current search');
   
-  
-  return (
+  const handleOpen = (size : Sizes) => {
+    setSize(size);
+    onOpen();
+  };
+
+  const onSubmit = () =>{
+    // searchItems(data);
+    onClose()
+  }
+
+  return (<>
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
@@ -87,74 +92,6 @@ export const Navbar = () => {
             <p className="font-bold text-inherit">GardenWiz</p>
           </NextLink>
         </NavbarBrand>
-          <form onSubmit={handleSubmit(onSubmit)}>
-          <Input {...register("searchInput", { required: true })}
-            classNames={{
-              base: "max-w-full sm:max-w-[10rem] h-10",
-              mainWrapper: "h-full",
-              input: "text-small",
-              inputWrapper:
-                "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-            }}
-            placeholder="Type to search..."
-            size="sm"
-            startContent={<SearchIcon size={18} />}
-            type="search"
-          />
-          </form>
-          {searchResult?.length > 0 ? (
-            <Modal  isOpen={isOpen} size="xl" onClose={onClose} scrollBehavior="inside">
-             <ModalContent>
-               {(onClose) => (
-              <>
-              <ModalHeader className="flex flex-col gap-1">Searched Post</ModalHeader>
-              <ModalBody>
-                <p>
-                  {
-                    searchResult.map((posts:any,index)=>
-                      <Link key={index} href={`/posts/${posts._id}`}>
-                      <Card  className="max-w-full shadow-xl mt-2">
-                          <CardHeader className="flex gap-3">
-                            <div className="flex flex-col">
-                              <p className="text-small text-default-500">{posts.title}</p>
-                            </div>
-                          </CardHeader>
-                          <CardBody>
-                           <p className="text-small text-foreground/80 inline-block" dangerouslySetInnerHTML={{ __html: posts.content.slice(0,100) }}></p>
-                          </CardBody>
-                      </Card>  
-                      </Link>
-                    )
-                  } 
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-          ):<></>
-          }
-        <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item:any) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-        </ul>
       </NavbarContent>
 
       <NavbarContent
@@ -162,6 +99,9 @@ export const Navbar = () => {
         justify="end"
       >
          <NavbarItem className="hidden sm:flex gap-2">
+         <Button isIconOnly variant="light" className="text-medium"  key={size} onPress={() => handleOpen(size)}>
+          <SearchIcon/>
+        </Button>
            <ThemeSwitch />
         </NavbarItem>
 
@@ -177,11 +117,13 @@ export const Navbar = () => {
 
       </NavbarContent>     
 
-       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+       <NavbarContent className="sm:hidden basis-1" justify="end">
+       <Button isIconOnly variant="light"  key={size} onPress={() => handleOpen(size)}>
+          <SearchIcon/>
+        </Button>
         <ThemeSwitch />
-        <NavbarMenuToggle />
+        {/* <NavbarMenuToggle /> */}
         <div className="flex gap-3 items-center">
-        <Avatar name={CurrentuserData?.data?.name}/>
         <NavbarDropDown/>
         </div>
       </NavbarContent>
@@ -189,7 +131,7 @@ export const Navbar = () => {
 
       <NavbarMenu>
         {/* {searchInput} */}
-        <div className="mx-4 mt-2 flex flex-col gap-2">
+        {/* <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
@@ -207,8 +149,69 @@ export const Navbar = () => {
               </Link>
             </NavbarMenuItem>
           ))}
-        </div>
+        </div> */}
       </NavbarMenu>
     </NextUINavbar>
+    <Modal isOpen={isOpen}
+        onOpenChange={onOpenChange} 
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        size={size}
+        scrollBehavior='inside'
+        placement="top"
+          >
+            <ModalContent>
+                {(onClose) => (
+                <>
+                <ModalHeader className="flex flex-col gap-1">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <Input {...register("searchInput", { required: true })}
+                    classNames={{
+                      base: "max-w-full h-10",
+                      mainWrapper: "h-full",
+                      input: "text-small",
+                      inputWrapper:
+                        "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
+                    }}
+                    placeholder="Type to search..."
+                    size="sm"
+                    startContent={<SearchIcon size={18} />}
+                    type="search"
+                    
+                  />
+                  </form>
+
+                </ModalHeader>
+                {searchResult?.length > 0 && user?.email ? (<ModalBody>
+                  <p>
+                    {
+                      searchResult.map((posts:any,index)=>
+                        <Link key={index} href={`/posts/${posts._id}`}>
+                        <Card  className="max-w-full shadow-xl mt-2">
+                            <CardHeader className="flex gap-3">
+                              <div className="flex flex-col">
+                                <p className="text-small text-default-500">{posts.title}</p>
+                              </div>
+                            </CardHeader>
+                            <CardBody>
+                            <p className="text-small text-foreground/80 inline-block" dangerouslySetInnerHTML={{ __html: posts.content.slice(0,100) }}></p>
+                            </CardBody>
+                        </Card>  
+                        </Link>
+                      )
+                    } 
+                  </p>
+                </ModalBody>):<>
+                </>}
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+         </Modal>  
+    </>
   );
 };
