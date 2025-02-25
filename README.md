@@ -1,53 +1,33 @@
-# Next.js & NextUI Template
+# 🌿 Gardening Tips & Advice Platform  
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+A full-stack web application for gardening enthusiasts to share tips, explore seasonal guides, and engage with a vibrant gardening community.  
 
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+## 🚀 Features  
+- **User Authentication**: Secure JWT-based login & registration.  
+- **Social Features**: Upvoting, commenting, following, and user profile verification.  
+- **Content Creation**: Rich text editor with images & videos.  
+- **Premium Content**: Stripe/Aamarpay payment for exclusive gardening guides.  
+- **News Feed**: Infinite scrolling, sorting, and filtering by category & popularity.  
+- **Admin Dashboard**: User, post & payment management with analytics.  
 
-## Technologies Used
+## 🛠 Tech Stack  
+- **Frontend**: Next.js, TypeScript, Tailwind CSS  
+- **Backend**: Node.js, Express.js, MongoDB  
+- **Authentication**: JWT  
+- **Payments**: Stripe
 
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [NextUI v2](https://nextui.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+## 📌 Pages  
+- Login/Registration  
+- User & Admin Dashboard  
+- Profile Page  
+- News Feed  
+- About & Contact Us  
 
-## How to Use
+## 🎨 UI Enhancements  
+- Micro animations for smooth user experience  
+- Modal-based post creation  
+- Favorite posts section in user profile  
 
-### Use the template with create-next-app
-
-To create a new project based on this template using `create-next-app`, run the following command:
-
-```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
-```
-
-### Install dependencies
-
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
-
-```bash
-npm install
-```
-
-### Run the development server
-
-```bash
-npm run dev
-```
-
-### Setup pnpm (optional)
-
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
-
-```bash
-public-hoist-pattern[]=*@nextui-org/*
-```
-
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
-
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+## 🔗 Live Demo  
+- **Client**: [GardenWiz Client](https://gardenwiz-client.vercel.app/)  
+- **Server**: [GardenWiz Server](https://gardenwiz-server.vercel.app/)  
