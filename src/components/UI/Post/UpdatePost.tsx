@@ -8,10 +8,7 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import GWForm from "../Form/GWForm";
-import GWInput from "../Form/GWInput";
 import { Button } from "@nextui-org/button";
-import TextEditor from "../RichTextEditor/TextEditor";
 import {
   Modal,
   ModalContent,
@@ -24,7 +21,12 @@ import {
 import { Input } from "@nextui-org/input";
 import { Image } from "@nextui-org/image";
 import { Divider } from "@nextui-org/divider";
+
+import TextEditor from "../RichTextEditor/TextEditor";
+import GWInput from "../Form/GWInput";
+import GWForm from "../Form/GWForm";
 import GWSelect from "../Form/GWSelect";
+
 import { fetchCategory } from "@/src//service/categories";
 import { UsefetchCategories } from "@/src//hooks/categories.hook";
 import { postData } from "@/src//service/post";
@@ -59,6 +61,7 @@ const UpdatePost = () => {
       content,
       userID:user?._id,
     };
+
     formData.append("data", JSON.stringify(postGardenData));
     for (let image of imageFiles) {
       formData.append("itemImages", image);
@@ -68,10 +71,12 @@ const UpdatePost = () => {
   };
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];
+
     setImageFiles((prev) => [...prev, file]);
 
     if (file) {
       const reader = new FileReader();
+
       reader.onloadend = () => {
         setImagePreviews((prev) => [...prev, reader.result as string]);
       };
@@ -89,6 +94,7 @@ const UpdatePost = () => {
     isLoading: categoryLoading,
     isSuccess: categorySuccess,
   } = UsefetchCategories();
+
   console.log(categoriesData);
   useEffect(() => {
     fetch('/data.json')
@@ -98,6 +104,7 @@ const UpdatePost = () => {
 
   let categoryOption: { key: string; label: string }[] = [];
   let tagsOption: { key: string; label: string }[] = [];
+
   console.log(categoriesData?.data);
   console.log(tagsData);
     if (categoriesData?.data && !categoryLoading) {
@@ -115,6 +122,7 @@ const UpdatePost = () => {
           label: tag.name,
         }));
     }
+
   return (
     <>
           <Card className="max-w-7xl my-4">

@@ -2,10 +2,6 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
-import GWInput from '@/src//components/UI/Form/GWInput';
-import { useUser } from '@/src//context/user.provider';
-import {postPaymentData, postPaymentIntent } from '@/src//service/Payment';
-import { updateUserStatus } from '@/src//service/Profile';
 import { Button } from '@nextui-org/button';
 import { CardHeader } from '@nextui-org/card';
 import { CardCvcElement, CardElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
@@ -13,6 +9,12 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+
+import { updateUserStatus } from '@/src//service/Profile';
+import {postPaymentData, postPaymentIntent } from '@/src//service/Payment';
+import { useUser } from '@/src//context/user.provider';
+import GWInput from '@/src//components/UI/Form/GWInput';
+import CheckoutLoading from '../Loading';
 
 const CheckOutForm = () => {
     //const [membership_prices,setMembershipPrice]=useState(0);
@@ -49,8 +51,11 @@ const CheckOutForm = () => {
         }
       }, [membership_prices]);
       if (!user) {
-        return <p>Loading...</p>;
+        return <CheckoutLoading/>;
       }
+      if (!stripe || !elements) {
+        return <CheckoutLoading/>
+   } 
     const submitHandler = methods.handleSubmit;
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         //setMembershipPrice(19.99);
@@ -138,12 +143,12 @@ const CheckOutForm = () => {
                 }
               }
     };
-
-    return (<>
-    
+    console.log("Stripe:", stripe);
+    console.log("Elements:", elements);
+    return (<>  
     <FormProvider {...methods}>
-                <div className=''>
-                    <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" onSubmit={submitHandler(onSubmit)}>
+                    <form onSubmit={submitHandler(onSubmit)}>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div className='space-y-2'>
                             <h1 className='text-lg'>Name</h1>
                             <GWInput className='border-1 border-black text-5xl rounded-xl text-2xl' label='' name='name' type='text'/>
@@ -173,6 +178,8 @@ const CheckOutForm = () => {
                             } 
                             />
                         </div>
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div className='space-y-2'>
                             <h1 className='text-lg'>Expiration Date(MM/YY)</h1>
                             <CardExpiryElement
@@ -219,13 +226,13 @@ const CheckOutForm = () => {
                             }} 
                         />
                         </div>
-                        <Button className='btn w-full col-span-2 my-4 btn-primary' type="submit">
+                        </div>
+                        <Button aria-labelledby='payment submit button' disabled={!stripe || !elements} className='btn w-full col-span-2 my-4 btn-primary' type="submit">
                          Pay ${membership_prices}
                         </Button>
-                        <p className='text-red-300'>{error}</p>
-                        {transactionId && <p className='text-green-300'>your transactionid:{transactionId}</p>}
+                        <p className='text-red-300 w-full'>{error}</p>
+                        {transactionId && <p className='text-green-800 w-full'>your transactionid:{transactionId}</p>}
                     </form>
-                </div>
             </FormProvider>
 
     </>);

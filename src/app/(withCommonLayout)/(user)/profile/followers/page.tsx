@@ -2,10 +2,11 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 "use client"
-import { useUser } from '@/src//context/user.provider';
 import { Card, CardBody, CardFooter } from '@nextui-org/card';
 import { Image } from '@nextui-org/image';
 import React from 'react';
+
+import { useUser } from '@/src//context/user.provider';
 
 const FollowersPage = () => {
     const{user}=useUser();

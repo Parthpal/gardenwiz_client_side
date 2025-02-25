@@ -1,9 +1,10 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addComments, deleteComments, deletePosts, downvotePost, editComment, fetchComments, fetchPost, fetchPostFromID, postData, upvotePost } from "../service/post"
 import { FieldValues } from "react-hook-form"
 import { toast } from "sonner"
+
+import { addComments, deleteComments, deletePosts, downvotePost, editComment, fetchComments, fetchPost, fetchPostFromID, postData, updatePostData, upvotePost } from "../service/post"
 
 export const UseGetPosts=()=>{
     return useQuery({
@@ -72,7 +73,22 @@ export const UseGetPostsComments=()=>{
       queryFn: async () => await fetchComments(),
   })
 }
+export const useUpdatePost = () => {
+  const queryClient = useQueryClient();
 
+  return useMutation<any, Error, { id: string; userData: FieldValues }>({
+    mutationKey: ["update_post"],
+    mutationFn: async ({ id, userData }) => await updatePostData(userData, id),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: ["GET_POSTS"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_POSTS_Id"] });
+      toast.success("Post updated successfully!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+};
 export const useAddComments = () => {
     const queryClient = useQueryClient();
     return useMutation<any,Error,{id:string,commentData:any}>({
@@ -107,7 +123,8 @@ export const useDeletePosts = () => {
       mutationKey: ["delete_comments"],
       mutationFn: async ({id}) => await deletePosts(id),
       onSuccess: () => {
-         queryClient.invalidateQueries({ queryKey: ["GET_POSTS_Id"] });
+        queryClient.invalidateQueries({ queryKey: ["GET_POSTS"] });
+        queryClient.invalidateQueries({ queryKey: ["GET_POSTS_Id"] });
          toast.message('Post Deleted');  
         },
         onError: (error) => {

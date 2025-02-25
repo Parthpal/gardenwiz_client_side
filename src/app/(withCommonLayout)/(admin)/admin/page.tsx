@@ -1,4 +1,5 @@
 import React from 'react';
+
 import PostPerMonth from './PostPerMonth/page';
 
 const AdminProfilePage = () => {

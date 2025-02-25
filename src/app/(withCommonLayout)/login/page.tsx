@@ -1,11 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable padding-line-between-statements */
 "use client"
-import GWForm from "@/src//components/UI/Form/GWForm";
-import GWInput from "@/src//components/UI/Form/GWInput";
-import { useUser } from "@/src//context/user.provider";
-import { useForgetPassword, useUserLogin } from "@/src//hooks/auth.hook";
-import { forgetPassword, loginUser } from "@/src//service/AuthService";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,12 +11,22 @@ import { useEffect } from "react";
 import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from "@nextui-org/modal";
 import { Card, CardBody } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
+import { Suspense } from "react";
+
+import { forgetPassword, loginUser } from "@/src//service/AuthService";
+import { useForgetPassword, useUserLogin } from "@/src//hooks/auth.hook";
+import { useUser } from "@/src//context/user.provider";
+import GWInput from "@/src//components/UI/Form/GWInput";
+import GWForm from "@/src//components/UI/Form/GWForm";
+import ProfileLoading from "../(user)/profile/Loading";
+import LoadingLogin from "./Loading";
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const LoginPage = () => {
-  const searchParams = useSearchParams();
+   const searchParams = useSearchParams();
   const router = useRouter();
-  const { setIsLoading: userLoading } = useUser(); 
   const redirect = searchParams.get("redirect");
+  const { setIsLoading: userLoading } = useUser(); 
+  
   const {mutate:handleUserLogin,isPending,isSuccess}=useUserLogin();
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
    // console.log(data);
@@ -59,7 +64,8 @@ const LoginPage = () => {
             onClose();
           }, 2000)
   }
-  return (<>
+  return (
+  <>
     <div className="flex flex-col lg:flex-row ">
       <div className="flex-1 lg:ml-48 md:mx-auto">
         <Image
@@ -82,6 +88,7 @@ const LoginPage = () => {
               className="my-4 w-[90%] mx-5 rounded-md bg-[#1d772e] font-semibold text-white"
               size="lg"
               type="submit"
+              aria-label="Login Button"
             >
               Login
             </Button>
@@ -90,7 +97,7 @@ const LoginPage = () => {
                  Don&apos;t have an account ? <Link className="text-[#1d772e]" href={"/register"}>Register</Link>
             </div>
             <div className="text-center">
-                 <Button key={size} onPress={() => handleOpen(size)} className='p-0 m-0 border-0 bg-white'color="primary"  variant="faded">
+                 <Button   aria-label="Forgot Password Button" key={size} onPress={() => handleOpen(size)} className='p-0 m-0 border-0 bg-white'color="primary"  variant="faded">
                     Forget your Password?
                 </Button>
             </div>
@@ -113,7 +120,7 @@ const LoginPage = () => {
                       <CardBody>
                           <form onSubmit={handleForgetPass} className="space-y-5">
                             <Input className="my-5 px-5 " color="primary" label="email" name="email" type="email"/>
-                            <Button color="primary" className='w-full my-2' size="lg" type="submit">
+                            <Button aria-label="Reset Password Button"  color="primary" className='w-full my-2' size="lg" type="submit">
                               Request Reset Link
                             </Button>
                           </form>

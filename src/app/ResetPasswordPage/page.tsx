@@ -6,18 +6,19 @@ import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Divider } from '@nextui-org/divider';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import GWInput from '../../components/UI/Form/GWInput';
 import { Button } from '@nextui-org/button';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { resetPassword } from '../../service/AuthService';
 import { toast, Toaster } from 'sonner';
+import { Suspense } from "react";
+
+import { resetPassword } from '../../service/AuthService';
+import GWInput from '../../components/UI/Form/GWInput';
 import { useResetPassword } from '../../hooks/auth.hook';
 
-export default function ResetPasswordPage() {
-  const searchParams = useSearchParams();
+export default function ResetPasswordPage({ searchParams }: { searchParams: { email?: string, token?: string } }) {
   const router=useRouter();
-  const email = searchParams.get('email');
-  const token = searchParams.get('token');
+  const email = searchParams.email;
+  const token = searchParams.token;
   const {mutate:resetPasswordMutate,isSuccess,isPending}=useResetPassword();
     const methods = useForm({
       defaultValues: {
@@ -43,7 +44,8 @@ export default function ResetPasswordPage() {
         router.push('/login')
       }
     }, [isPending, isSuccess]); // Added `onClose` in dependencies
-  return (<>
+  return (
+  <>
   <div className='flex justify-center items-center h-[50vh] lg:h-[80vh]'>
   <Card className="w-96">
       <CardHeader className="flex gap-3">
@@ -57,7 +59,7 @@ export default function ResetPasswordPage() {
               <form className="space-y-5" onSubmit={submitHandler(onSubmit)}>
                 <GWInput label="Email" name="email" type='email'/>
                 <GWInput label="New Password" name="newPassword" type='password'/>
-                <Button color="primary" className='w-full my-2' size="lg" type="submit">
+                <Button   aria-label="Change Password Button" color="primary" className='w-full my-2' size="lg" type="submit">
                   Change Password
                 </Button>
               </form>
@@ -68,5 +70,7 @@ export default function ResetPasswordPage() {
   </div>
 
   
-  </>);
+  </>
+  );
+  
 }

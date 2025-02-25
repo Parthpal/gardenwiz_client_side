@@ -1,18 +1,21 @@
 /* eslint-disable prettier/prettier */
 "use server";
 import { FieldValues } from "react-hook-form";
-import axiosInstance from "../../lib/AxiosInstance";
 import { cookies, headers } from "next/headers";
 import { jwtDecode } from "jwt-decode";
+
+import axiosInstance from "../../lib/AxiosInstance";
 
 export const registerUser = async (userData: FieldValues) => {
   try {
     const { data } = await axiosInstance.post("/auth/register", userData);
+
     console.log(data); 
     if (data.success) {
       cookies().set("accessToken", data?.data?.accessToken);
       cookies().set("refreshToken", data?.data?.refreshToken);
     }
+
     return data;
   } catch (error: any) {
     throw new Error(error);
@@ -41,6 +44,7 @@ export const registerUser = async (userData: FieldValues) => {
   export const changePassword = async (userData: FieldValues) => {
     try {
       const { data } = await axiosInstance.post("/auth/change-password/", userData);
+
       return data;
     } catch (error: any) {
       throw new Error(error);
@@ -92,6 +96,7 @@ export const forgetPassword = async (userData: FieldValues) => {
 
     try {
       const { data } = await axiosInstance.post("/auth/forget-password", userData);
+
       //console.log(data); 
       return data;
     } catch (error: any) {
@@ -109,6 +114,7 @@ export const resetPassword = async (userData: any,token:any) => {
             "Content-Type": "application/json",
           }
         });
+
       //console.log(data); 
       return data;
     } catch (error: any) {

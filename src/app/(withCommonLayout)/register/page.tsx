@@ -1,17 +1,19 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable padding-line-between-statements */
 "use client"
-import GWForm from "@/src//components/UI/Form/GWForm";
-import GWInput from "@/src//components/UI/Form/GWInput";
-import { useUserRegistration } from "@/src//hooks/auth.hook";
-import { logout, registerUser } from "@/src//service/AuthService";
-import { Button } from "@nextui-org/button";
 import { log } from "console";
+
+import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { FieldValues, SubmitHandler } from 'react-hook-form';
+
+import { logout, registerUser } from "@/src//service/AuthService";
+import { useUserRegistration } from "@/src//hooks/auth.hook";
+import GWInput from "@/src//components/UI/Form/GWInput";
+import GWForm from "@/src//components/UI/Form/GWForm";
 
 const RegisterPage = () => {
    const {mutate:handleRegistration,isPending,isSuccess}=useUserRegistration();

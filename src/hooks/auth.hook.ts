@@ -2,8 +2,9 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { FieldValues } from "react-hook-form"
-import { changePassword, forgetPassword, loginUser, registerUser, resetPassword } from "../service/AuthService"
 import { toast } from "sonner"
+
+import { changePassword, forgetPassword, loginUser, registerUser, resetPassword } from "../service/AuthService"
 
 export const useUserRegistration = () => {
     return useMutation<any,Error,FieldValues>({
@@ -26,7 +27,7 @@ export const useUserChangePassword = () => {
             toast.success("Password Changed successfully.");
           },
           onError: (error) => {
-            toast.error(error.message);
+            toast.error('Something went wrong !! try again');
           },
                 
     })
@@ -53,6 +54,7 @@ export const useUserLogin = () => {
       },
       onError: (error) => {
       const errorMessage ="Something went wrong"; // Default error message
+
       toast.error(errorMessage);
       },
     });
@@ -67,6 +69,7 @@ export const useUserLogin = () => {
       },
       onError: (error) => {
       const errorMessage ="Something went wrong"; // Default error message
+
       toast.error(errorMessage);
       },
     });

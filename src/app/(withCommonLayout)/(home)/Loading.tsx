@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
+import React from 'react';
+
 import FollowCardSkeleton from '@/src//components/FollowerCardSkeleton';
 import PostCardSkeleton from '@/src//components/PostCardSkeleton';
-import React from 'react';
 
 const Loading = () => {
     return (

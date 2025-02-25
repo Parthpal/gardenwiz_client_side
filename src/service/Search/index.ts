@@ -8,6 +8,7 @@ export const searchItems = async (searchTerm: string) => {
     const res = await axiosInstance.get(
       `/searchPosts?searchTerm=${searchTerm}`
     );
+
     return res.data; // Corrected: Access the 'data' property of the response
   } catch (error) {
     throw new Error("Failed to search items");

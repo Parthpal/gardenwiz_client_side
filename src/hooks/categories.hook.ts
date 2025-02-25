@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { useQuery } from "@tanstack/react-query"
+
 import { fetchCategory } from "../service/categories"
 
 export const UsefetchCategories=()=>{

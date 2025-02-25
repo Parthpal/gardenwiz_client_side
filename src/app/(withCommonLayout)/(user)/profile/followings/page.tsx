@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable padding-line-between-statements */
 'use client'
-import { useUser } from "@/src//context/user.provider";
-import { useDeleteFollowing, UseGetUsersById } from "@/src//hooks/users.hook";
 import { Button } from "@nextui-org/button";
 import { Image } from "@nextui-org/image";
 import React from "react";
+
+import { useDeleteFollowing, UseGetUsersById } from "@/src//hooks/users.hook";
+import { useUser } from "@/src//context/user.provider";
 
 const FollowingPage = () => {
   const { user } = useUser();
@@ -20,7 +21,7 @@ const FollowingPage = () => {
 
   return (
     <div className="gap-4 grid grid-cols-2 sm:grid-cols-3">
-      {CurrentuserData?.data?.followingIds?.map((item: any, index) => (
+      {CurrentuserData?.data?.followingIds?.map((item: any, index:any) => (
         /* eslint-disable no-console */
         <div className="flex flex-col items-center align-middle space-y-2">
           <Image

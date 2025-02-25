@@ -1,19 +1,23 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 'use client'
+import React, { useEffect, useState } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import classNames from "classnames";
+
+import { Ipost, IUser } from '../../../../../types';
+
 import PostCard from '@/src//components/UI/Post/PostCard';
 import { UseGetPosts } from '@/src//hooks/post.hook';
 import { fetchPost } from '@/src//service/post';
-import React, { useEffect, useState } from 'react';
-import { Ipost, IUser } from '../../../../../types';
 import { useUser } from '@/src//context/user.provider';
 import CreatePost from '@/src//components/UI/Post/CreatePost';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+
+
 import 'react-tabs/style/react-tabs.css';
 import { UsefetchUsers, UseGetUsersById } from '@/src//hooks/users.hook';
 import ProfileSidebarSkeleton from '@/src//components/ProfileSidebarSkeleton';
 import PostCardSkeleton from '@/src//components/PostCardSkeleton';
-import classNames from "classnames";
 import Sidebar from '@/src//components/UI/sidebar/Sidebar';
 
 const ProfilePage = () => {
@@ -37,8 +41,15 @@ const ProfilePage = () => {
     const filtered_Favourite_posts=postData?.data.filter((data:Ipost)=>CurrentuserData?.data?.favoritePosts?.includes(data?._id))
     //console.log(filtered_Favourite_posts,'favpost');
     if(postLoading){
-      return <PostCardSkeleton/>
+      return (
+              <>
+                {Array(4).fill(null).map((_, index) => (
+                  <PostCardSkeleton key={index} />
+                ))}
+              </>
+              )
     }
+
     return (
       <>   
       <div className='lg:mx-32 mx-0 space-y-10'>

@@ -10,10 +10,7 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import GWForm from "../Form/GWForm";
-import GWInput from "../Form/GWInput";
 import { Button } from "@nextui-org/button";
-import TextEditor from "../RichTextEditor/TextEditor";
 import {
   Modal,
   ModalContent,
@@ -26,7 +23,12 @@ import {
 import { Input } from "@nextui-org/input";
 import { Image } from "@nextui-org/image";
 import { Divider } from "@nextui-org/divider";
+
+import TextEditor from "../RichTextEditor/TextEditor";
+import GWInput from "../Form/GWInput";
+import GWForm from "../Form/GWForm";
 import GWSelect from "../Form/GWSelect";
+
 import { fetchCategory } from "@/src//service/categories";
 import { UsefetchCategories } from "@/src//hooks/categories.hook";
 import { postData } from "@/src//service/post";

@@ -1,6 +1,7 @@
 import * as React from "react";
-import { IconSvgProps } from "../../types";
 import { SVGProps } from "react";
+
+import { IconSvgProps } from "../../types";
 
 
 export const Logo: React.FC<IconSvgProps> = ({
@@ -344,7 +345,7 @@ export function Crown(props: SVGProps<SVGSVGElement>) {
       <path
         fill="currentColor"
         d="M11.219 3.375L8 7.399L4.781 3.375A1.002 1.002 0 0 0 3 4v15c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V4a1.002 1.002 0 0 0-1.781-.625L16 7.399l-3.219-4.024c-.381-.474-1.181-.474-1.562 0M5 19v-2h14.001v2zm10.219-9.375c.381.475 1.182.475 1.563 0L19 6.851L19.001 15H5V6.851l2.219 2.774c.381.475 1.182.475 1.563 0L12 5.601z"
-      ></path>
+       />
     </svg>
   )
 }
@@ -362,12 +363,12 @@ export function DragDots(props: SVGProps<SVGSVGElement>) {
         fill="currentColor"
         fillRule="evenodd"
         d="M7.375 3.67c0-.645-.56-1.17-1.25-1.17s-1.25.525-1.25 1.17c0 .646.56 1.17 1.25 1.17s1.25-.524 1.25-1.17m0 8.66c0-.646-.56-1.17-1.25-1.17s-1.25.524-1.25 1.17s.56 1.17 1.25 1.17s1.25-.525 1.25-1.17m-1.25-5.5c.69 0 1.25.525 1.25 1.17s-.56 1.17-1.25 1.17s-1.25-.525-1.25-1.17s.56-1.17 1.25-1.17m5-3.16c0-.645-.56-1.17-1.25-1.17s-1.25.525-1.25 1.17c0 .646.56 1.17 1.25 1.17s1.25-.524 1.25-1.17m-1.25 7.49c.69 0 1.25.524 1.25 1.17s-.56 1.17-1.25 1.17s-1.25-.525-1.25-1.17c0-.646.56-1.17 1.25-1.17M11.125 8c0-.645-.56-1.17-1.25-1.17s-1.25.525-1.25 1.17s.56 1.17 1.25 1.17s1.25-.525 1.25-1.17"
-      ></path>
+       />
     </svg>
   )
 }
 
-export const HeartIcon = ({fill = "currentColor", filled, size, height, width, ...props}) => {
+export const HeartIcon = ({fill = "currentColor", filled, size, height, width, ...props}:any) => {
   return (
     <svg
       fill={filled ? fill : "none"}

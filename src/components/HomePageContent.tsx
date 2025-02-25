@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import Footer from "./Footer";
+
 export default function HomePageContent() {
   // Sample images for the gallery
     const galleryImages = [
@@ -77,9 +79,7 @@ export default function HomePageContent() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-green-900 text-white py-6 text-center">
-        <p className="text-sm">© 2025 Gardening Tips & Advice Platform | All rights reserved.</p>
-      </footer>
+          <Footer/>
     </div>
   );
 }

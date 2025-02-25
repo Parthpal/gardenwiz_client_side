@@ -2,11 +2,14 @@
 /* eslint-disable prettier/prettier */
 'use client'
 import { ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+import Loading from "./Loading";
+
 import { useUser } from "@/src//context/user.provider";
 import HomePageContent from "@/src//components/HomePageContent";
-import Loading from "./Loading";
 import PostCardSkeleton from "@/src//components/PostCardSkeleton";
-import { useRouter } from "next/navigation";
+
 
   export default function Layout({
       children,

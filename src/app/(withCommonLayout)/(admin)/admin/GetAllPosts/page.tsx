@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable prettier/prettier */
 /* eslint-disable padding-line-between-statements */
 'use client'
@@ -12,7 +13,7 @@ import {
 } from "@heroui/table";
 
 import { Tooltip } from "@heroui/tooltip";
-import { DeleteIcon, EditIcon, EyeIcon } from "@/src//components/icons";
+import { DeleteIcon, EyeIcon } from "@/src//components/icons";
 import { useDeletePosts, UseGetPosts } from "@/src//hooks/post.hook";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
@@ -70,7 +71,7 @@ export default function GetAllPosts() {
                   </span>
                 </Tooltip> */}
                 <Tooltip color="danger" content="Delete post">
-                  <Button  variant="light" isIconOnly onPress={()=>handleDelete(row?._id)} className=" p-0 m-0 min-w-0 w-auto h-auto  text-lg text-default-400 cursor-pointer active:opacity-50">
+                  <Button  isIconOnly variant="light" onPress={()=>handleDelete(row?._id)} className=" p-0 m-0 min-w-0 w-auto h-auto  text-lg text-default-400 cursor-pointer active:opacity-50" >
                     <DeleteIcon />
                   </Button >
                 </Tooltip>

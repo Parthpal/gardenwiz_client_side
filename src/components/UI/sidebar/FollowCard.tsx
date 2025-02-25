@@ -2,18 +2,21 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 /* eslint-disable prettier/prettier */
 "use client"
-import { useUser } from '@/src//context/user.provider';
-import { useAddFollower, useDeleteFollowing,  } from '@/src//hooks/users.hook';
-import { addFollower,fetchUser } from '@/src//service/Profile';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { Card, CardHeader } from '@nextui-org/card';
 import React, { useEffect, useState } from 'react';
+
 import { IUser } from '../../../../types';
+import FollowCardSkeleton from '../../FollowerCardSkeleton';
+
+import { addFollower,fetchUser } from '@/src//service/Profile';
+import { useAddFollower, useDeleteFollowing,  } from '@/src//hooks/users.hook';
+import { useUser } from '@/src//context/user.provider';
 
 const FollowCard = ({user}:{user:IUser}) => {
     const {user:currentUser,isLoading:userLoading}=useUser();
-    const {mutate:addFollower}=useAddFollower();
+    const {mutate:addFollower,isPending,isSuccess}=useAddFollower();
     const {mutate:deleteFollower}=useDeleteFollowing();
     const [allUserData,setAllUserData]=useState([]);
     const filterUser:IUser[]=allUserData.filter((userData:IUser)=>userData?._id===currentUser!._id)
@@ -24,9 +27,9 @@ const FollowCard = ({user}:{user:IUser}) => {
       setIsFollowed(follwedCheck);
       if(follwedCheck){
         addFollower({followerID: id, currentUserId: currentUser!._id})
-        setTimeout(()=>{
-          window.location.reload(); 
-        },1000)
+        // setTimeout(()=>{
+        //   window.location.reload(); 
+        // },1000)
       }
       else{
         deleteFollower({followingID: id, currentUserId: currentUser!._id})
@@ -41,15 +44,15 @@ const FollowCard = ({user}:{user:IUser}) => {
       setIsFollowed(filterUser[0]?.followingIds?.includes(user?._id));
     },[currentUser,userLoading])
 
-    // if (currentUser && userLoading) {
-    //   return (
-    //     <>
-    //       {Array(4).fill(null).map((_, index) => (
-    //         <FollowCardSkeleton key={index} />
-    //       ))}
-    //     </>
-    //   );
-    // }
+    if (isPending) {
+      return (
+        <>
+          {Array(1).fill(null).map((_, index) => (
+            <FollowCardSkeleton key={index} />
+          ))}
+        </>
+      );
+    }
     return (
         <>
             <Card className="lg:max-w-[340px] w-full">

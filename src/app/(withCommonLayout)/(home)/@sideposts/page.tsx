@@ -1,9 +1,11 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 "use client"
-import FollowCard from '@/src//components/UI/sidebar/FollowCard';
 import React, { useEffect, useState } from 'react';
+
 import { IUser } from '../../../../../types';
+
+import FollowCard from '@/src//components/UI/sidebar/FollowCard';
 import { fetchUser } from '@/src//service/Profile';
 import { useUser } from '@/src//context/user.provider';
 import FollowCardSkeleton from '@/src//components/FollowerCardSkeleton';
@@ -26,7 +28,8 @@ const Sideposts = () => {
                setFilteredUserData(filteredData2);
             }
             }
-            getUser()
+        getUser()
+
         },[user,userLoading])
         if(userLoading){
             <FollowCardSkeleton/>

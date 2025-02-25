@@ -1,16 +1,20 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 "use client"
+import React, { useEffect, useState } from 'react';
+import { VList, WindowVirtualizer } from 'virtua';
+
+import { Ipost } from '../../../../types';
+
+import Sideposts from './@sideposts/page';
+
 import CreatePost from '@/src//components/UI/Post/CreatePost';
 import PostCard from '@/src//components/UI/Post/PostCard';
 import { UseGetPosts } from '@/src//hooks/post.hook';
-import React, { useEffect, useState } from 'react';
-import { Ipost } from '../../../../types';
 import { useUser } from '@/src//context/user.provider';
-import { VList, WindowVirtualizer } from 'virtua';
 import PostCardSkeleton from '@/src//components/PostCardSkeleton';
 import { UseGetUsersById } from '@/src//hooks/users.hook';
-import Sideposts from './@sideposts/page';
+
 
 
 const HomePage = () => {

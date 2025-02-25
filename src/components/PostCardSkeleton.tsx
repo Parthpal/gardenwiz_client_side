@@ -13,7 +13,7 @@ const PostCardSkeleton = () => {
     return (
         <Card
             isBlurred
-            className="border-none bg-background/60 dark:bg-default-100/50 w-full mb-5"
+            className="border-none bg-background/60 dark:bg-default-100/50 w-[90%] mb-5"
             shadow="sm"
             >
             <CardBody>
@@ -30,7 +30,7 @@ const PostCardSkeleton = () => {
                             <div className="h-4 w-full rounded-lg bg-secondary" />
                         </Skeleton>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-3 my-3">
                         <Skeleton className="w-4/5 rounded-lg" isLoaded={isLoaded}>
                             <div className="h-3 w-full rounded-lg bg-secondary" />
                         </Skeleton>

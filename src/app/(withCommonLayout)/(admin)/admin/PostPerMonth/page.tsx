@@ -1,10 +1,11 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 'use client'
-import { UsefetchCategories } from '@/src//hooks/categories.hook';
-import { UseGetPosts } from '@/src//hooks/post.hook';
 import React, { useEffect, useState } from 'react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend,BarChart, Bar, ResponsiveContainer } from 'recharts';
+
+import { UsefetchCategories } from '@/src//hooks/categories.hook';
+import { UseGetPosts } from '@/src//hooks/post.hook';
 
 const PostPerMonth = () => {
 

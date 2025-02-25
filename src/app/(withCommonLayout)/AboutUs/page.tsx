@@ -5,6 +5,8 @@ import { Divider } from "@nextui-org/divider";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Avatar } from "@nextui-org/avatar";
 
+import Footer from "@/src//components/Footer";
+
 
 const teamMembers = [
     {
@@ -15,7 +17,7 @@ const teamMembers = [
   ];
   
   export default function About() {
-    return (
+    return (<>
 <div className="min-h-screen bg-green-50 text-gray-800">
       {/* Hero Section */}
       <section className="w-full flex flex-col items-center text-center py-16 px-6 bg-green-700 text-white">
@@ -78,5 +80,7 @@ const teamMembers = [
         </Button>
       </section>
     </div>
+    <Footer/>
+    </>
     );
   }

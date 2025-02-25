@@ -17,9 +17,17 @@ import { Input } from "@nextui-org/input";
 import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { Avatar } from "@nextui-org/avatar";
+import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
+import { Divider } from "@nextui-org/divider";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalProps, useDisclosure } from "@nextui-org/modal";
 
-import { siteConfig } from "../config/site";
-import { ThemeSwitch } from "../components/theme-switch";
+import { searchItems } from "../service/Search";
+import { useSearchItems } from "../hooks/search.hook";
+import useDebounce from "../hooks/debounce.hook";
+import { useUser } from "../context/user.provider";
 import {
   TwitterIcon,
   GithubIcon,
@@ -29,20 +37,13 @@ import {
   Logo,
   TreeIcon,
 } from "../components/icons";
-import { Avatar } from "@nextui-org/avatar";
-import NavbarDropDown from "./NavbarDropDown";
-import { useUser } from "../context/user.provider";
-import { useForm } from "react-hook-form";
-import useDebounce from "../hooks/debounce.hook";
-import React, { useEffect, useState } from "react";
-import { useSearchItems } from "../hooks/search.hook";
-import { searchItems } from "../service/Search";
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
-import { Divider } from "@nextui-org/divider";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalProps, useDisclosure } from "@nextui-org/modal";
+import { ThemeSwitch } from "../components/theme-switch";
+import { siteConfig } from "../config/site";
 import { Ipost } from "../../types";
-import PostCard from "./UI/Post/PostCard";
 import { UseGetUsersById } from "../hooks/users.hook";
+
+import NavbarDropDown from "./NavbarDropDown";
+import PostCard from "./UI/Post/PostCard";
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 export const Navbar = () => {
   const {user}=useUser();
@@ -124,7 +125,15 @@ export const Navbar = () => {
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}
         <div className="flex gap-3 items-center">
-        <NavbarDropDown/>
+        {user?.email ? (
+          <NavbarItem className="">
+              <NavbarDropDown/>
+          </NavbarItem>
+        ) : (
+          <NavbarItem className="">
+            <Link href="/login">Login</Link>
+          </NavbarItem>
+        )}
         </div>
       </NavbarContent>
     
@@ -194,7 +203,7 @@ export const Navbar = () => {
                               </div>
                             </CardHeader>
                             <CardBody>
-                            <p className="text-small text-foreground/80 inline-block" dangerouslySetInnerHTML={{ __html: posts.content.slice(0,100) }}></p>
+                            <p className="text-small text-foreground/80 inline-block" dangerouslySetInnerHTML={{ __html: posts.content.slice(0,100) }} />
                             </CardBody>
                         </Card>  
                         </Link>

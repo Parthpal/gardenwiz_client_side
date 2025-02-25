@@ -1,9 +1,10 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
-import Container from '@/src//components/Container';
 import { Skeleton } from '@heroui/skeleton';
 import { Card, CardBody, CardFooter } from '@nextui-org/card';
 import React from 'react';
+
+import Container from '@/src//components/Container';
 
 const PostDetailsLoading = () => {
     const [isLoaded, setIsLoaded] = React.useState(false);

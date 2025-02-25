@@ -6,16 +6,18 @@ import { Divider } from '@nextui-org/divider';
 import { Image } from '@nextui-org/image';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { IComments, IUser } from '../../../../types';
-import { DotThreeIcons } from '../../icons';
 import { Button } from '@nextui-org/button';
-import { useUser } from '@/src//context/user.provider';
 import { useRouter } from 'next/router';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
-import { deleteComments, editComment } from '@/src//service/post';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+
+import { DotThreeIcons } from '../../icons';
+import { IComments, IUser } from '../../../../types';
 import GWTextarea from '../Form/GWTextArea';
+
+import { deleteComments, editComment } from '@/src//service/post';
+import { useUser } from '@/src//context/user.provider';
 import { useDeleteComments, useEditComments } from '@/src//hooks/post.hook';
 
 type ICommentProps={

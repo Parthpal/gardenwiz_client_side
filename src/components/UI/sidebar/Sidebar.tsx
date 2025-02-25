@@ -5,14 +5,17 @@ import { Avatar, AvatarGroup } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import React from 'react';
+import Link from 'next/link';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+
 import UpdateProfile from '../Profile/UpdateProfile';
+import { VerifiedComponent } from '../../icons';
+
 import { useUser } from '@/src//context/user.provider';
 import { UseGetUsersById } from '@/src//hooks/users.hook';
 import { fetchUser } from '@/src//service/Profile';
-import Link from 'next/link';
-import { VerifiedComponent } from '../../icons';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import ProfileLoading from '@/src//app/(withCommonLayout)/(user)/profile/Loading';
+import ProfileSidebarSkeleton from '../../ProfileSidebarSkeleton';
 
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
@@ -27,11 +30,14 @@ const Sidebar = () => {
           setSize(size);
           onOpen();
         };
+        if(userLoading){
+          return <ProfileSidebarSkeleton/>
+        }
     return (
         <>
         <div className=''>
           <div className='flex lg:items-start lg:justify-start items-center justify-center'>
-          <Avatar src={CurrentuserData?.data?.profilePhoto} className="w-20 h-20 text-large" />
+          <Avatar src={CurrentuserData?.data?.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/1144/1144760.png'} className="w-20 h-20 text-large" />
           </div>
             <div className='space-y-4 py-5 flex flex-col items-center justify-center lg:items-start lg:justify-start'>
                 <h1 className='text-2xl'>{CurrentuserData?.data?.name}</h1>
@@ -54,7 +60,7 @@ const Sidebar = () => {
                   >
                   {
                    user?.followerIds?.map((follower:any)=>(
-                      <Avatar key={follower?._id} src={follower?.profilePhoto} />
+                      <Avatar key={follower?._id} src={follower?.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/1144/1144760.png'} />
                     ))
                   }
                 </AvatarGroup>
@@ -71,7 +77,7 @@ const Sidebar = () => {
                       >
                       {
                         user?.followingIds?.map((followings:any)=>(
-                          <Avatar key={followings?._id} src={followings?.profilePhoto} />
+                          <Avatar key={followings?._id} src={followings?.profilePhoto || 'https://cdn-icons-png.flaticon.com/512/1144/1144760.png'} />
                         ))
                       }
                 </AvatarGroup>

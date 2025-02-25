@@ -2,8 +2,6 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
-import GWInput from '@/src//components/UI/Form/GWInput';
-import GWTextarea from '@/src//components/UI/Form/GWTextArea';
 import { Button } from '@nextui-org/button';
 import { Card } from '@nextui-org/card';
 import { Input, Textarea } from '@nextui-org/input';
@@ -11,6 +9,10 @@ import React from 'react';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import emailjs from '@emailjs/browser';
 import { toast, Toaster } from 'sonner';
+
+import GWTextarea from '@/src//components/UI/Form/GWTextArea';
+import GWInput from '@/src//components/UI/Form/GWInput';
+import Footer from '@/src//components/Footer';
 
 const ContactUs = () => {
       const methods = useForm();
@@ -22,13 +24,13 @@ const ContactUs = () => {
         };
         emailjs.send('service_d8hjss7', 'template_pgep7qb',emailData, 'vi3KZCR2z3UWOLZrN')
         .then((result:any) => {
-            toast.success(result.text);
+            toast.success(result.text +' Email Send');
         }, (error:any) => {
             toast.error(error.text);
         });
         console.log(emailData);
       };
-    return (
+    return (<>
     <div className="flex justify-center items-center h-screen">
       <Card className="p-6 w-full max-w-md shadow-lg">
         <h2 className="text-2xl font-bold text-center mb-4">Contact Us</h2>
@@ -48,7 +50,8 @@ const ContactUs = () => {
       </Card>
       <Toaster/>
     </div>
-    );
+    <Footer/>
+    </>);
 };
 
 export default ContactUs;

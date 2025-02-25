@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 
 import axios from "axios";
-import envConfig from "../../config/envConfig";
 import { cookies } from "next/headers";
+
+import envConfig from "../../config/envConfig";
 import { getNewAccessToken } from "../../service/AuthService";
 
 const axiosInstance = axios.create({

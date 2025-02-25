@@ -2,9 +2,10 @@
 /* eslint-disable padding-line-between-statements */
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addFavouritePosts, addFollower,deleteFollowing, fetchUser, fetchUserFromID, modifyUser, updateUser } from "../service/Profile"
 import { FieldValues } from "react-hook-form"
 import { toast } from "sonner"
+
+import { addFavouritePosts, addFollower,deleteFollowing, fetchUser, fetchUserFromID, modifyUser, updateUser } from "../service/Profile"
 
 export const UsefetchUsers=()=>{
     return useQuery({

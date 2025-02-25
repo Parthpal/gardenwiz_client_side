@@ -15,8 +15,7 @@ export default function ProfileSidebarSkeleton() {
       <div className="w-full gap-2 flex flex-col">
         <Skeleton className="h-3 w-3/5 rounded-lg" />
         <Skeleton className="h-3 w-4/5 rounded-lg" />
-        <Button color="primary" size="lg" variant="flat">
-       </Button>
+        <Button color="primary" size="lg" variant="flat" />
       <div>
       <h1>Followers</h1>
       <AvatarGroup isBordered max={3}>

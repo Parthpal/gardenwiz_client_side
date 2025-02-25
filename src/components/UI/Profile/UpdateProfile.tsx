@@ -1,22 +1,25 @@
 /* eslint-disable padding-line-between-statements */
 /* eslint-disable prettier/prettier */
 "use client"
-import { useUser } from '@/src//context/user.provider';
+import { log } from 'console';
+
 import { Card, CardBody } from '@nextui-org/card';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Button } from '@nextui-org/button';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { useRouter } from 'next/navigation';
+
 import GWInput from '../Form/GWInput';
 import GWSelect from '../Form/GWSelect';
 import TextEditor from '../RichTextEditor/TextEditor';
-import { Button } from '@nextui-org/button';
-import { log } from 'console';
-import { updateUser } from '@/src//service/Profile';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import GWForm from '../Form/GWForm';
+
+import { updateUser } from '@/src//service/Profile';
 import { changePassword, logout } from '@/src//service/AuthService';
 import { useUserChangePassword } from '@/src//hooks/auth.hook';
-import { useRouter } from 'next/navigation';
+import { useUser } from '@/src//context/user.provider';
 import { UseGetUsersById, useUpdateUser } from '@/src//hooks/users.hook';
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const UpdateProfile = ({onClose}:any) => {
@@ -24,7 +27,7 @@ const UpdateProfile = ({onClose}:any) => {
     const {user}=useUser();
     const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
     const{mutate:userDataUpdateMutate}=useUpdateUser();
-    const {mutate:passwordChange}=useUserChangePassword();
+    const {mutate:passwordChange,isSuccess:passwordSuccess,isPending:passPending}=useUserChangePassword();
     const [imageFiles, setImageFiles] = useState<File[] | []>([]);
     const [imagePreviews, setImagePreviews] = useState<string>('');
     const { isOpen, onOpen,onOpenChange } = useDisclosure();
@@ -69,12 +72,13 @@ const UpdateProfile = ({onClose}:any) => {
       };
       const onSubmitChangePassword:SubmitHandler<FieldValues>=(data)=>{
           passwordChange(data);  
-          setTimeout(()=>{
-            onClose(); 
-            logout();
-            router.push('/login');
-          },2000) 
       }
+      // useEffect(() => {
+      //   if (passwordSuccess && !passPending) {
+      //     logout(); // Ensure user is logged out before redirecting
+      //     // router.push("/login");
+      //   }
+      // }, [passwordSuccess]);
       const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
         setImageFiles((prev) => [...prev, file]);

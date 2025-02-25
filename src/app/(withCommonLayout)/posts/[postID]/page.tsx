@@ -2,8 +2,8 @@
 /* eslint-disable prettier/prettier */
 "use client"
 import { addComments, fetchPostFromID } from '@/src//service/post';
+
 import React, { useEffect, useState } from 'react';
-import { IComments, Ipost } from '../../../../../types';
 import LightGallery from "lightgallery/react";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-zoom.css";
@@ -14,16 +14,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalProps, useDisclosure } from '@nextui-org/modal';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useUser } from '@/src//context/user.provider';
-import GWTextarea from '@/src//components/UI/Form/GWTextArea';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader } from '@nextui-org/card';
 import { Input, Textarea } from '@nextui-org/input';
-import CommentCard from '@/src//components/UI/Post/CommentCard';
-import { useAddComments, UseGetPostsId } from '@/src//hooks/post.hook';
-import { UsefetchUsers, UseGetUsersById } from '@/src//hooks/users.hook';
 import { useRouter } from 'next/navigation';
+
+import { IComments, Ipost } from '../../../../../types';
+
 import PostDetailsLoading from './Loading';
+
+import { UsefetchUsers, UseGetUsersById } from '@/src//hooks/users.hook';
+import { useAddComments, UseGetPostsId } from '@/src//hooks/post.hook';
+import CommentCard from '@/src//components/UI/Post/CommentCard';
+import GWTextarea from '@/src//components/UI/Form/GWTextArea';
+import { useUser } from '@/src//context/user.provider';
 
 type Sizes = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 const PostDetails = ({ params }: { params: { postID: string } }) => {
@@ -73,7 +77,7 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
     CurrentuserData?.data?._id === postData?.userID && postData?.tags==='Premium' && CurrentuserData?.data?.status==='BASIC'  ||
     CurrentuserData?.data?._id === postData?.userID && postData?.tags==='Beginners' && CurrentuserData?.data?.status==='PREMIUM'  ? <>
     <div className='grid grid-cols-1 lg:grid-cols-[1fr,3fr,1fr] mx-5'>
-       <div></div>
+       <div />
        <div className='w-full space-y-4'>
        <h5 className='font-semibold text-2xl text-center'>{postData?.title}</h5>
        <p className='font-light text-md text-justify' dangerouslySetInnerHTML={{ __html:postData?.content as string} }/>
@@ -125,7 +129,7 @@ const PostDetails = ({ params }: { params: { postID: string } }) => {
         }
        </div>
        </div>
-       <div></div>
+       <div />
     </div>
                 {/* comment modal */}
        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

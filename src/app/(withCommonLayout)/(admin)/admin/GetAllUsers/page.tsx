@@ -10,10 +10,10 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/table";
-
 import {User} from "@heroui/user";
-import { UsefetchUsers, useModifyUser, useUpdateUser } from "@/src//hooks/users.hook";
 import { Button } from "@nextui-org/button";
+
+import { UsefetchUsers, useModifyUser, useUpdateUser } from "@/src//hooks/users.hook";
 
 const columns = [
 {

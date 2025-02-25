@@ -6,27 +6,31 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Image } from '@nextui-org/image';
-
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { ArrowDownIcon, ArrowUpIcon, CommentsIcon, Crown, DragDots, HeartIcon } from '../../icons';
 import Link from 'next/link';
-import { Ipost, IUser } from '../../../../types';
-import { addComments, postData, updatePostData, upvotePost } from '@/src//service/post';
-import { useDeletePosts, useDOwnvote, useUpvote } from '@/src//hooks/post.hook';
-import { useUser } from '@/src//context/user.provider';
 import Swal from 'sweetalert2';
 import { Tooltip } from '@heroui/tooltip';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalProps, useDisclosure } from '@nextui-org/modal';
 import { FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Divider } from '@nextui-org/divider';
+import { Avatar } from '@nextui-org/avatar';
+
+import { ArrowDownIcon, ArrowUpIcon, CommentsIcon, Crown, DragDots, HeartIcon } from '../../icons';
+import { Ipost, IUser } from '../../../../types';
 import GWInput from '../Form/GWInput';
 import GWSelect from '../Form/GWSelect';
+
 import TextEditor from '../RichTextEditor/TextEditor';
+import { addComments, postData, updatePostData, upvotePost } from '@/src//service/post';
+import { useDeletePosts, useDOwnvote, useUpdatePost, useUpvote } from '@/src//hooks/post.hook';
+import { useUser } from '@/src//context/user.provider';
+
+
 import { UsefetchCategories } from '@/src//hooks/categories.hook';
 import { addFavouritePosts } from '@/src//service/Profile';
 import { useAddFavouritePost, UsefetchUsers, UseGetUsersById } from '@/src//hooks/users.hook';
-import { Divider } from '@nextui-org/divider';
-import { Avatar } from '@nextui-org/avatar';
+
 
 interface IpostCardProps{
  posts:any
@@ -36,6 +40,7 @@ const PostCard = ({posts}:IpostCardProps) => {
     const {user,isLoading:userLoading}=useUser();
     const {data:CurrentuserData,isLoading:currentuserload}=UseGetUsersById(user?._id);
     const { data:userdata} = UsefetchUsers();
+    const{mutate:postUpdation}=useUpdatePost()
     //const [cUser,setcUser]=useState<IUser>([])
    // console.log(userdata?.data);
     const [filteredUserData, setFilteredUserData] = useState<IUser[]>([]);
@@ -109,7 +114,9 @@ const PostCard = ({posts}:IpostCardProps) => {
       };
      formData.append("data", JSON.stringify(updateGardenData));
      //console.log(formData);
-     updatePostData(formData,_id)
+    //  { id, userData }
+    //  postUpdation({})
+     postUpdation({id:_id,userData:formData})
     };
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files![0];
@@ -126,7 +133,7 @@ const PostCard = ({posts}:IpostCardProps) => {
     const handleDeleteImage = (index: number) => {
         // Remove the image preview and file at the given index
         setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-        setImageFiles((prev:any) => prev.filter((_, i:any) => i !== index));
+        setImageFiles((prev:any) => prev.filter((_:any, i:any) => i !== index));
       };
     const addToFavourite=(id:string)=>{
       //alert('add to fab clicked'+id)
