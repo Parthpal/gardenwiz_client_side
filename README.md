@@ -26,7 +26,17 @@ A full-stack web application for gardening enthusiasts to share tips, explore se
 ## 🎨 UI Enhancements  
 - Micro animations for smooth user experience  
 - Modal-based post creation  
-- Favorite posts section in user profile  
+- Favorite posts section in user profile
+
+## 🧪 Test Credentials
+
+### 👤 User Login  
+- **Email**: `c@g.com`  
+- **Password**: `12345`
+
+### 🛠️ Admin Login  
+- **Email**: `admin@g.com`  
+- **Password**: `12345`
 
 ## 🔗 Live Demo  
 - **Client**: [GardenWiz Client](https://gardenwiz-client.vercel.app/)  
